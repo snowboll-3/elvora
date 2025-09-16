@@ -1,0 +1,44 @@
+﻿:root{
+  --bg:#0b1220; --fg:#e6edf3; --mut:#9aa4b5; --card:#101a34; --b:#1b2a52;
+  --wh:#22c55e;       /* skladišta */
+  --hq:#f59e0b;       /* HQ ambers */
+  --mk:#8b5cf6;       /* marketi */
+  --flag:#06b6d4;     /* flagship trgovine */
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--fg);font:15px/1.6 system-ui}
+.topbar{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid #13234a;background:#0a152d}
+.brand{font-weight:900}
+.nav .link{color:#c9d4ea;margin-left:10px;text-decoration:none}
+.wrap{max-width:1100px;margin:0 auto;padding:18px}
+h1{margin:0 0 8px 0}
+.muted{color:var(--mut);margin:0 0 14px 0}
+.grid2{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:12px}
+@media (max-width:980px){ .grid2{grid-template-columns:1fr 1fr} }
+@media (max-width:680px){ .grid2{grid-template-columns:1fr} }
+.card{background:var(--card);border:1px solid var(--b);border-radius:16px;padding:14px}
+.row{display:grid;grid-template-columns: 1fr 160px;gap:10px;margin:8px 0}
+.row input[type="number"]{padding:8px;border:1px solid #1b2a52;border-radius:10px;background:#0e1834;color:#fff}
+.row input[type="checkbox"]{transform:scale(1.2)}
+.hint{font-size:12px;color:var(--mut)}
+.actions{display:flex;gap:8px;margin:8px 0 14px 0;flex-wrap:wrap}
+.btn{appearance:none;border:0;border-radius:12px;padding:10px 12px;font-weight:900;cursor:pointer}
+.primary{background:#22c55e;color:#06150a;border:1px solid #168a48}
+.ghost{background:transparent;color:#e6edf3;border:1px dashed #27407b}
+.legend{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 10px}
+.badge{display:inline-block;padding:3px 10px;border-radius:999px;color:#04130b;font-weight:900}
+.badge.hqW{background:var(--hq)}
+.badge.wh{background:var(--wh)}
+.badge.hqM{background:var(--flag)}
+.badge.mk{background:var(--mk)}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px}
+@media (max-width:1024px){ .grid{grid-template-columns:repeat(3,1fr)} }
+@media (max-width:740px){ .grid{grid-template-columns:repeat(2,1fr)} }
+.slot{background:#0f1a34;border:1px solid #1a2b52;border-radius:14px;padding:12px}
+.slot h3{margin:0 0 4px 0;font-size:15px}
+.tag{display:inline-block;font-size:12px;font-weight:900;padding:2px 8px;border-radius:999px;margin-right:6px}
+.tag.hqW{background:var(--hq);color:#1a1203}
+.tag.wh{background:var(--wh);color:#041307}
+.tag.hqM{background:var(--flag);color:#061317}
+.tag.mk{background:var(--mk);color:#140a24}
+.meta{color:#9aa4b5;font-size:12px}

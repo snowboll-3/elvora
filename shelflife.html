@@ -1,0 +1,287 @@
+﻿<!DOCTYPE html><html lang="hr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ShelfLife — Kamera</title>
+<style>
+:root{--bg:#0b0f14;--card:#0f1620;--muted:#9fb0c6;--text:#e9f0fa;--ok:#8ef6a0;--warn:#ffd166;--bad:#ff6b6b;--border:#1c2a3a}
+*{box-sizing:border-box}html,body{height:100%}
+body{margin:0;background:#0b0f14;color:var(--text);font:14px/1.45 system-ui,-apple-system,Segoe UI,Roboto}
+.wrap{max-width:900px;margin:0 auto;padding:18px 14px 64px}
+.card{background:var(--card);border:1px solid var(--border);border-radius:16px;box-shadow:0 10px 30px rgba(0,0,0,.35);overflow:hidden}
+.head{display:flex;justify-content:space-between;align-items:center;padding:12px 14px;border-bottom:1px solid var(--border)}
+.muted{color:var(--muted)}
+.cam{position:relative}
+video{display:block;width:100%;height:auto;background:#000}
+.corner{position:absolute;width:28px;height:28px;border:4px solid #74e49b;border-right:none;border-bottom:none;opacity:.9}
+.corner.tr{top:10px;right:10px;transform:rotate(90deg)}
+.corner.br{bottom:10px;right:10px;transform:rotate(180deg)}
+.corner.bl{bottom:10px;left:10px;transform:rotate(270deg)}
+.corner.tl{top:10px;left:10px}
+.panel{padding:10px 14px;display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.pill{border:1px solid var(--border);border-radius:999px;padding:6px 10px;color:var(--muted)}
+.btn{appearance:none;border:1px solid var(--border);background:#152033;color:var(--text);padding:10px 12px;border-radius:12px;cursor:pointer}
+.btn.ok{background:#173024}.btn.bad{background:#3b1414}.btn.ghost{background:#122030}
+.hidden{display:none!important}
+.list{margin-top:12px}
+.item{display:flex;justify-content:space-between;gap:10px;padding:12px;border-top:1px solid var(--border)}
+.item:first-child{border-top:none}
+.name{font-weight:600}.hint{color:var(--muted)}
+.qty{background:#142235;border:1px solid var(--border);border-radius:999px;padding:6px 10px;position:relative;min-width:52px;text-align:center}
+.qtymenu{position:absolute;right:0;top:42px;background:#121b2b;border:1px solid var(--border);border-radius:10px;padding:6px;display:none;z-index:10}
+.qtymenu button{display:block;width:100%;margin:2px 0}
+.rok{background:#1b2b1f;border:1px solid #21402c;border-radius:999px;padding:6px 10px;cursor:pointer;min-width:120px;text-align:center}
+.rok.expired{background:#3a1212;border-color:#5a1f1f}
+.mono{font-family:ui-monospace,SFMono-Regular,Consolas,Menlo,monospace}
+
+/* Modal (čisti ekran) */
+.modal{position:fixed;inset:0;display:none;place-items:center;background:#0b0f14;z-index:99999}
+.modal .box{width:min(680px,92vw);background:var(--card);border:1px solid var(--border);border-radius:16px;overflow:hidden}
+.box h3{margin:0;padding:12px 14px;border-bottom:1px solid var(--border)}
+.box .body{padding:12px 14px}
+.guide{position:relative;border:2px dashed #86f39b;border-radius:10px;min-height:120px;margin:10px 0}
+.guide::after{content:"Usmjerite datum isteka u okvir";position:absolute;inset:auto 10px 10px auto;color:#86f39b;font-size:12px}
+
+/* Alert */
+.alert{position:fixed;left:50%;top:20px;transform:translateX(-50%);padding:12px 14px;border-radius:12px;border:1px solid var(--border);background:#132034;color:#dfe7f6;display:none;z-index:100000}
+.alert.bad{background:#3a1212;border-color:#5a1f1f;color:#ffdfe0}
+
+#resumeBtn{position:absolute;left:50%;top:14px;transform:translateX(-50%);z-index:5}
+.hide-when-modal .cam, .hide-when-modal .panel{display:none}
+</style>
+</head><body>
+<div class="wrap" id="page">
+  <div class="card">
+    <div class="head">
+      <div><strong>ShelfLife — Kamera</strong></div>
+      <div class="muted" id="status">Auto-skeniranje…</div>
+    </div>
+    <div class="cam">
+      <button id="resumeBtn" class="btn hidden">Nastavi skeniranje</button>
+      <video id="video" playsinline autoplay muted></video>
+      <span class="corner tl"></span><span class="corner tr"></span><span class="corner br"></span><span class="corner bl"></span>
+    </div>
+    <div class="panel">
+      <span class="pill">Zvuk: <span id="soundState">ON</span></span>
+      <button id="toggleTorch" class="btn">Bljeskalica OFF</button>
+      <button id="btnScanDate" class="btn ghost hidden">Skeniraj datum</button>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:14px">
+    <div class="head"><strong>Zadnjih 10 skenova</strong></div>
+    <div id="list" class="list"></div>
+  </div>
+</div>
+
+<!-- Modal OCR roka (čisti ekran) -->
+<div id="modal" class="modal" aria-hidden="true">
+  <div class="box">
+    <h3>Molim vas iskenirajte datum</h3>
+    <div class="body">
+      <div class="muted" style="margin-bottom:6px">
+        Usmjerite sredinu kadra (iscrtani okvir) na <b>datum isteka</b>. Pritisnite <b>POČNI</b>.
+      </div>
+      <div id="ocrGuide" class="guide"></div>
+      <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:6px">
+        <button id="mTorch" class="btn">Bljeskalica</button>
+        <button id="mStart" class="btn ok">POČNI</button>
+        <button id="mSkip" class="btn">Preskoči</button>
+      </div>
+      <div id="ocrLog" class="muted" style="margin-top:8px;font-size:12px"></div>
+    </div>
+  </div>
+</div>
+
+<div id="alert" class="alert"></div>
+
+<!-- Tesseract.js za OCR -->
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<script>
+const $ = s=>document.querySelector(s);
+const video=$('#video'), listEl=$('#list'), statusEl=$('#status'), alertEl=$('#alert'), page=$('#page');
+
+let stream=null, detector=null, scanning=true, torchOn=false;
+let lastCode=null,lastAt=0, pausedIdx=0;
+
+// zvuk
+const beep=new Audio('data:audio/wav;base64,UklGRiQAAABXQVZFZm10IBAAAAABAAEAESsAACJWAAACABAAZGF0YQwAAAADO3y0Pz8/Pz8/Pz8/Pz8/Pz8/PLx7Dg==');
+function showAlert(msg,type='info',ms=2200){ alertEl.textContent=msg; alertEl.className='alert'+(type==='bad'?' bad':''); alertEl.style.display='block'; clearTimeout(alertEl._t); alertEl._t=setTimeout(()=>alertEl.style.display='none',ms); }
+function nowStr(){ return new Date().toLocaleString('hr-HR',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit',second:'2-digit'}); }
+
+// localStorage
+const scansKey='shelflife.recent', namesKey='shelflife.names';
+let recentScans=load(scansKey,[]);
+let nameCache=load(namesKey,{});
+function save(k,v){ localStorage.setItem(k,JSON.stringify(v)); }
+function load(k,fb){ try{ return JSON.parse(localStorage.getItem(k)) ?? fb }catch{ return fb } }
+
+// demo lookup (cache prvo, nema mreže)
+async function lookupName(ean){
+  if(nameCache[ean]) return {name:nameCache[ean]};
+  // možeš dodati svoje mapiranja ovdje ako želiš
+  const demo = { '3850354015925':'b-Aktiv SMOOTHIE 330g', '8008110040642':'Wudy classico 300 g' };
+  if(demo[ean]) { nameCache[ean]=demo[ean]; save(namesKey,nameCache); return {name:demo[ean]}; }
+  return {name:null,note:'nema u bazi'};
+}
+
+async function startCamera(){
+  if(!('BarcodeDetector' in window)){ statusEl.textContent='Preglednik ne podržava BarcodeDetector'; showAlert('Nije podržano — koristi Chrome/Android.', 'bad', 3500); return; }
+  detector=new BarcodeDetector({formats:['ean_13','ean_8','upc_a','upc_e','qr_code','code_128','code_39']});
+  stream=await navigator.mediaDevices.getUserMedia({video:{facingMode:'environment'}}); video.srcObject=stream; await video.play();
+  requestAnimationFrame(tick);
+}
+
+async function setTorch(on){
+  try{ const t=stream?.getVideoTracks?.()[0]; await t.applyConstraints({advanced:[{torch:on}]}); torchOn=on; $('#toggleTorch').textContent= on ? 'Bljeskalica ON' : 'Bljeskalica OFF'; }catch{}
+}
+$('#toggleTorch').onclick=()=>setTorch(!torchOn);
+
+async function tick(){
+  if(!scanning||!detector) return requestAnimationFrame(tick);
+  try{
+    const codes=await detector.detect(video);
+    if(codes?.length){
+      const c=codes[0].rawValue||''; const now=performance.now();
+      if(c && (c!==lastCode || now-lastAt>2000)){
+        lastCode=c; lastAt=now; onBarcode(c);
+      }
+    }
+  }catch(e){}
+  requestAnimationFrame(tick);
+}
+
+async function onBarcode(code){
+  try{beep.currentTime=0; beep.play().catch(()=>{});}catch{}
+  scanning=false; statusEl.textContent='Skenirano: '+code;
+
+  const when=nowStr();
+  // dedupe po kodu
+  let idx = recentScans.findIndex(x=>x.code===code);
+  if(idx>=0){
+    const it=recentScans[idx];
+    it.qty=(it.qty||1)+1;
+    // ne prepisuj poznat naziv nepoznatim
+    const {name} = await lookupName(code);
+    if(name && (!it.name || it.name.startsWith('Nepoznat'))) { it.name=name; nameCache[code]=name; save(namesKey,nameCache); }
+    // pomakni na vrh
+    recentScans.splice(idx,1); recentScans.unshift(it); idx=0;
+  }else{
+    const {name,note}=await lookupName(code);
+    const nm = name || 'Nepoznat proizvod';        // bez "(nema u bazi)" u naslovu
+    const it={code,name:nm,nameNote:name?null:(note||'nema u bazi'),time:when,qty:1,expiry:null};
+    if(name) { nameCache[code]=name; save(namesKey,nameCache); }
+    recentScans.unshift(it); recentScans=recentScans.slice(0,50);
+    idx=0;
+  }
+  save(scansKey,recentScans); renderRecent();
+
+  pausedIdx = idx;
+  // pokaži dodatni gumb ako korisnik želi ručno
+  $('#btnScanDate').classList.remove('hidden');
+  // čisti ekran za OCR
+  openOCRModalForIndex(pausedIdx);
+}
+
+function renderRecent(){
+  listEl.innerHTML='';
+  recentScans.slice(0,10).forEach((it,i)=>{
+    const row=document.createElement('div'); row.className='item';
+
+    const left=document.createElement('div');
+    left.innerHTML=`<div class="name">${it.name}${it.nameNote?` <span class="hint">(${it.nameNote})</span>`:''}</div>
+                    <div class="hint">${it.time}</div>`;
+
+    const right=document.createElement('div'); right.style.display='flex'; right.style.gap='8px'; right.style.alignItems='center';
+
+    // Qty s mini menijem
+    const qty=document.createElement('div'); qty.className='qty mono'; qty.textContent='Qty '+(it.qty||1);
+    const qm=document.createElement('div'); qm.className='qtymenu';
+    qm.innerHTML=`<button class="btn">+1</button><button class="btn">-1</button><button class="btn bad">Obriši</button>`;
+    qty.append(qm);
+    qty.onclick=(ev)=>{ ev.stopPropagation(); qm.style.display = qm.style.display==='block'?'none':'block'; };
+    qm.children[0].onclick=()=>{ it.qty=(it.qty||1)+1; save(scansKey,recentScans); renderRecent(); };
+    qm.children[1].onclick=()=>{ it.qty=(it.qty||1)-1; if(it.qty<=0){ if(confirm('Obrisati proizvod?')){ recentScans.splice(i,1);} else { it.qty=1; } } save(scansKey,recentScans); renderRecent(); };
+    qm.children[2].onclick=()=>{ recentScans.splice(i,1); save(scansKey,recentScans); renderRecent(); };
+
+    // Rok
+    const rok=document.createElement('div'); rok.className='rok mono'; rok.title='Dodirni za ručni unos';
+    rok.textContent='Rok: '+(it.expiry??'—');
+    if(it.expiry && isExpiredStr(it.expiry)) rok.classList.add('expired');
+
+    rok.onclick=async ()=>{
+      const v=prompt('Unesi rok (npr. 14.10.2025 ili 14.10.2025 02:45):', it.expiry??'');
+      if(v!=null){
+        const parsed=parseExpiry(v);
+        if(!parsed){ showAlert('Ne mogu protumačiti datum.', 'bad'); return; }
+        setExpiryOnItem(i, parsed);
+        if(isExpired(parsed)){ showAlert('Proizvodu je istekao rok trajanja!', 'bad', 4000); }
+      }
+    };
+
+    right.append(qty,rok); row.append(left,right); listEl.append(row);
+  });
+}
+
+/* ===== OCR MODAL (čisti zaslon) ===== */
+const modal=$('#modal'), ocrLog=$('#ocrLog');
+function showModal(on){
+  if(on){ modal.style.display='grid'; modal.setAttribute('aria-hidden','false'); page.classList.add('hide-when-modal'); }
+  else  { modal.style.display='none'; modal.setAttribute('aria-hidden','true');  page.classList.remove('hide-when-modal'); }
+}
+function openOCRModalForIndex(idx){
+  showModal(true); ocrLog.textContent='';
+  $('#mStart').onclick=async ()=>{
+    const crop=captureCrop();
+    const txt=await doOCR(crop);
+    const exp=parseExpiry(txt);
+    if(exp){ setExpiryOnItem(idx,exp); if(isExpired(exp)){ showAlert('Proizvodu je istekao rok trajanja!', 'bad', 4000); } closeModalResume(); }
+    else { ocrLog.textContent='Rok nije prepoznat. Pokušaj ponovno ili unesi ručno na listi.'; }
+  };
+  $('#mSkip').onclick=()=>{ closeModalResume(); };
+  $('#mTorch').onclick=()=>setTorch(!torchOn);
+}
+function closeModalResume(){ showModal(false); $('#btnScanDate').classList.add('hidden'); resumeScan(); }
+$('#btnScanDate').onclick=()=>openOCRModalForIndex(pausedIdx);
+$('#resumeBtn').onclick=()=>resumeScan();
+function resumeScan(){ scanning=true; statusEl.textContent='Auto-skeniranje…'; $('#resumeBtn').classList.add('hidden'); }
+
+/* Kadar za OCR: središnji vodoravni pojas */
+function captureCrop(){
+  const vw=video.videoWidth, vh=video.videoHeight;
+  const cw=Math.floor(vw*0.86), ch=Math.floor(vh*0.20);
+  const cx=Math.floor((vw-cw)/2), cy=Math.floor(vh*0.42);
+  const c=document.createElement('canvas'); c.width=cw; c.height=ch;
+  c.getContext('2d').drawImage(video,cx,cy,cw,ch,0,0,cw,ch);
+  $('#ocrGuide').style.minHeight = (ch*(300/cw))+'px';
+  return c;
+}
+async function doOCR(canvas){
+  const {data:{text}}=await Tesseract.recognize(canvas,'eng');
+  ocrLog.textContent='Prepoznato: '+(text||'').trim();
+  return text||'';
+}
+
+// prihvati 14.10.2025 / 14-10-25 / 14/10/2025 [+ sat]
+function parseExpiry(raw){
+  let t=(raw||'').replace(/\s+/g,' ').trim().toUpperCase();
+  const m=t.match(/(\d{1,2})[.\-\/](\d{1,2})[.\-\/](\d{2,4})/);
+  if(!m) return null;
+  let [_,d,mo,y]=m; if(y.length===2) y='20'+y;
+  const hm = t.match(/(\d{1,2})[:H](\d{2})/); // 02:45 ili 02H45
+  return { d:parseInt(d,10), m:parseInt(mo,10), y:parseInt(y,10), hh:hm?parseInt(hm[1],10):null, mm:hm?parseInt(hm[2],10):null };
+}
+function formatExpiry(exp){
+  const dd=String(exp.d).padStart(2,'0'), mm=String(exp.m).padStart(2,'0'), yy=String(exp.y);
+  const tt = (exp.hh!=null && exp.mm!=null) ? ` ${String(exp.hh).padStart(2,'0')}:${String(exp.mm).padStart(2,'0')}` : '';
+  return `${dd}.${mm}.${yy}${tt}`;
+}
+function isExpired(exp){ const dt=new Date(exp.y, exp.m-1, exp.d, exp.hh??23, exp.mm??59, 59); return Date.now()>dt.getTime(); }
+function isExpiredStr(s){ const m=s.match(/(\d{2}).(\d{2}).(\d{4})(?:\s+(\d{2}):(\d{2}))?/); if(!m) return false; return isExpired({d:+m[1],m:+m[2],y:+m[3],hh:m[4]?+m[4]:23,mm:m[5]?+m[5]:59}); }
+function setExpiryOnItem(i,exp){
+  const it=recentScans[i]; if(!it) return;
+  it.expiry = formatExpiry(exp);
+  save(scansKey,recentScans); renderRecent();
+}
+
+renderRecent(); startCamera();
+</script>
+</body></html>

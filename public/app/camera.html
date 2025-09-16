@@ -1,0 +1,87 @@
+﻿<!DOCTYPE html>
+<html lang="hr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ShelfLife – Global Barcode Scanner</title>
+  <style>
+    body{margin:0;background:#0b0f14;color:#fff;font-family:system-ui,Arial,sans-serif}
+    .wrap{max-width:900px;margin:0 auto;padding:16px}
+    video{width:100%;border:2px solid #222;border-radius:8px;background:#000}
+    .result{margin-top:16px;padding:12px;background:#111;border-radius:8px}
+    .name{font-size:18px;font-weight:bold}
+    .code{font-family:monospace;color:#9cf}
+    .time{font-size:12px;color:#aaa}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h2>🌍 ShelfLife – Global Barcode Scanner</h2>
+    <video id="video" autoplay playsinline></video>
+    <div id="output" class="result">Skenirajte barkod…</div>
+  </div>
+
+<script>
+const video = document.getElementById('video');
+const out = document.getElementById('output');
+
+let lastCode = null;
+let lastAt = 0;
+
+async function startCam(){
+  try{
+    const stream = await navigator.mediaDevices.getUserMedia({ video:{ facingMode:'environment' }});
+    video.srcObject = stream;
+  }catch(e){
+    out.textContent = "Greška: kamera nije dostupna.";
+  }
+}
+
+async function tick(){
+  if (!('BarcodeDetector' in window)) {
+    out.textContent = "Preglednik ne podržava BarcodeDetector (koristi Chrome/Android).";
+    return;
+  }
+  try{
+    const detector = new BarcodeDetector({formats:['ean_13','ean_8','upc_a','upc_e','code_128','qr_code']});
+    const codes = await detector.detect(video);
+    if(codes.length>0){
+      const code = codes[0].rawValue;
+      const now = performance.now();
+      if(code && (code!==lastCode || now-lastAt>2000)){
+        lastCode = code; lastAt = now;
+        lookupProduct(code);
+      }
+    }
+  }catch(e){ /* ignore */ }
+  requestAnimationFrame(tick);
+}
+
+async function lookupProduct(code){
+  out.innerHTML = `<div class="code">Barkod: ${code}</div><div>Pretražujem globalnu bazu…</div>`;
+  try{
+    const res = await fetch(`https://world.openfoodfacts.org/api/v0/product/${code}.json`);
+    const data = await res.json();
+    if(data.status===1){
+      const name = data.product.product_name || "(bez naziva)";
+      const brand = data.product.brands || "";
+      const when = new Date().toLocaleString("hr-HR");
+      out.innerHTML = `
+        <div class="name">${name} ${brand?`<span style="color:#9cf">(${brand})</span>`:""}</div>
+        <div class="code">Barkod: ${code}</div>
+        <div class="time">Vrijeme skeniranja: ${when}</div>
+      `;
+    }else{
+      out.innerHTML = `<div class="name">Nepoznat proizvod (nema u globalnoj bazi)</div>
+                       <div class="code">Barkod: ${code}</div>`;
+    }
+  }catch(err){
+    out.innerHTML = `<div class="name">Greška pri dohvaćanju podataka</div>`;
+  }
+}
+
+startCam();
+tick();
+</script>
+</body>
+</html>

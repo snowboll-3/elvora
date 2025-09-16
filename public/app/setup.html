@@ -1,0 +1,87 @@
+﻿<!doctype html>
+<html lang="hr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>ShelfLife — Setup mreže (Skladišta & Marketi)</title>
+  <link rel="stylesheet" href="./setup.css"/>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">🥬 ShelfLife — Setup mreže</div>
+  <nav class="nav">
+    <a class="link" href="/app/">App</a>
+    <a class="link" href="/enterprise/golub-channels.html">Kanali (demo)</a>
+  </nav>
+</header>
+
+<main class="wrap">
+  <h1>Struktura organizacije</h1>
+  <p class="muted">Unesi broj objekata i listu gradova. ID-evi se formiraju s kodom grada (npr. <code>ZAG</code>, <code>SPL</code>) i lokalnom numeracijom.</p>
+
+  <section class="grid2">
+    <div class="card">
+      <h3>🏭 Skladišta</h3>
+      <div class="row">
+        <label>Glavna skladišta (HQ)</label>
+        <input id="wh_hq" type="number" min="0" value="1"/>
+      </div>
+      <div class="row">
+        <label>Obična skladišta</label>
+        <input id="wh_std" type="number" min="0" value="5"/>
+      </div>
+      <div class="hint">Oznake: <code>WH-HQ-ZAG-01</code>, <code>WH-ZAG-001</code></div>
+    </div>
+
+    <div class="card">
+      <h3>🏬 Trgovine</h3>
+      <div class="row">
+        <label>Glavne trgovine (Flagship)</label>
+        <input id="mk_hq" type="number" min="0" value="3"/>
+      </div>
+      <div class="row">
+        <label>Obične trgovine</label>
+        <input id="mk_std" type="number" min="0" value="25"/>
+      </div>
+      <div class="hint">Oznake: <code>MK-HQ-SPL-001</code>, <code>MK-SPL-0001</code></div>
+    </div>
+
+    <div class="card">
+      <h3>🗺️ Gradovi (jedan po liniji)</h3>
+      <div class="row" style="grid-template-columns:1fr;">
+        <textarea id="cities" rows="8" style="width:100%;padding:10px;border:1px solid #1b2a52;border-radius:10px;background:#0e1834;color:#fff">Zagreb
+Split
+Rijeka
+Osijek
+Zadar
+Pula
+Šibenik
+Dubrovnik
+Varaždin
+Karlovac</textarea>
+      </div>
+      <div class="hint">Dodaj stvarne gradove. Raspodjela objekata ide <b>kružnom (round-robin)</b> kroz popis gradova.</div>
+    </div>
+  </section>
+
+  <div class="actions">
+    <button class="btn primary" id="gen">Generiraj prikaz</button>
+    <button class="btn ghost" id="save">Spremi (lokalno)</button>
+    <button class="btn ghost" id="clear">Očisti</button>
+  </div>
+
+  <section>
+    <h2>Pregled (slotovi)</h2>
+    <div class="legend">
+      <span class="badge hqW">Skladište HQ</span>
+      <span class="badge wh">Skladište</span>
+      <span class="badge hqM">Trgovina HQ</span>
+      <span class="badge mk">Trgovina</span>
+    </div>
+    <div id="grid" class="grid"></div>
+  </section>
+</main>
+
+<script src="./setup.js"></script>
+</body>
+</html>

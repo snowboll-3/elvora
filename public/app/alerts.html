@@ -1,0 +1,38 @@
+﻿<!doctype html>
+<html lang="hr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>ShelfLife — AI Upozorenja</title>
+  <link rel="stylesheet" href="./alerts.css"/>
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">🥬 ShelfLife — AI Upozorenja</div>
+  <nav class="nav">
+    <a class="link" href="/app/">Početak</a>
+    <a class="link" href="/app/setup.html">Setup</a>
+  </nav>
+</header>
+
+<main class="wrap">
+  <h1>Upozorenja</h1>
+  <p class="muted">AI predlaže gdje treba reagirati. Klikni akciju i gotovo.</p>
+
+  <div class="filters">
+    <select id="flt">
+      <option value="all">Sva</option>
+      <option value="low">Niska zaliha</option>
+      <option value="expiry">Istek roka</option>
+      <option value="surge">Nagla potrošnja</option>
+      <option value="over">Prevelika zaliha</option>
+    </select>
+    <button id="refresh" class="btn ghost">Osvježi</button>
+  </div>
+
+  <section id="list" class="list"></section>
+</main>
+
+<script src="./alerts.js"></script>
+</body>
+</html>
