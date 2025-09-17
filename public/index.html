@@ -1,153 +1,50 @@
-﻿<!doctype html>
-<html lang="hr">
-<head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>ShelfLife – Scanner (classic)</title>
-<style>
-  :root{--bg:#0b1220;--fg:#e5e7eb;--muted:#9ca3af;--brand:#22c55e;--border:#1f2a44;--panel:#0b162a}
-  *{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--fg);font:16px/1.45 system-ui,-apple-system,Segoe UI,Roboto,Arial}
-  header{background:#0a1020;border-bottom:1px solid #0f1a33;padding:10px 16px;position:sticky;top:0;z-index:20}
-  .top{max-width:1000px;margin:0 auto;display:flex;align-items:center;justify-content:space-between}
-  .btn{border:0;border-radius:12px;padding:10px 14px;font-weight:800;cursor:pointer}
-  .primary{background:#2563eb;color:#fff}
-  main{max-width:1000px;margin:0 auto;padding:12px}
-  .wrap{position:relative;border-radius:16px;overflow:hidden;background:#000}
-  video{width:100%;aspect-ratio:9/16;max-height:70vh;object-fit:cover;display:block;background:#000}
-  .overlay{position:absolute;inset:0;pointer-events:none}
-  .overlay::before{content:"";position:absolute;inset:0;box-shadow:0 0 0 200vmax rgba(0,0,0,.45)}
-  .frame{position:absolute;inset:14% 8%;border-radius:18px}
-  .corner{position:absolute;width:40px;height:40px;border:4px solid var(--brand)}
-  .tl{left:-2px;top:-2px;border-right:0;border-bottom:0;border-radius:18px 0 0 0}
-  .tr{right:-2px;top:-2px;border-left:0;border-bottom:0;border-radius:0 18px 0 0}
-  .bl{left:-2px;bottom:-2px;border-right:0;border-top:0;border-radius:0 0 0 18px}
-  .br{right:-2px;bottom:-2px;border-left:0;border-top:0;border-radius:0 0 18px 0}
-  .flash{animation:flash .25s ease}
-  @keyframes flash{from{box-shadow:0 0 0 200vmax rgba(46,204,113,.7)}to{box-shadow:0 0 0 200vmax rgba(0,0,0,.45)}}
-  .tools{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0}
-  .ghost{background:transparent;color:var(--fg);border:1px dashed #304166}
-  .status{margin:6px 0;color:#86efac;font-weight:700}
-  .status.bad{color:#fecaca}
-  .log{margin:12px 0 0;background:#0b162a;border:1px solid var(--border);border-radius:14px;padding:12px 14px;font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace}
-  .mono{font-family:ui-monospace, SFMono-Regular, Menlo, Consolas, monospace}
-</style>
-</head>
+﻿<!doctype html><meta charset="utf-8">
+<title>Elvora</title>
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="manifest" href="/manifest.webmanifest">
+<link rel="stylesheet" href="/styles.css">
+<meta name="theme-color" content="#0b0f14">
 <body>
-  <header><div class="top">
-    <div class="mono" style="opacity:.9">19:28</div>
-    <button id="startBtn" class="btn primary">Start kamera</button>
-  </div></header>
-
-  <main>
-    <div class="wrap">
-      <video id="video" playsinline autoplay muted></video>
-      <div class="overlay" id="overlay">
-        <div class="frame">
-          <div class="corner tl"></div><div class="corner tr"></div>
-          <div class="corner bl"></div><div class="corner br"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="tools">
-      <button id="switchBtn" class="btn ghost">Zamijeni kameru</button>
-      <button id="stopBtn" class="btn ghost">Stop</button>
-      <button id="soundBtn" class="btn ghost">🔊 Zvuk: ON</button>
-    </div>
-
-    <div id="status" class="status">Spremno</div>
-
-    <div class="log" id="log">
-      <div>Scan: <span class="mono" id="scanline">—</span></div>
-      <div>AF: <span class="mono">continuous</span></div>
-      <div>Zoom: <span class="mono" id="zoom">—</span></div>
-      <div>CODE <span class="mono" id="code">—</span></div>
-      <div><span id="foodline">FOOD desserts • —</span></div>
-      <div class="mono muted" id="ocr">OCR —</div>
-    </div>
+  <main class="wrap">
+    <h1 id="title">Elvora</h1>
+    <p id="prompt">Scan the expiry date</p>
+    <form id="lookup">
+      <input id="code" inputmode="numeric" pattern="[0-9]{8,14}" placeholder="EAN/QR..." required>
+      <button type="submit">OK</button>
+    </form>
+    <section id="result" aria-live="polite"></section>
+    <canvas id="ocrCanvas" style="display:none"></canvas>
   </main>
+  <script type="module">
+    import { t } from "/app/i18n.js";
+    import { speak } from "/app/voice.js";
+    import { ocrDate } from "/app/ocr.js";
+    import "/app/command-palette.js";
 
-  <script src="https://unpkg.com/@zxing/browser@0.1.4/umd/index.min.js"></script>
-  <script>
-  const v=document.getElementById('video'), overlay=document.getElementById('overlay');
-  const startBtn=document.getElementById('startBtn'), switchBtn=document.getElementById('switchBtn'), stopBtn=document.getElementById('stopBtn'), soundBtn=document.getElementById('soundBtn');
-  const statusEl=document.getElementById('status'), scanline=document.getElementById('scanline'), zoomEl=document.getElementById('zoom'), codeEl=document.getElementById('code'), foodline=document.getElementById('foodline'), ocr=document.getElementById('ocr');
+    document.getElementById("prompt").textContent = t("scan_date");
+    if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("/sw.js"));
 
-  let stream=null, reader=null, devices=[], currentDeviceId=null, lastCode=null, lastAt=0, soundOn=true, audioCtx=null;
+    const form = document.getElementById("lookup");
+    const codeEl = document.getElementById("code");
+    const out = document.getElementById("result");
 
-  const catalog={
-    "3850108040500":"FOOD desserts • fino mlijeko • Choco loco",
-    "8004030383555":"FOOD desserts • fino mlijeko • Choco loco",
-  };
-
-  function setStatus(t, ok=true){ statusEl.textContent=t; statusEl.className= ok? 'status' : 'status bad'; }
-  function flash(){ overlay.classList.remove('flash'); void overlay.offsetWidth; overlay.classList.add('flash'); }
-  function beep(){ if(!soundOn) return; try{ audioCtx=audioCtx||new (window.AudioContext||window.webkitAudioContext)(); const o=audioCtx.createOscillator(), g=audioCtx.createGain(); o.type='sine'; o.frequency.value=880; g.gain.value=0.0001; o.connect(g); g.connect(audioCtx.destination); const t=audioCtx.currentTime; o.start(t); g.gain.exponentialRampToValueAtTime(0.15,t+0.02); g.gain.exponentialRampToValueAtTime(0.00001,t+0.18); o.stop(t+0.2); navigator.vibrate&&navigator.vibrate(40);}catch{} }
-
-  async function listCams(){ try{const all=await navigator.mediaDevices.enumerateDevices(); devices=all.filter(d=>d.kind==='videoinput'); return devices;}catch{return[];} }
-
-  async function startCamera(prefDeviceId=null){
-    await stopCamera();
-    try{
-      setStatus('Pokrećem kameru…');
-      v.muted=true; v.setAttribute('playsinline','');
-      const cs = prefDeviceId? {video:{deviceId:{exact:prefDeviceId}},audio:false} : {video:{facingMode:{ideal:'environment'},width:{ideal:1280},height:{ideal:720}},audio:false};
-      let ok=false, err=null;
-      try{ stream=await navigator.mediaDevices.getUserMedia(cs); ok=true; }catch(e){ err=e; }
-      if(!ok){ try{ stream=await navigator.mediaDevices.getUserMedia({video:true,audio:false}); ok=true; }catch(e2){ err=e2; } }
-      if(!ok) throw err||new Error('getUserMedia failed');
-
-      v.srcObject=stream; await v.play().catch(()=>{});
-      const sett=(stream.getVideoTracks()[0]||{}).getSettings();
-      currentDeviceId=sett.deviceId||prefDeviceId||null;
-      zoomEl.textContent = (sett.zoom!==undefined? sett.zoom : 3.0).toFixed ? (sett.zoom||3).toFixed(2) : (sett.zoom||3);
-
-      setTimeout(()=>{ if(!v.videoWidth||!v.videoHeight){ setStatus('Kamera aktivna, ali crna slika – klikni "Zamijeni kameru".',false);} else { setStatus('Kamera pokrenuta ✅');}},400);
-      await startScanning();
-    }catch(e){ setStatus(e.name+': '+e.message,false); }
-  }
-
-  async function stopCamera(){
-    try{ if(reader){ await reader.reset(); reader=null; } if(v) v.pause(); if(stream){ stream.getTracks().forEach(t=>t.stop()); stream=null; } setStatus('Kamera zaustavljena'); }catch{}
-  }
-
-  async function switchCamera(){
-    const cams=await listCams(); if(!cams.length){ setStatus('Nema dodatnih kamera',false); return; }
-    if(!currentDeviceId){ await startCamera(); return; }
-    const idx=cams.findIndex(d=>d.deviceId===currentDeviceId); const next=cams[(idx+1)%cams.length];
-    await startCamera(next.deviceId);
-  }
-
-  async function startScanning(){
-    const { BarcodeFormat, DecodeHintType } = ZXingBrowser;
-    const hints=new Map(); hints.set(DecodeHintType.POSSIBLE_FORMATS,[BarcodeFormat.EAN_13,BarcodeFormat.UPC_A,BarcodeFormat.EAN_8]);
-    reader=new ZXingBrowser.BrowserMultiFormatReader(hints);
-
-    await reader.decodeFromVideoDevice(currentDeviceId||null, v, (result,err)=>{
-      if(result){
-        const code=result.getText(); const now=Date.now();
-        if(code!==lastCode || (now-lastAt)>1500){
-          lastCode=code; lastAt=now;
-          scanline.textContent='BarcodeDetector ean_13';
-          codeEl.textContent=code;
-          foodline.textContent=catalog[code] || 'FOOD desserts • —';
-          ocr.textContent='OCR —';
-          flash(); beep(); setStatus('Očitano ✅');
-        }
-      } else if (err && !(err instanceof ZXingBrowser.NotFoundException)){
-        setStatus('Greška dekodiranja', false);
-      }
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+      const code = codeEl.value.trim();
+      if (!code) return;
+      out.textContent = "…";
+      try {
+        const res = await fetch(`/api/products?code=${encodeURIComponent(code)}`, { cache: "no-store" });
+        const j = await res.json();
+        const name = j?.product?.name || t("unknown");
+        out.textContent = `${t("name")}: ${name}`;
+        speak(name);
+        // Simulacija OCR-a na postojećoj slici (ovdje može ići stream iz kamere)
+        // const img = document.querySelector("#someVideoFrame");
+        // const { norm } = await ocrDate(img);
+        // if (norm) out.insertAdjacentText("beforeend", ` | ${t("expiry")}: ${norm}`);
+        fetch("/api/scanlog", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ code, ts: Date.now(), source: j?.source }) }).catch(()=>{});
+      } catch { out.textContent = "Greška na mreži."; }
     });
-  }
-
-  startBtn.onclick=async()=>{ await listCams(); await startCamera(); };
-  switchBtn.onclick=switchCamera;
-  stopBtn.onclick=stopCamera;
-  soundBtn.onclick=()=>{ soundOn=!soundOn; soundBtn.textContent=(soundOn?'🔊':'🔈')+' Zvuk: '+(soundOn?'ON':'OFF'); };
-
-  if(!('mediaDevices' in navigator) || !('getUserMedia' in navigator.mediaDevices)){ setStatus('Preglednik ne podržava kameru.', false); }
-  document.addEventListener('visibilitychange', async()=>{ if(document.hidden) await stopCamera(); });
-
   </script>
 </body>
-</html>

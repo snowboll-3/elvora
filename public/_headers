@@ -1,7 +1,6 @@
 ﻿/*
-  X-Content-Type-Options: nosniff
-  X-Frame-Options: DENY
-  Referrer-Policy: strict-origin-when-cross-origin
-  Permissions-Policy: camera=(), microphone=(), geolocation=(), interest-cohort=()
-  Content-Security-Policy: default-src 'self'; img-src 'self' data: https:; media-src 'self' blob: data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self'; connect-src 'self' https://world.openfoodfacts.org; manifest-src 'self';
   Cache-Control: public, max-age=600
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), browsing-topics=()
+  Content-Security-Policy: default-src 'self'; base-uri 'none'; object-src 'none'; img-src 'self' data: https:; media-src 'self' blob: data:; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; script-src 'self' 'report-sample' https://cdn.jsdelivr.net; connect-src 'self' https://world.openfoodfacts.org https://cdn.jsdelivr.net; worker-src 'self' blob: https://cdn.jsdelivr.net; frame-ancestors 'none'; manifest-src 'self';
