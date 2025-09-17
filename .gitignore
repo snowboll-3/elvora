@@ -1,21 +1,5 @@
-﻿# OS / tooling
-.DS_Store
-Thumbs.db
-
-# Node / web
-node_modules/
+﻿node_modules/
 dist/
-build/
-.tmp/
-.cache/
-
-# Env / secrets
-.env
-.env.*
-*.local
-
-# Archives / backups
 *.zip
-
-# Misc
-coverage/
+*.log
+.DS_Store
