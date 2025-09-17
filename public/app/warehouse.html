@@ -1,0 +1,27 @@
+﻿<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Elvora • Warehouse</title>
+<style>
+body{margin:0;background:#0b0f14;color:#eaf3ff;font:16px Inter}
+.wrap{max-width:1100px;margin:0 auto;padding:16px}
+.grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.slot{height:160px;border:1px solid #1b2838;border-radius:14px;background:linear-gradient(180deg,#0f1926,#0c1420);
+      display:flex;align-items:flex-end;padding:10px;position:relative;overflow:hidden}
+.slot:before{content:'';position:absolute;inset:0;background:radial-gradient(260px 140px at 70% 10%,rgba(102,224,255,.18),transparent)}
+.slot b{z-index:1}
+</style>
+<div class="wrap">
+  <h2>Skladište (AI raspored)</h2>
+  <div id="grid" class="grid"></div>
+</div>
+<script>
+const grid=document.getElementById('grid');
+const cats=['Gorivo & ulje','Hl. komora','Suho','Rezervni dijelovi','Alat','Ambalaža','Piće','Ostalo'];
+cats.forEach((c,i)=>{ const d=document.createElement('div'); d.className='slot'; d.innerHTML=`<b>${c}</b>`; grid.append(d);});
+function addItem(name,catIdx=2){
+  const s=grid.children[catIdx]; const tag=document.createElement('span'); tag.textContent=name;
+  Object.assign(tag.style,{marginLeft:'8px',marginBottom:'6px',padding:'4px 8px',border:'1px solid #1b2838',borderRadius:'10px',background:'#13243a',fontSize:'12px'});
+  s.append(tag);
+}
+// demo
+['Cement (paleta)','AdBlue 10L','Ulje 5W30','File pileći 5kg','Koka 24x'].forEach((n,i)=>addItem(n,i%4));
+</script>

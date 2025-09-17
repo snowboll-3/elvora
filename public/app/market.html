@@ -1,0 +1,48 @@
+﻿<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Elvora • Market POS</title>
+<style>
+body{margin:0;background:#0b0f14;color:#eaf3ff;font:16px Inter}
+.wrap{max-width:1100px;margin:0 auto;padding:16px}
+.grid{display:grid;grid-template-columns:1.1fr .9fr;gap:12px}
+.stage{height:420px;border:1px solid #1b2838;border-radius:16px;background:radial-gradient(600px 240px at 60% 10%,#123,#000)}
+.card{border:1px solid #1b2838;border-radius:16px;background:#0f1620;padding:14px}
+.line{display:flex;justify-content:space-between;padding:8px;border-top:1px solid #1b2838}
+.line:first-child{border-top:none}
+.total{font-weight:800}
+</style>
+<div class="wrap">
+  <h2>Market POS (demo)</h2>
+  <div class="grid">
+    <div class="stage" id="posStage"></div>
+    <div class="card">
+      <div id="cart"></div>
+      <div class="line total"><span>Ukupno</span><span id="sum">0.00 €</span></div>
+    </div>
+  </div>
+</div>
+<script>
+const cart=[], cartEl=document.getElementById('cart'), sumEl=document.getElementById('sum');
+function euro(n){return (Math.round(n*100)/100).toFixed(2)+' €';}
+function add(name,price){cart.unshift({name,price,ts:new Date().toLocaleTimeString()});render();}
+function render(){
+  cartEl.innerHTML=''; let s=0;
+  cart.slice(0,8).forEach(it=>{ s+=it.price; const d=document.createElement('div'); d.className='line';
+    d.innerHTML=`<span>${it.name}</span><span>${euro(it.price)}</span>`; cartEl.append(d);});
+  sumEl.textContent=euro(s);
+}
+// demo “artikli lete u košaru”
+const stage=document.getElementById('posStage');
+function fly(label,price){
+  const b=document.createElement('div'); b.textContent=label;
+  Object.assign(b.style,{position:'absolute',left:'20px',top:'340px',padding:'8px 12px',border:'1px solid #1b2838',
+    background:'#10243a',borderRadius:'10px',boxShadow:'0 10px 30px rgba(0,0,0,.45)',transition:'transform .6s ease, opacity .6s'});
+  stage.append(b); requestAnimationFrame(()=>{ b.style.transform='translate(540px,-260px) scale(0.8)'; b.style.opacity='0.1';});
+  setTimeout(()=>{ b.remove(); add(label,price); }, 620);
+}
+// demo tipke
+[['Kruh',1.20],['Mlijeko',1.09],['Jaja',2.49],['Sok',1.79]].forEach(([n,p],i)=>{
+  const t=document.createElement('button'); t.textContent=n; t.onclick=()=>fly(n,p);
+  Object.assign(t.style,{margin:'8px',padding:'10px 14px',borderRadius:'12px',border:'1px solid #1b2838',background:'#13243a',color:'#eaf3ff'});
+  stage.append(t);
+});
+</script>

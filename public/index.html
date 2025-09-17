@@ -1,50 +1,69 @@
-﻿<!doctype html><meta charset="utf-8">
-<title>Elvora</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<link rel="manifest" href="/manifest.webmanifest">
-<link rel="stylesheet" href="/styles.css">
-<meta name="theme-color" content="#0b0f14">
+﻿<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Elvora – Scan • Track • Predict</title>
+  <meta name="description" content="Elvora: AI barcode & expiry scanning, warehouse/market flows, 3D UI. PWA-ready."/>
+  <meta property="og:title" content="Elvora – Scan • Track • Predict" />
+  <meta property="og:description" content="Global AI barcode & expiry scanning with 3D UX. Home • Warehouse • Market • Venue • Pharmacy." />
+  <meta property="og:type" content="website" />
+  <meta name="theme-color" content="#0b0f14" />
+  <link rel="manifest" href="/manifest.webmanifest" />
+  <link rel="icon" href="/assets/icon-192.png" />
+  <link rel="stylesheet" href="/styles.css" />
+  <script defer src="/app.js"></script>
+</head>
 <body>
-  <main class="wrap">
-    <h1 id="title">Elvora</h1>
-    <p id="prompt">Scan the expiry date</p>
-    <form id="lookup">
-      <input id="code" inputmode="numeric" pattern="[0-9]{8,14}" placeholder="EAN/QR..." required>
-      <button type="submit">OK</button>
-    </form>
-    <section id="result" aria-live="polite"></section>
-    <canvas id="ocrCanvas" style="display:none"></canvas>
+  <header class="nav">
+    <div class="brand"><span class="orb"></span> Elvora</div>
+    <nav>
+      <a href="#features">Features</a>
+      <a href="#products">Products</a>
+      <a href="/app/hub.html" class="btn">Open App</a>
+    </nav>
+  </header>
+
+  <main>
+    <section class="hero">
+      <canvas id="bg"></canvas>
+      <div class="hero-inner">
+        <h1>Scan • Track • Predict</h1>
+        <p>Global barcode & expiry AI that just works. 3D UI, offline-first PWA, from Home to Warehouse, Market, Venue & Pharmacy.</p>
+        <div class="cta-row">
+          <a class="btn primary" href="/app/scanner.html">Try Web Scanner</a>
+          <a class="btn ghost" href="/app/hub.html">Open Hub</a>
+        </div>
+        <div class="kpi">
+          <div><strong>2D-Ready</strong><span>GS1 Sunrise 2027</span></div>
+          <div><strong>Offline</strong><span>PWA install</span></div>
+          <div><strong>Privacy</strong><span>local-first</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="features" class="section">
+      <h2>Why Elvora</h2>
+      <div class="grid">
+        <div class="card"><h3>Universal Scanning</h3><p>EAN/UPC/Code128/QR/DataMatrix + expiry OCR overlay & manual fallback.</p></div>
+        <div class="card"><h3>3D UI</h3><p>Fridges, POS, Shelves, Hangar views (hooks ready for full scenes).</p></div>
+        <div class="card"><h3>Offline-first</h3><p>Works without internet, syncs later. PWA install in one tap.</p></div>
+        <div class="card"><h3>AI Assist</h3><p>Auto-naming unknown items, voice hints, smart shelf placement.</p></div>
+      </div>
+    </section>
+
+    <section id="products" class="section">
+      <h2>Products</h2>
+      <div class="tiles">
+        <div class="tile"><h4>Home</h4><p>3D Fridge with shelves (eggs/amber glow, milk, dairy, salad, meat…).</p></div>
+        <div class="tile"><h4>Warehouse</h4><p>3D racks by category (fuel/oil tanks, bricks pallets, spares with QR).</p></div>
+        <div class="tile"><h4>Market</h4><p>3D POS: items “fly” to basket, undo animates back, audit trail.</p></div>
+        <div class="tile"><h4>Venue</h4><p>Bars, cafes, hotels: bread/pastry, beer, juices, carbonated drinks.</p></div>
+        <div class="tile"><h4>Pharmacy</h4><p>Meds, OTC, dermo, baby, orthopedic—own 3D shelving & coolers.</p></div>
+      </div>
+    </section>
   </main>
-  <script type="module">
-    import { t } from "/app/i18n.js";
-    import { speak } from "/app/voice.js";
-    import { ocrDate } from "/app/ocr.js";
-    import "/app/command-palette.js";
 
-    document.getElementById("prompt").textContent = t("scan_date");
-    if ("serviceWorker" in navigator) addEventListener("load", () => navigator.serviceWorker.register("/sw.js"));
-
-    const form = document.getElementById("lookup");
-    const codeEl = document.getElementById("code");
-    const out = document.getElementById("result");
-
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const code = codeEl.value.trim();
-      if (!code) return;
-      out.textContent = "…";
-      try {
-        const res = await fetch(`/api/products?code=${encodeURIComponent(code)}`, { cache: "no-store" });
-        const j = await res.json();
-        const name = j?.product?.name || t("unknown");
-        out.textContent = `${t("name")}: ${name}`;
-        speak(name);
-        // Simulacija OCR-a na postojećoj slici (ovdje može ići stream iz kamere)
-        // const img = document.querySelector("#someVideoFrame");
-        // const { norm } = await ocrDate(img);
-        // if (norm) out.insertAdjacentText("beforeend", ` | ${t("expiry")}: ${norm}`);
-        fetch("/api/scanlog", { method: "POST", headers: { "content-type": "application/json" }, body: JSON.stringify({ code, ts: Date.now(), source: j?.source }) }).catch(()=>{});
-      } catch { out.textContent = "Greška na mreži."; }
-    });
-  </script>
+  <footer class="footer">© <span id="y"></span> Elvora • <a href="/legal/privacy.html">Privacy</a> • <a href="/legal/terms.html">Terms</a></footer>
 </body>
+</html>

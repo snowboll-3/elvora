@@ -1,5 +1,12 @@
-﻿node_modules/
-dist/
-*.zip
-*.log
+﻿# OS / editors
 .DS_Store
+Thumbs.db
+*.log
+
+# Backups/zip
+backup_*.zip
+public_*.zip
+*.zip
+
+# Node (ako dodaš kasnije)
+node_modules/

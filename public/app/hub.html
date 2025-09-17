@@ -1,0 +1,28 @@
+﻿/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+  Content-Security-Policy: default-src ''self''; img-src ''self'' data:; style-src ''self'' ''unsafe-inline''; script-src ''self''; connect-src ''self'';
+  Cache-Control: public, max-age=600
+'
+@ | Set-Content "$root\public\_headers" -Encoding UTF8
+
+# ---------- app/hub.html (centralni ulaz) ----------
+@'
+<!DOCTYPE html><html lang="hr"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Elvora · Hub</title>
+<link rel="stylesheet" href="/styles.css"/></head>
+<body>
+<div class="section">
+  <h2>Elvora — Hub</h2>
+  <div class="tiles">
+    <a class="tile" href="/app/scanner.html"><h4>Scanner</h4><p>Barcode + Date OCR overlay (beep + torch).</p></a>
+    <a class="tile" href="/app/home.html"><h4>Home</h4><p>3D Fridge (shelves glow). (stub ready)</p></a>
+    <a class="tile" href="/app/warehouse.html"><h4>Warehouse</h4><p>3D racks/tanks/pallets (stub hooks).</p></a>
+    <a class="tile" href="/app/market.html"><h4>Market (POS)</h4><p>3D POS flow (stub hooks).</p></a>
+    <a class="tile" href="/app/venue.html"><h4>Venue</h4><p>Bars/cafes/hotels 3D coolers (stub).</p></a>
+    <a class="tile" href="/app/pharmacy.html"><h4>Pharmacy</h4><p>3D shelves/coolers (stub).</p></a>
+  </div>
+</div>
+</body></html>

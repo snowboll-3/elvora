@@ -1,7 +1,7 @@
-﻿export function speak(text, lang = (navigator.language || "en-US")) {
+﻿window.say = function (text) {
   try {
     const u = new SpeechSynthesisUtterance(text);
-    u.lang = lang; u.rate = 1; u.pitch = 1;
+    u.lang = (navigator.language || "en").startsWith("hr") ? "hr-HR" : navigator.language || "en";
     speechSynthesis.cancel(); speechSynthesis.speak(u);
-  } catch {}
-}
+  } catch(e) {}
+};
