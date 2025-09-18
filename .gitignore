@@ -1,12 +1,6 @@
-﻿# OS / editors
-.DS_Store
-Thumbs.db
-*.log
-
-# Backups/zip
-backup_*.zip
-public_*.zip
+﻿node_modules/
 *.zip
-
-# Node (ako dodaš kasnije)
-node_modules/
+.cache/
+public/_snapshots/
+public/_autofix_backup_*/
+public/_imgdims_backup_*/
