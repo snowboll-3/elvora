@@ -1,6 +1,7 @@
-﻿node_modules/
-*.zip
-.cache/
-public/_snapshots/
-public/_autofix_backup_*/
-public/_imgdims_backup_*/
+﻿# OS/IDE
+.DS_Store
+Thumbs.db
+*.log
+# Node toolovi (ako se pojave)
+node_modules/
+dist/
