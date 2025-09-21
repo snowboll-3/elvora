@@ -69,7 +69,7 @@
 
   // generate mock data stream
   const measures = [];
-  function tick(){
+  function tick(){ try{ if(window.elvoraBusy) window.elvoraBusy(true);
     const t = new Date().toLocaleTimeString();
     for(const z of zones){
       // base temps
@@ -88,5 +88,6 @@
   }
 
   tick();
-  setInterval(tick, 4500);
+  setInterval(tick, 4500); try{ if(window.elvoraBusy) window.elvoraBusy(false);}catch(e){}
 })();
+

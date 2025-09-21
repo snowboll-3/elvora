@@ -38,3 +38,8 @@ body{margin:0;background:linear-gradient(180deg,#0b0f14,#0e131b);color:var(--ink
 .tile:hover{opacity:.95}
 .btn.small{padding:6px 8px;font-size:12px}
 .tile:hover{opacity:.95}
+/* Spinner */
+#elvoraBusy{position:fixed;inset:auto 14px 14px auto;background:rgba(0,0,0,.55);border:1px solid var(--line);padding:8px 10px;border-radius:10px;backdrop-filter:blur(6px);display:none;align-items:center;gap:8px;z-index:9999}
+#elvoraBusy.show{display:flex}
+.spin{width:14px;height:14px;border:2px solid #9fb0c6;border-top-color:transparent;border-radius:50%;animation:sp 1s linear infinite}
+@keyframes sp{to{transform:rotate(360deg)}}
