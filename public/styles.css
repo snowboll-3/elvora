@@ -34,3 +34,5 @@ body{margin:0;background:linear-gradient(180deg,#0b0f14,#0e131b);color:var(--ink
 .list{margin:0;padding-left:18px}
 .muted{color:var(--muted)}
 @media (max-width:840px){.zones{grid-template-columns:1fr}}
+.btn.small{padding:6px 8px;font-size:12px}
+.tile:hover{opacity:.95}
