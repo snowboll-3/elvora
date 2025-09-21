@@ -1,89 +1,56 @@
 ﻿<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Elvora – Scan • Track • Predict</title>
-  <meta name="description" content="Elvora: AI barcode & expiry scanning, warehouse/market flows, 3D UI. PWA-ready."/>
-  <meta property="og:title" content="Elvora – Scan • Track • Predict" />
-  <meta property="og:description" content="Global AI barcode & expiry scanning with 3D UX. Home • Warehouse • Market • Venue • Pharmacy." />
-  <meta property="og:type" content="website" />
-  <meta name="theme-color" content="#0b0f14" />
-  <link rel="manifest" href="/manifest.webmanifest" />
-  <link rel="icon" href="/assets/icon-192.png" />
-  <link rel="stylesheet" href="/styles.css" />
-  <script defer src="/app.js"></script>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Elvora</title>
+<link rel="manifest" href="/manifest.webmanifest">
+<meta name="theme-color" content="#0b0f14">
+<link rel="stylesheet" href="/styles.css">
+<style>
+  :root{--bg:#0b0f14;--fg:#e7eef8;--muted:#9fb0c6;--brand:#19b5ff;}
+  body{background:var(--bg);color:var(--fg);font:16px/1.45 system-ui,Segoe UI,Roboto,Arial}
+  .wrap{max-width:980px;margin:0 auto;padding:56px 20px}
+  .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:32px;align-items:center}
+  .title{font-size:48px;line-height:1.05;margin:0 0 10px}
+  .lead{color:var(--muted);font-size:18px;margin:0 0 22px}
+  .cta{display:flex;gap:12px;flex-wrap:wrap}
+  .btn{background:#102030;border:1px solid #23364d;color:#e7eef8;padding:10px 14px;border-radius:12px;text-decoration:none}
+  .btn.primary{background:var(--brand);border-color:transparent;color:#04131f;font-weight:700}
+  .pill{display:inline-block;background:#0f1b27;border:1px solid #23364d;color:#8fb9d8;padding:6px 10px;border-radius:999px;font-size:13px}
+  .features{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}
+  .card{background:#0f1722;border:1px solid #24374d;border-radius:16px;padding:14px}
+  footer{margin-top:48px;color:var(--muted);font-size:13px;text-align:center}
+  @media(max-width:840px){.hero{grid-template-columns:1fr}}
+</style>
 </head>
-
-<header class="topbar">
-  <a href="/" class="brand" data-t="brand">Elvora</a>
-  <nav class="links">
-    <a href="/pro/products.html" data-t="products">Products</a>
-  </nav>
-  <div class="lang">
-    <label for="langSel" data-t="lang">Language</label>
-    <select id="langSel" aria-label="Language">
-      <option value="en">EN</option>
-      <option value="hr">HR</option>
-    </select>
+<body>
+  <div class="wrap">
+    <div class="hero">
+      <div>
+        <span class="pill">AI Scan • Track • Predict</span>
+        <h1 class="title">Elvora</h1>
+        <p class="lead">Jedan PWA za markete, logistiku i skladišta. Offline, više jezika, QR/Barcode skener, HACCP nadzor i pametni alarmi.</p>
+        <div class="cta">
+          <a class="btn primary" href="/app/hub.html">Open Hub</a>
+          <a class="btn" href="/pro/index.html">Products</a>
+          <a class="btn" href="/about.html">About</a>
+        </div>
+        <div style="margin-top:16px;color:#8fb9d8;font-size:14px">Install: Add to Home Screen · Works offline</div>
+      </div>
+      <div>
+        <div class="features">
+          <div class="card"><strong>Business Hub</strong><br><span class="muted">POS sinkronizacija, izvještaji, slotovi</span></div>
+          <div class="card"><strong>Logistics Hub</strong><br><span class="muted">Rute, rampe, SOS, tonaza</span></div>
+          <div class="card"><strong>Inventory Hub</strong><br><span class="muted">3D police, planogram, premještaji</span></div>
+          <div class="card"><strong>HACCP</strong><br><span class="muted">Temp zone + PDF export</span></div>
+          <div class="card"><strong>Pharmacy</strong><br><span class="muted">Lot/serije, povlačenja</span></div>
+          <div class="card"><strong>Operations</strong><br><span class="muted">Uređaji, uloge, backup</span></div>
+        </div>
+      </div>
+    </div>
+    <footer>© <span id="y"></span> Elvora • <a href="/legal/privacy.html">Privacy</a> • <a href="/legal/terms.html">Terms</a></footer>
   </div>
-</header>
-<script defer src="/lang.js"></script>
-<script>document.addEventListener("DOMContentLoaded",()=>{ const s=document.getElementById("langSel"); if(s){s.value=(localStorage.getItem("lang")||"en").slice(0,2); s.onchange=()=>ElvoraI18N.set(s.value);} });</script>
-  <header class="nav">
-    <div class="brand"><span class="orb"></span> Elvora</div>
-    <nav>
-      <a href="#features">Features</a>
-      <a href="#products">Products</a>
-      <a href="/app/hub.html" class="btn">Open App</a>
-    </nav>
-  </header>
-
-  <main>
-    <section class="hero">
-      <canvas id="bg"></canvas>
-      <div class="hero-inner">
-        <h1>Scan • Track • Predict</h1>
-        <p>Global barcode & expiry AI that just works. 3D UI, offline-first PWA, from Home to Warehouse, Market, Venue & Pharmacy.</p>
-        <div class="cta-row">
-          <a class="btn primary" href="/app/scanner.html">Try Web Scanner</a>
-          <a class="btn ghost" href="/app/hub.html">Open Hub</a>
-        </div>
-        <div class="kpi">
-          <div><strong>2D-Ready</strong><span>GS1 Sunrise 2027</span></div>
-          <div><strong>Offline</strong><span>PWA install</span></div>
-          <div><strong>Privacy</strong><span>local-first</span></div>
-        </div>
-      </div>
-    </section>
-
-    <section id="features" class="section">
-      <h2>Why Elvora</h2>
-      <div class="grid">
-        <div class="card"><h3>Universal Scanning</h3><p>EAN/UPC/Code128/QR/DataMatrix + expiry OCR overlay & manual fallback.</p></div>
-        <div class="card"><h3>3D UI</h3><p>Fridges, POS, Shelves, Hangar views (hooks ready for full scenes).</p></div>
-        <div class="card"><h3>Offline-first</h3><p>Works without internet, syncs later. PWA install in one tap.</p></div>
-        <div class="card"><h3>AI Assist</h3><p>Auto-naming unknown items, voice hints, smart shelf placement.</p></div>
-      </div>
-    </section>
-
-    <section id="products" class="section">
-      <h2>Products</h2>
-      <div class="tiles">
-        <div class="tile"><h4>Home</h4><p>3D Fridge with shelves (eggs/amber glow, milk, dairy, salad, meat…).</p></div>
-        <div class="tile"><h4>Warehouse</h4><p>3D racks by category (fuel/oil tanks, bricks pallets, spares with QR).</p></div>
-        <div class="tile"><h4>Market</h4><p>3D POS: items “fly” to basket, undo animates back, audit trail.</p></div>
-        <div class="tile"><h4>Venue</h4><p>Bars, cafes, hotels: bread/pastry, beer, juices, carbonated drinks.</p></div>
-        <div class="tile"><h4>Pharmacy</h4><p>Meds, OTC, dermo, baby, orthopedic—own 3D shelving & coolers.</p></div>
-      </div>
-    </section>
-  </main>
-
-  <footer class="footer">© <span id="y"></span> Elvora • <a href="/legal/privacy.html">Privacy</a> • <a href="/legal/terms.html">Terms</a></footer>
-<footer class="footer">© <span id="y"></span> Elvora • <a href="/about.html">About</a> • <a href="/legal/privacy.html">Privacy</a> • <a href="/legal/terms.html">Terms</a></footer></body>
+<script>document.getElementById('y').textContent=new Date().getFullYear()</script>
+</body>
 </html>
-
-
-
-
-
