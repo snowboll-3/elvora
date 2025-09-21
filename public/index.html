@@ -14,7 +14,22 @@
   <link rel="stylesheet" href="/styles.css" />
   <script defer src="/app.js"></script>
 </head>
-<body>
+
+<header class="topbar">
+  <a href="/" class="brand" data-t="brand">Elvora</a>
+  <nav class="links">
+    <a href="/pro/products.html" data-t="products">Products</a>
+  </nav>
+  <div class="lang">
+    <label for="langSel" data-t="lang">Language</label>
+    <select id="langSel" aria-label="Language">
+      <option value="en">EN</option>
+      <option value="hr">HR</option>
+    </select>
+  </div>
+</header>
+<script defer src="/lang.js"></script>
+<script>document.addEventListener("DOMContentLoaded",()=>{ const s=document.getElementById("langSel"); if(s){s.value=(localStorage.getItem("lang")||"en").slice(0,2); s.onchange=()=>ElvoraI18N.set(s.value);} });</script>
   <header class="nav">
     <div class="brand"><span class="orb"></span> Elvora</div>
     <nav>
@@ -67,6 +82,7 @@
   <footer class="footer">© <span id="y"></span> Elvora • <a href="/legal/privacy.html">Privacy</a> • <a href="/legal/terms.html">Terms</a></footer>
 <footer class="footer">© <span id="y"></span> Elvora • <a href="/about.html">About</a> • <a href="/legal/privacy.html">Privacy</a> • <a href="/legal/terms.html">Terms</a></footer></body>
 </html>
+
 
 
 

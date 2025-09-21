@@ -1,83 +1,58 @@
-﻿<!doctype html><html lang="hr"><head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title data-i18n="t_hub_title">Elvora · Hub</title>
-<link rel="stylesheet" href="/styles.css"/>
-<script defer src="/app.js"></script>
-<script defer src="/i18n.js"></script>
+﻿<!doctype html><html><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Elvora · Hub</title>
+<link rel="stylesheet" href="/styles.css">
 </head><body>
-<header class="nav">
-  <div class="brand"><span class="orb"></span> Elvora</div>
-  <nav>
-    <a class="btn" href="/app/product.html" data-i18n="nav_product">Product</a>
-    <a class="btn" href="/about.html">About</a>
+<!--HEADER-->
+<header class="topbar">
+  <a href="/" class="brand" data-t="brand">Elvora</a>
+  <nav class="links">
+    <a href="/pro/products.html" data-t="products">Products</a>
   </nav>
+  <div class="lang">
+    <label for="langSel" data-t="lang">Language</label>
+    <select id="langSel" aria-label="Language">
+      <option value="en">EN</option>
+      <option value="hr">HR</option>
+    </select>
+  </div>
 </header>
-
-<div class="lang-toggle"><button class="btn" id="langBtn">EN</button></div>
-
+<script defer src="/lang.js"></script>
+<script>document.addEventListener("DOMContentLoaded",()=>{ const s=document.getElementById("langSel"); if(s){s.value=(localStorage.getItem("lang")||"en").slice(0,2); s.onchange=()=>ElvoraI18N.set(s.value);} });</script>
 <div class="section">
-  <h2 data-i18n="h_hub">Hub</h2>
-
-  <div class="hub-group" data-i18n="grp_core">Core</div>
+  <h2 data-t="selectHub">Select a Hub</h2>
   <div class="hub-grid">
     <a class="hub-card" href="/app/home.html">
-      <h3 data-i18n="card_home">Home (Hladnjak)</h3>
-      <span class="badge" data-i18n="badge_3d">3D Fridge</span>
-      <p data-i18n="desc_home">Kućni skener + pregled hladnjaka.</p>
+      <div class="icon cube"></div>
+      <h3 data-t="home">Home</h3>
+      <p data-t="homeDesc">3D fridge…</p>
     </a>
-
-    <a class="hub-card" href="/app/venue.html">
-      <h3 data-i18n="card_market">Market Hub</h3>
-      <span class="badge" data-i18n="badge_planogram">Planogram</span>
-      <p data-i18n="desc_market">Police, backroom i mini-skladište.</p>
+    <a class="hub-card" href="/app/business.html">
+      <div class="icon bld"></div>
+      <h3 data-t="business">Business Hub</h3>
+      <p data-t="businessDesc">POS…</p>
     </a>
-
+    <a class="hub-card" href="/app/inventory.html">
+      <div class="icon box"></div>
+      <h3 data-t="inventory">Inventory Hub</h3>
+      <p data-t="inventoryDesc">AI shelf…</p>
+    </a>
+    <a class="hub-card" href="/app/logistics.html">
+      <div class="icon truck"></div>
+      <h3 data-t="logistics">Logistics Hub</h3>
+      <p data-t="logisticsDesc">Loads…</p>
+    </a>
     <a class="hub-card" href="/app/pharmacy.html">
-      <h3 data-i18n="card_pharmacy">Pharmacy Hub</h3>
-      <span class="badge" data-i18n="badge_coldchain">Cold chain</span>
-      <p data-i18n="desc_pharmacy">Lot/rok, HACCP, recall i audit.</p>
+      <div class="icon pill"></div>
+      <h3 data-t="pharma">Pharma Hub</h3>
+      <p data-t="pharmaDesc">Medicine…</p>
     </a>
-
     <a class="hub-card" href="/app/operations.html">
-      <h3 data-i18n="card_warehouse">Warehouse Hub</h3>
-      <span class="badge" data-i18n="badge_docks">Docks & Ramps</span>
-      <p data-i18n="desc_warehouse">Kapacitet, rampe i 3D navigacija.</p>
-    </a>
-
-    <a class="hub-card" href="/app/venue.html">
-      <h3 data-i18n="card_venue">Venue Hub</h3>
-      <span class="badge" data-i18n="badge_sites">Sites</span>
-      <p data-i18n="desc_venue">Hoteli/kafići/eventi: opskrba + HACCP.</p>
+      <div class="icon gear"></div>
+      <h3 data-t="operations">Operations Hub</h3>
+      <p data-t="operationsDesc">Admin…</p>
     </a>
   </div>
-
-  <div class="hub-group" data-i18n="grp_tools">Tools</div>
-  <div class="hub-grid">
-    <a class="hub-card" href="/app/haccp.html">
-      <h3>HACCP & Temp</h3>
-      <span class="badge">Sensors</span>
-      <p data-i18n="desc_haccp">Zone i alarmi, CSV/PDF export.</p>
-    </a>
-
-    <a class="hub-card" href="/app/scanner.html">
-      <h3 data-i18n="card_scanner">Web skener</h3>
-      <span class="badge">Barcode</span>
-      <p data-i18n="desc_scanner">Kamera + OCR, OFF lookup.</p>
-    </a>
-
-    <a class="hub-card" href="/app/settings.html">
-      <h3 data-i18n="card_settings">Settings</h3>
-      <span class="badge">Account</span>
-      <p data-i18n="desc_settings">Prijava/obnova, uređaji i senzori.</p>
-    </a>
-
-    <a class="hub-card" href="/app/devices.html">
-      <h3 data-i18n="card_devices">Devices</h3>
-      <span class="badge">Admin</span>
-      <p data-i18n="desc_devices">Pregled i upravljanje uređajima.</p>
-    </a>
-  </div>
+  <p style="margin-top:14px"><a class="btn" href="/pro/products.html" data-t="learnMore">Learn more</a></p>
 </div>
-
-<footer class="footer">© <span id="y"></span> Elvora • <a href="/about.html">About</a> • <a href="/legal/privacy.html">Privacy</a> • <a href="/legal/terms.html">Terms</a></footer>
 </body></html>

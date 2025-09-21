@@ -1,0 +1,58 @@
+﻿<!doctype html><html><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Elvora · Products</title>
+<link rel="stylesheet" href="/styles.css">
+</head><body>
+<header class="topbar">
+  <a href="/" class="brand" data-t="brand">Elvora</a>
+  <nav class="links">
+    <a href="/pro/products.html" data-t="products">Products</a>
+  </nav>
+  <div class="lang">
+    <label for="langSel" data-t="lang">Language</label>
+    <select id="langSel" aria-label="Language">
+      <option value="en">EN</option>
+      <option value="hr">HR</option>
+    </select>
+  </div>
+</header>
+<script defer src="/lang.js"></script>
+<script>document.addEventListener("DOMContentLoaded",()=>{ const s=document.getElementById("langSel"); if(s){s.value=(localStorage.getItem("lang")||"en").slice(0,2); s.onchange=()=>ElvoraI18N.set(s.value);} });</script>
+<div class="section">
+  <h2 data-t="productsTitle">What Elvora includes</h2>
+  <div class="cards">
+    <div class="card">
+      <h3 data-t="home">Home</h3>
+      <p data-t="homeDesc"></p>
+    </div>
+    <div class="card">
+      <h3 data-t="business">Business Hub</h3>
+      <p data-t="businessDesc"></p>
+    </div>
+    <div class="card">
+      <h3 data-t="pharma">Pharma Hub</h3>
+      <p data-t="pharmaDesc"></p>
+    </div>
+    <div class="card">
+      <h3 data-t="logistics">Logistics Hub</h3>
+      <p data-t="logisticsDesc"></p>
+    </div>
+    <div class="card">
+      <h3 data-t="inventory">Inventory Hub</h3>
+      <p data-t="inventoryDesc"></p>
+    </div>
+    <div class="card">
+      <h3 data-t="warehouse">Warehouse</h3>
+      <p data-t="warehouseDesc"></p>
+    </div>
+    <div class="card">
+      <h3 data-t="venue">Venue</h3>
+      <p data-t="venueDesc"></p>
+    </div>
+    <div class="card">
+      <h3 data-t="operations">Operations Hub</h3>
+      <p data-t="operationsDesc"></p>
+    </div>
+  </div>
+</div>
+</body></html>
