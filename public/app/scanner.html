@@ -20,6 +20,13 @@ $newDirs | ForEach-Object { New-Item -ItemType Directory -Force -Path $_ | Out-N
 <title>Elvora • Web skener</title>
 <link rel="stylesheet" href="./scanner.css">
 </head><body>
+<div id="onb" style="position:fixed;inset:0;background:rgba(0,0,0,.72);color:#fff;display:flex;align-items:center;justify-content:center;z-index:9999">
+  <div style="max-width:520px;padding:18px;border:1px solid #335;border-radius:14px;background:#0b0f14">
+    <h3>Kako skenirati</h3>
+    <p>Usmjeri kameru prema bar/QR kodu. Prihvatite dopuštenje za kameru. AI dohvaća naziv i rok trajanja.</p>
+    <button class="btn" onclick="localStorage.setItem('scannerOnbSeen','1');document.getElementById('onb').remove();">OK, razumijem</button>
+  </div>
+</div>
 <div class="wrap">
   <h2>Elvora Web skener</h2>
   <div class="cam">
@@ -102,4 +109,5 @@ document.getElementById('btnRollback').onclick=()=>window.elvoraRollback();
 camera().catch(()=>alert('Kamera blokirana. Otvori preko HTTPS-a ili dozvoli kameru.'));
 </script>
 <footer class="footer">© <span id="y"></span> Elvora • <a href="/about.html">About</a> • <a href="/legal/privacy.html">Privacy</a> • <a href="/legal/terms.html">Terms</a></footer></body></html>
+
 
