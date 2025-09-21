@@ -1,87 +1,127 @@
 ﻿<!doctype html><html lang="hr"><head>
 <meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Elvora · Product</title>
+<title data-i18n="prod_title">Elvora · Product</title>
 <link rel="stylesheet" href="/styles.css"/>
+<script defer src="/app.js"></script>
+<script defer src="/i18n.js"></script>
 </head><body>
 <header class="nav">
   <div class="brand"><span class="orb"></span> Elvora</div>
   <nav>
-    <a class="btn" href="/app/product-en.html" aria-label="Switch to English">EN</a> <a class="btn" href="/app/hub.html">Hub</a>
+    <a class="btn" href="/app/hub.html" data-i18n="nav_hub">Hub</a>
+    <a class="btn is-active" href="/app/product.html" data-i18n="nav_product">Product</a>
   </nav>
 </header>
 
 <div class="section">
-  <h2>Elvora — Product</h2>
-  <p class="muted">Scan • Track • Predict — AI PWA za kućne hladnjake, markete, ljekarne, skladišta i objekte.</p>
+  <h2 data-i18n="prod_h2">Što Elvora nudi</h2>
+  <p class="muted" data-i18n="prod_intro">
+    AI Scan • Track • Predict. Elvora je PWA koja objedinjuje skeniranje, HACCP, logistiku i 3D prikaze skladišta/marketâ.
+  </p>
 
-  <div class="grid">
-    <!-- HOME -->
-    <div class="card">
-      <h3>Home (Hladnjak)</h3>
-      <p>Kućni hladnjak s 3D policama i skenerom.</p>
+  <div class="prod-grid">
+
+    <!-- Home -->
+    <div class="prod-card">
+      <h3 data-i18n="p_home_h">Home (Hladnjak)</h3>
+      <div class="prod-meta">
+        <span class="tag" data-i18n="t_scan">Sken</span>
+        <span class="tag" data-i18n="t_ocr">OCR</span>
+        <span class="tag" data-i18n="t_3d">3D</span>
+        <span class="tag">HACCP</span>
+      </div>
+      <div class="hero">
+        <strong data-i18n="p_demo">Demo vizual</strong><br/>
+        <small data-i18n="p_video_hint">Ovdje ide kratki 30–60s video ili 3D animacija hladnjaka/polica.</small>
+      </div>
       <ul class="list">
-        <li>📷 <b>Web skener</b> (EAN/QR, OFF lookup, ručni rok)</li>
-        <li>🧊 <b>Zone</b>: Door / Shelves / Freezer (3D stub, ladice vidljive)</li>
-        <li>⏳ <b>Rokovi</b>: AI podsjetnici, boje (zeleno/sivo/crveno)</li>
-        <li>📥 <b>Import</b> popisa, offline rad (PWA)</li>
+        <li data-i18n="p_home_1">Skeniranje bar/QR koda + OCR naziva i roka.</li>
+        <li data-i18n="p_home_2">3D pregled hladnjaka s policama i pregradama.</li>
+        <li data-i18n="p_home_3">Praćenje rokova – AI upozorenja i list za bacanje.</li>
       </ul>
-      <p><a class="btn" href="/app/home.html">Pogledaj demo</a> <a class="btn" href="/app/scanner.html">Skener</a></p>
     </div>
 
-    <!-- MARKET -->
-    <div class="card">
-      <h3>Market Hub</h3>
-      <p>Upravljanje policama, backroomom i mini-skladištem marketa.</p>
+    <!-- Market -->
+    <div class="prod-card">
+      <h3 data-i18n="p_market_h">Market Hub</h3>
+      <div class="prod-meta">
+        <span class="tag" data-i18n="t_planogram">Planogram</span>
+        <span class="tag" data-i18n="t_pos">POS</span>
+        <span class="tag" data-i18n="t_backroom">Backroom</span>
+      </div>
+      <div class="hero">
+        <strong data-i18n="p_demo">Demo vizual</strong><br/>
+        <small data-i18n="p_video_hint">3D police, isticanje praznih mjesta i preporuke replenishmenta.</small>
+      </div>
       <ul class="list">
-        <li>🛒 <b>Planogram</b> & 3D raspored polica</li>
-        <li>⏳ <b>Rok trajanja</b> po polici i kategoriji</li>
-        <li>🔔 <b>AI upozorenja</b> (isteci, out-of-stock, pogrešno mjesto)</li>
-        <li>🌐 <b>Multijezik</b> + glasovne upute radniku</li>
+        <li data-i18n="p_market_1">3D layout polica + backroom mini-skladište.</li>
+        <li data-i18n="p_market_2">Automatsko upozorenje na out-of-stock i isteke.</li>
+        <li data-i18n="p_market_3">Sync s POS-om i brzi zadaci za osoblje.</li>
       </ul>
-      <p><a class="btn" href="/app/venue.html">Pogledaj demo (Market)</a> <a class="btn" href="/app/haccp.html">HACCP & Temperature</a></p>
     </div>
 
-    <!-- PHARMACY -->
-    <div class="card">
-      <h3>Pharmacy Hub</h3>
-      <p>Kontrolirana temperatura, serije/lotovi i povrati.</p>
+    <!-- Pharmacy -->
+    <div class="prod-card">
+      <h3 data-i18n="p_pharma_h">Pharmacy Hub</h3>
+      <div class="prod-meta">
+        <span class="tag">LOT</span><span class="tag" data-i18n="t_exp">Expiry</span>
+        <span class="tag">HACCP</span><span class="tag" data-i18n="t_recall">Recall</span>
+      </div>
+      <div class="hero">
+        <strong data-i18n="p_demo">Demo vizual</strong><br/>
+        <small data-i18n="p_video_hint">Police s lijekovima + cold-chain senzori.</small>
+      </div>
       <ul class="list">
-        <li>💊 <b>Serijski/LOT</b> & <b>rokovi</b>, hladni lanac</li>
-        <li>🧪 <b>HACCP</b> dnevnik: ambient/chilled/frozen</li>
-        <li>📦 <b>Recall</b> / povrat serija (AI asistencija)</li>
-        <li>🔐 <b>Audit trail</b>, prava pristupa, E2E enkripcija osjetljivog</li>
+        <li data-i18n="p_pharma_1">Sken LOT/batch, provjera roka i serije.</li>
+        <li data-i18n="p_pharma_2">Cold-chain nadzor (chilled/frozen) s alarmima.</li>
+        <li data-i18n="p_pharma_3">Recall alati i audit trail.</li>
       </ul>
-      <p><a class="btn" href="/app/pharmacy.html">Pogledaj demo (Pharmacy)</a> <a class="btn" href="/app/haccp.html">HACCP</a></p>
     </div>
 
-    <!-- WAREHOUSE -->
-    <div class="card">
-      <h3>Warehouse Hub</h3>
-      <p>Više skladišta, 3D rampe i kapacitet po zonama.</p>
+    <!-- Warehouse -->
+    <div class="prod-card">
+      <h3 data-i18n="p_wh_h">Warehouse Hub</h3>
+      <div class="prod-meta">
+        <span class="tag" data-i18n="t_docks">Rampe</span>
+        <span class="tag" data-i18n="t_capacity">Kapacitet</span>
+        <span class="tag">3D Nav</span>
+      </div>
+      <div class="hero">
+        <strong data-i18n="p_demo">Demo vizual</strong><br/>
+        <small data-i18n="p_video_hint">3D tlocrt skladišta + status rampi (zelena/siva/crvena).</small>
+      </div>
       <ul class="list">
-        <li>🚚 <b>Rampe</b> i <b>dokovi</b> (3D navigacija do rampe)</li>
-        <li>📦 <b>Kapacitet</b> (zeleno/sivo/crveno), AI preraspodjela</li>
-        <li>🎯 <b>Rute</b> i najava dolaska (rani dolazak → obavijest + ruta)</li>
-        <li>🛰 <b>Integracije</b>: truck/rail/port/air (slotovi & QR prijava)</li>
+        <li data-i18n="p_wh_1">AI raspored utovara/istovara po rampama.</li>
+        <li data-i18n="p_wh_2">Kontrola tonaže po vozilu i upozorenja.</li>
+        <li data-i18n="p_wh_3">3D navigacija vozila do točne rampe.</li>
       </ul>
-      <p><a class="btn" href="/app/operations.html">Pogledaj demo (Warehouse)</a> <a class="btn" href="/app/settings.html">Devices & Sensors</a></p>
     </div>
 
-    <!-- VENUE -->
-    <div class="card">
-      <h3>Venue Hub</h3>
-      <p>Hoteli, kafići, eventi: linija opskrbe + HACCP + prodaja.</p>
+    <!-- Venue -->
+    <div class="prod-card">
+      <h3 data-i18n="p_venue_h">Venue Hub</h3>
+      <div class="prod-meta">
+        <span class="tag" data-i18n="t_hotels">Hoteli</span>
+        <span class="tag" data-i18n="t_cafes">Kafići</span>
+        <span class="tag" data-i18n="t_events">Eventi</span>
+      </div>
+      <div class="hero">
+        <strong data-i18n="p_demo">Demo vizual</strong><br/>
+        <small data-i18n="p_video_hint">Pregled lokacija, zaliha i HACCP zapisa po objektu.</small>
+      </div>
       <ul class="list">
-        <li>🏨 <b>Objekti</b>, vitrine/hladnjaci (3D vizual, zone)</li>
-        <li>🔄 <b>Transferi</b> između lokacija (QR/glas)</li>
-        <li>🔔 <b>AI alarmi</b> (temp. incident, prolijevanje, HELP tipka)</li>
-        <li>📊 <b>Izvještaji</b> i exporti (CSV/PDF), multilanguage</li>
+        <li data-i18n="p_venue_1">Više lokacija (grad/objekt) s vlastitim bojama/oznakama.</li>
+        <li data-i18n="p_venue_2">Zadaci i obavijesti timu na jeziku radnika.</li>
+        <li data-i18n="p_venue_3">HACCP zone i eksport PDF izvješća.</li>
       </ul>
-      <p><a class="btn" href="/app/venue.html">Pogledaj demo (Venue)</a> <a class="btn" href="/app/haccp.html">HACCP</a></p>
     </div>
+
+  </div>
+
+  <div class="section">
+    <a class="btn" href="/app/hub.html" data-i18n="back_hub">← Natrag na Hub</a>
   </div>
 </div>
 
 <footer class="footer">© <span id="y"></span> Elvora • <a href="/about.html">About</a> • <a href="/legal/privacy.html">Privacy</a> • <a href="/legal/terms.html">Terms</a></footer>
 </body></html>
-

@@ -53,3 +53,12 @@ body{margin:0;background:linear-gradient(180deg,#0b0f14,#0e131b);color:var(--ink
 .hub-group{margin:22px 0 8px;font-weight:700;color:var(--muted);letter-spacing:.3px}
 .lang-toggle{position:fixed;right:14px;top:14px;z-index:9998}
 .lang-toggle .btn{padding:6px 10px;border-radius:999px}
+/* Product page */
+.prod-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:16px}
+@media(max-width:860px){.prod-grid{grid-template-columns:1fr}}
+.prod-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+.prod-card h3{margin:0 0 8px}
+.prod-meta{display:flex;gap:8px;flex-wrap:wrap;margin:6px 0 10px}
+.tag{font-size:.85rem;border:1px solid var(--line);padding:2px 8px;border-radius:999px}
+.hero{margin:8px 0 18px;border:1px dashed var(--line);border-radius:12px;padding:10px;text-align:center}
+.hero small{color:var(--muted)}
