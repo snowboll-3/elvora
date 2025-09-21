@@ -18,3 +18,16 @@ self.addEventListener("fetch",e=>{ if(e.request.method!=="GET") return; e.respon
 
 
 
+
+/* Elvora SW: simple stale-while-revalidate for JSON/API */
+self.addEventListener("fetch", (e)=>{
+  const u = new URL(e.request.url);
+  if(u.pathname.endsWith(".json") || u.pathname.startsWith("/api/")){
+    e.respondWith((async()=>{
+      const cache = await caches.open("api-cache");
+      const cached = await cache.match(e.request);
+      const network = fetch(e.request).then(r=>{ cache.put(e.request,r.clone()); return r; }).catch(()=>cached);
+      return cached || network;
+    })());
+  }
+});
