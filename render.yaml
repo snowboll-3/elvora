@@ -1,6 +1,7 @@
 ﻿services:
-  - type: static
-    name: elvora-web
-    env: static
-    buildCommand: ""
-    publishPath: public
+- type: static
+  name: elvora-static
+  env: static
+  buildCommand: ""
+  staticPublishPath: public
+  pullRequestPreviewsEnabled: true
