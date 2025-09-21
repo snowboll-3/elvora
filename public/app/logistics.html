@@ -26,6 +26,21 @@
     <h3>HACCP · Temperature Control</h3>
     <p>Praćenje zona (ambient / chilled / frozen), AI alarmi, PDF izvoz.</p>
     <p><a class="btn" href="/app/haccp.html">Open HACCP</a></p>
-  </div><script type="module" src="/scripts/logistics.js"></script></body></html>
+  </div><script type="module" src="/scripts/logistics.js"></script><!-- DEMO BUTTONS (safe to remove) -->
+<script type="module">
+  import * as L from "/scripts/logistics.js";
+  function addBtn(txt, onclick){
+    const b=document.createElement("button"); b.className="btn"; b.style.margin="6px";
+    b.textContent=txt; b.onclick=onclick; return b;
+  }
+  document.addEventListener("DOMContentLoaded", ()=>{
+    const bar=document.createElement("div");
+    bar.style.cssText="position:fixed;right:16px;bottom:16px;z-index:9999;background:#0b0f14cc;padding:8px;border:1px solid #24374d;border-radius:10px";
+    bar.appendChild(addBtn("Early check-in (TRUCK-42, 25 min)", ()=>L.earlyCheckIn("TRUCK-42",25)));
+    bar.appendChild(addBtn("Notify manager (Dock 3 ready)", ()=>L.notifyManager("Dock 3 ready")));
+    document.body.appendChild(bar);
+  });
+</script></body></html>
+
 
 
