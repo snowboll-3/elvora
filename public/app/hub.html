@@ -1,58 +1,96 @@
-﻿<!doctype html><html><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Elvora · Hub</title>
-<link rel="stylesheet" href="/styles.css">
-</head><body>
-<!--HEADER-->
-<header class="topbar">
-  <a href="/" class="brand" data-t="brand">Elvora</a>
-  <nav class="links">
-    <a href="/pro/products.html" data-t="products">Products</a>
-  </nav>
-  <div class="lang">
-    <label for="langSel" data-t="lang">Language</label>
-    <select id="langSel" aria-label="Language">
-      <option value="en">EN</option>
-      <option value="hr">HR</option>
-    </select>
+﻿<!doctype html><html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Elvora · Hub</title>
+  <link rel="manifest" href="/manifest.webmanifest"/>
+  <meta name="theme-color" content="#0b0f14"/>
+  <link rel="stylesheet" href="/styles.css"/>
+  <style>
+    :root{
+      --bg:#0b0f14;--panel:#0f1520;--card:#101827;--line:#1c2737;
+      --txt:#e6edf6;--muted:#9fb0c6;--accent:#19b5ff;--ok:#2de39f;--warn:#f4c542;--bad:#ff5d5d
+    }
+    body{background:var(--bg);color:var(--txt)}
+    .shell{max-width:1080px;margin:24px auto;padding:0 16px}
+    .brand{display:flex;align-items:center;gap:12px;margin:18px 0 10px}
+    .brand .dot{width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,#21d0ff,#0aa3e6)}
+    .brand h1{font-size:28px;letter-spacing:.4px;margin:0}
+    .lead{color:var(--muted);margin:0 0 18px}
+
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(260px,1fr));gap:14px}
+    @media (min-width:980px){ .grid{grid-template-columns:repeat(3,minmax(260px,1fr))} }
+
+    .tile{display:flex;align-items:center;gap:14px;padding:16px;border:1px solid var(--line);
+      background:linear-gradient(180deg,#0f1520,#0c121b);border-radius:16px;text-decoration:none;color:var(--txt)}
+    .tile:hover{border-color:#27405a;box-shadow:0 0 0 2px rgba(25,181,255,.12) inset}
+    .ico{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:#0c1926;border:1px solid #1b2e42}
+    .tt{display:flex;flex-direction:column}
+    .tt b{font-size:16px}
+    .tt span{color:var(--muted);font-size:13px}
+
+    .accent{color:var(--accent)}
+    .ok{color:var(--ok)} .warn{color:var(--warn)} .bad{color:var(--bad)}
+
+    .footer{margin:28px 0;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:12px}
+    .footer a{color:var(--muted)}
+  </style>
+  <script defer src="/app.js"></script>
+</head>
+<body>
+  <div class="shell">
+    <div class="brand">
+      <div class="dot" aria-hidden="true"></div>
+      <h1>Elvora</h1>
+    </div>
+    <p class="lead">Select a Hub • everything in one place.</p>
+
+    <div class="grid">
+      <!-- Home (top-left) -->
+      <a class="tile" href="/app/home.html">
+        <div class="ico">🏠</div>
+        <div class="tt"><b>Home</b><span>Fridge • Scanner • OCR • 3D shelves</span></div>
+      </a>
+
+      <a class="tile" href="/app/business.html">
+        <div class="ico">🏢</div>
+        <div class="tt"><b>Business Hub</b><span>POS sync • slots • reports</span></div>
+      </a>
+
+      <a class="tile" href="/app/inventory.html">
+        <div class="ico">📦</div>
+        <div class="tt"><b>Inventory Hub</b><span>AI planogram • counts • moves</span></div>
+      </a>
+
+      <a class="tile" href="/app/logistics.html">
+        <div class="ico">🚚</div>
+        <div class="tt"><b>Logistics Hub</b><span>Dock assign • 3D routing • SOS</span></div>
+      </a>
+
+      <a class="tile" href="/app/pharmacy.html">
+        <div class="ico">💊</div>
+        <div class="tt"><b>Pharma Hub</b><span>Lot/recall • temp logs • audit</span></div>
+      </a>
+
+      <a class="tile" href="/app/operations.html">
+        <div class="ico">⚙️</div>
+        <div class="tt"><b>Operations</b><span>Devices • roles • alerts • backups</span></div>
+      </a>
+
+      <!-- HACCP quick access -->
+      <a class="tile" href="/app/haccp.html">
+        <div class="ico">🌡️</div>
+        <div class="tt"><b>HACCP & Temperature</b><span>Ambient • Chilled • Frozen • PDF</span></div>
+      </a>
+
+      <!-- Settings -->
+      <a class="tile" href="/app/settings.html">
+        <div class="ico">🛠️</div>
+        <div class="tt"><b>Settings</b><span>Languages • notifications • install</span></div>
+      </a>
+    </div>
+
+    <div class="footer">© <span id="y"></span> Elvora • <a href="/about.html">About</a> • <a href="/legal/privacy.html">Privacy</a> • <a href="/legal/terms.html">Terms</a></div>
   </div>
-</header>
-<script defer src="/lang.js"></script>
-<script>document.addEventListener("DOMContentLoaded",()=>{ const s=document.getElementById("langSel"); if(s){s.value=(localStorage.getItem("lang")||"en").slice(0,2); s.onchange=()=>ElvoraI18N.set(s.value);} });</script>
-<div class="section">
-  <h2 data-t="selectHub">Select a Hub</h2>
-  <div class="hub-grid">
-    <a class="hub-card" href="/app/home.html">
-      <div class="icon cube"></div>
-      <h3 data-t="home">Home</h3>
-      <p data-t="homeDesc">3D fridge…</p>
-    </a>
-    <a class="hub-card" href="/app/business.html">
-      <div class="icon bld"></div>
-      <h3 data-t="business">Business Hub</h3>
-      <p data-t="businessDesc">POS…</p>
-    </a>
-    <a class="hub-card" href="/app/inventory.html">
-      <div class="icon box"></div>
-      <h3 data-t="inventory">Inventory Hub</h3>
-      <p data-t="inventoryDesc">AI shelf…</p>
-    </a>
-    <a class="hub-card" href="/app/logistics.html">
-      <div class="icon truck"></div>
-      <h3 data-t="logistics">Logistics Hub</h3>
-      <p data-t="logisticsDesc">Loads…</p>
-    </a>
-    <a class="hub-card" href="/app/pharmacy.html">
-      <div class="icon pill"></div>
-      <h3 data-t="pharma">Pharma Hub</h3>
-      <p data-t="pharmaDesc">Medicine…</p>
-    </a>
-    <a class="hub-card" href="/app/operations.html">
-      <div class="icon gear"></div>
-      <h3 data-t="operations">Operations Hub</h3>
-      <p data-t="operationsDesc">Admin…</p>
-    </a>
-  </div>
-  <p style="margin-top:14px"><a class="btn" href="/pro/products.html" data-t="learnMore">Learn more</a></p>
-</div>
-</body></html>
+</body>
+</html>
