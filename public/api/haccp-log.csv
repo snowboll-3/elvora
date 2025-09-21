@@ -1,4 +1,4 @@
-﻿time,zone,temp_c,status
-2025-09-20 08:00,Ambient,21.0,green
-2025-09-20 08:00,Chilled,4.2,green
-2025-09-20 08:00,Frozen,-17.9,amber
+﻿timestamp,zone,valueC
+2025-09-21T10:00:00Z,ambient,21.0
+2025-09-21T10:00:00Z,chilled,6.5
+2025-09-21T10:00:00Z,frozen,-16.2
