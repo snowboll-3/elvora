@@ -43,3 +43,13 @@ body{margin:0;background:linear-gradient(180deg,#0b0f14,#0e131b);color:var(--ink
 #elvoraBusy.show{display:flex}
 .spin{width:14px;height:14px;border:2px solid #9fb0c6;border-top-color:transparent;border-radius:50%;animation:sp 1s linear infinite}
 @keyframes sp{to{transform:rotate(360deg)}}
+/* Hub polish */
+.hub-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+@media(max-width:1000px){.hub-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:680px){.hub-grid{grid-template-columns:1fr}}
+.hub-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;text-decoration:none;color:var(--ink);display:block;transition:transform .12s ease,opacity .12s}
+.hub-card:hover{transform:translateY(-2px);opacity:.98}
+.hub-card h3{margin:0 0 6px 0}
+.hub-group{margin:22px 0 8px;font-weight:700;color:var(--muted);letter-spacing:.3px}
+.lang-toggle{position:fixed;right:14px;top:14px;z-index:9998}
+.lang-toggle .btn{padding:6px 10px;border-radius:999px}
