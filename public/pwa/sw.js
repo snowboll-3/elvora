@@ -1,4 +1,4 @@
-﻿const VERSION = "elvora-v1";
+﻿const VERSION = "elvora-v2";
 const PRECACHE = [
   "/",                 // root
   "/index.html",
@@ -71,3 +71,4 @@ self.addEventListener("fetch", (e) => {
     }).catch(() => caches.match(rq))
   );
 });
+

@@ -30,3 +30,12 @@ body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.5 system-ui}
 .footer a:hover{color:var(--txt)}
 @media(max-width:940px){.grid{grid-template-columns:1fr 1fr}.hero h1{font-size:34px}}
 @media(max-width:640px){.grid{grid-template-columns:1fr}.nav{display:none}.hero h1{font-size:28px}.strip-inner{flex-direction:column;align-items:flex-start}}
+
+/* Link colors (fix visited purple) */
+a, a:visited { color: var(--txt); text-decoration: none; }
+a:hover { color: #ffffff; }
+.nav a, .nav a:visited { color: var(--muted); }
+.nav a:hover { color: var(--txt); }
+.link, .link:visited { color: var(--blue); text-decoration: none; font-weight: 700; }
+.link:hover { text-decoration: underline; }
+
