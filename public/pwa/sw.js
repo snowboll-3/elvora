@@ -1,18 +1,21 @@
-﻿const VERSION = "elvora-v2";
+﻿const VERSION = "elvora-v3";
 const PRECACHE = [
-  "/",                 // root
-  "/index.html",
-  "/styles.css",
-  "/offline.html",
+  "/", "/index.html", "/styles.css",
   "/hubs/inventory/index.html",
-  "/pwa/manifest.json"
+  "/legal/index.html", "/consent/index.html",
+  "/offline.html", "/pwa/manifest.json"
 ];
+
+// skipWaiting poruka iz stranice (za update banner)
+self.addEventListener("message", (event) => {
+  if (event.data && event.data.action === "skipWaiting") {
+    self.skipWaiting();
+  }
+});
 
 // Instalacija: precache osnovnih resursa
 self.addEventListener("install", (e) => {
-  e.waitUntil(
-    caches.open(VERSION).then((cache) => cache.addAll(PRECACHE))
-  );
+  e.waitUntil(caches.open(VERSION).then((cache) => cache.addAll(PRECACHE)));
   self.skipWaiting();
 });
 
@@ -26,19 +29,16 @@ self.addEventListener("activate", (e) => {
   self.clients.claim();
 });
 
-// Strategije:
-// 1) HTML → Network-first, pa cache, pa offline fallback
-// 2) CSS/JS → Cache-first (brzo i offline)
-// 3) Ostalo → Try network, fallback cache
+// HTML = network-first; CSS/JS = cache-first; ostalo = network-first + cache fallback
 self.addEventListener("fetch", (e) => {
   const rq = e.request;
-  const url = new URL(rq.url);
+  const accept = rq.headers.get("accept") || "";
 
-  if (rq.mode === "navigate" || rq.headers.get("accept")?.includes("text/html")) {
+  // HTML
+  if (rq.mode === "navigate" || accept.includes("text/html")) {
     e.respondWith(
       fetch(rq).then(res => {
-        const copy = res.clone();
-        caches.open(VERSION).then(c => c.put(rq, copy));
+        caches.open(VERSION).then(c => c.put(rq, res.clone()));
         return res;
       }).catch(async () => {
         const cached = await caches.match(rq);
@@ -48,13 +48,13 @@ self.addEventListener("fetch", (e) => {
     return;
   }
 
+  // CSS/JS
   if (rq.destination === "style" || rq.destination === "script") {
     e.respondWith(
       caches.match(rq).then(cached => {
         if (cached) return cached;
         return fetch(rq).then(res => {
-          const copy = res.clone();
-          caches.open(VERSION).then(c => c.put(rq, copy));
+          caches.open(VERSION).then(c => c.put(rq, res.clone()));
           return res;
         });
       })
@@ -62,13 +62,11 @@ self.addEventListener("fetch", (e) => {
     return;
   }
 
-  // default: network first, fallback cache
+  // Ostalo (slike itd.): network-first, cache fallback
   e.respondWith(
     fetch(rq).then(res => {
-      const copy = res.clone();
-      caches.open(VERSION).then(c => c.put(rq, copy));
+      caches.open(VERSION).then(c => c.put(rq, res.clone()));
       return res;
     }).catch(() => caches.match(rq))
   );
 });
-
