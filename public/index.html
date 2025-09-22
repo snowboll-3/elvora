@@ -1,59 +1,47 @@
 ﻿<!doctype html>
-<html lang="en">
+<html lang="hr">
 <head>
-<meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Elvora</title>
-<link rel="manifest" href="/manifest.webmanifest">
-<meta name="theme-color" content="#0b0f14">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Elvora — Scan • Track • Predict</title>
 <link rel="stylesheet" href="/styles.css">
-<style>
-  :root{--bg:#0b0f14;--fg:#e7eef8;--muted:#9fb0c6;--brand:#19b5ff;}
-  body{background:var(--bg);color:var(--fg);font:16px/1.45 system-ui,Segoe UI,Roboto,Arial}
-  .wrap{max-width:980px;margin:0 auto;padding:56px 20px}
-  .hero{display:grid;grid-template-columns:1.1fr .9fr;gap:32px;align-items:center}
-  .title{font-size:48px;line-height:1.05;margin:0 0 10px}
-  .lead{color:var(--muted);font-size:18px;margin:0 0 22px}
-  .cta{display:flex;gap:12px;flex-wrap:wrap}
-  .btn{background:#102030;border:1px solid #23364d;color:#e7eef8;padding:10px 14px;border-radius:12px;text-decoration:none}
-  .btn.primary{background:var(--brand);border-color:transparent;color:#04131f;font-weight:700}
-  .pill{display:inline-block;background:#0f1b27;border:1px solid #23364d;color:#8fb9d8;padding:6px 10px;border-radius:999px;font-size:13px}
-  .features{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:26px}
-  .card{background:#0f1722;border:1px solid #24374d;border-radius:16px;padding:14px}
-  footer{margin-top:48px;color:var(--muted);font-size:13px;text-align:center}
-  @media(max-width:840px){.hero{grid-template-columns:1fr}}
-</style>
+<link rel="manifest" href="/pwa/manifest.json">
+<meta name="theme-color" content="#0b0f14">
 </head>
 <body>
-  <div class="wrap">
-    <div class="hero">
-      <div>
-        <span class="pill">AI Scan • Track • Predict</span>
-        <h1 class="title">Elvora</h1>
-        <p class="lead">Jedan PWA za markete, logistiku i skladišta. Offline, više jezika, QR/Barcode skener, HACCP nadzor i pametni alarmi.</p>
-        <div class="cta">
-          <a class="btn primary" href="/app/hub.html">Open Hub</a>
-          <a class="btn" href="/pro/index.html">Products</a>
-          <a class="btn" href="/about.html">About</a>
-        </div>
-        <div style="margin-top:16px;color:#8fb9d8;font-size:14px">Install: Add to Home Screen · Works offline</div>
+  <div class="bg-anim"></div>
+  <header class="site-header container">
+    <a class="brand" href="/">Elvora</a>
+    <nav class="nav">
+      <a href="/">Početna</a>
+      <a href="/hubs/inventory/index.html">Inventory</a>
+      <a class="muted" href="#">Logistics</a>
+      <a class="muted" href="#">Operations</a>
+      <a class="muted" href="#">HACCP</a>
+      <a href="/legal/Elvora_Terms_Multilingual.pdf" target="_blank">/legal</a>
+    </nav>
+  </header>
+  <main>
+    <section class="hero container">
+      <span class="chip">Safety First</span>
+      <h1>Globalna AI platforma za logistiku, sigurnost i HACCP</h1>
+      <p class="sub">Offline-first • Više jezika • QR/Barcode • GDPR/GMP usklađeno</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="/hubs/inventory/index.html">Pokreni Inventory Hub</a>
+        <a class="btn btn-ghost" href="/legal/Elvora_Terms_Multilingual.pdf" target="_blank">Uvjeti & Privatnost</a>
       </div>
-      <div>
-        <div class="features">
-          <div class="card"><strong>Business Hub</strong><br><span class="muted">POS sinkronizacija, izvještaji, slotovi</span></div>
-          <div class="card"><strong>Logistics Hub</strong><br><span class="muted">Rute, rampe, SOS, tonaza</span></div>
-          <div class="card"><strong>Inventory Hub</strong><br><span class="muted">3D police, planogram, premještaji</span></div>
-          <div class="card"><strong>HACCP</strong><br><span class="muted">Temp zone + PDF export</span></div>
-          <div class="card"><strong>Pharmacy</strong><br><span class="muted">Lot/serije, povlačenja</span></div>
-          <div class="card"><strong>Operations</strong><br><span class="muted">Uređaji, uloge, backup</span></div>
-        </div>
-      </div>
-    </div>
-    <footer>© <span id="y"></span> Elvora • <a href="/legal/privacy.html">Privacy</a> • <a href="/legal/terms.html">Terms</a></footer>
-  </div>
-<script>document.getElementById('y').textContent=new Date().getFullYear()</script>
-<script type="module" src="/scripts/move.js"></script>C:\Users\Mrcina</body>
+    </section>
+    <section class="grid container">
+      <article class="card"><div class="card-icon">📦</div><h3>Inventory</h3><p>Upravljanje zalihama, rokovi, skeniranje EAN/QR.</p><a class="link" href="/hubs/inventory/index.html">Otvori →</a></article>
+      <article class="card"><div class="card-icon">🚚</div><h3>Logistics</h3><p>Multimodalni prijevoz (kamion • brod • avion • vlak).</p><span class="soon">Uskoro</span></article>
+      <article class="card"><div class="card-icon">👥</div><h3>Operations</h3><p>Zadaci, chat i glasovne poruke s AI prijevodom.</p><span class="soon">Uskoro</span></article>
+      <article class="card"><div class="card-icon">❄️</div><h3>HACCP</h3><p>Temperature, evidencija, alarmi i PDF izvještaji.</p><span class="soon">Uskoro</span></article>
+      <article class="card"><div class="card-icon">🖨️</div><h3>POS</h3><p>Uređaji i testni ispis (ESC/POS, Epson, StarPRNT).</p><span class="soon">Uskoro</span></article>
+      <article class="card"><div class="card-icon">🛡️</div><h3>Pravila</h3><p>Uvjeti & Privatnost na više jezika.</p><a class="link" href="/legal/Elvora_Terms_Multilingual.pdf" target="_blank">Pogledaj PDF →</a></article>
+    </section>
+    <section class="strip"><div class="container strip-inner"><div><h4>Plug & Play</h4><p>Instaliraj kao PWA • aktiviraj licencu • radi odmah.</p></div><a class="btn btn-primary" href="/hubs/inventory/index.html">Kreni sada</a></div></section>
+  </main>
+  <footer class="footer container"><div>© Elvora</div><div class="footer-links"><a href="/legal/Elvora_Terms_Multilingual.pdf" target="_blank">Privacy</a><span>·</span><a href="/legal/Elvora_Terms_Multilingual.pdf" target="_blank">Terms</a></div></footer>
+  <script>navigator.serviceWorker?.register('/pwa/sw.js').catch(()=>{});</script>
+</body>
 </html>
-
-
-
