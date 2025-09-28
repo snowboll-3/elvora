@@ -2,7 +2,7 @@
   - type: static
     name: elvora-web
     env: static
-    staticPublishPath: public
+    staticPublishPath: .
     routes:
       - type: rewrite
         source: /sw.js
@@ -10,9 +10,6 @@
       - type: rewrite
         source: /manifest.webmanifest
         destination: /manifest.webmanifest
-      - type: rewrite
-        source: /assets/(.*)
-        destination: /assets/$1
       - type: rewrite
         source: /(.*\.(css|js|png|jpg|jpeg|gif|webp|svg|ico|txt|json))
         destination: /$1
@@ -26,9 +23,6 @@
       - path: /manifest.webmanifest
         name: Cache-Control
         value: no-cache
-      - path: /assets/*
-        name: Cache-Control
-        value: public, max-age=31536000, immutable
       - path: /index.html
         name: Cache-Control
         value: no-cache
