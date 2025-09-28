@@ -1,7 +1,12 @@
 ﻿services:
-- type: static
-  name: elvora-static
-  env: static
-  buildCommand: ""
-  staticPublishPath: public
-  pullRequestPreviewsEnabled: true
+  - type: static
+    name: elvora-web
+    staticPublishPath: web
+    buildCommand: echo No build step
+    envVars:
+      - key: VITE_APP_NAME
+        value: Elvora
+      - key: VITE_DEFAULT_LANG
+        value: hr
+      - key: VITE_ENABLE_SCANNER
+        value: "true"
