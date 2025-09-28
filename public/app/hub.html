@@ -94,3 +94,16 @@
 
 
 
+<!-- hub-wiring -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const go = (sel, href) => { const el = document.querySelector(sel); if (el) el.addEventListener('click', () => location.href = href); };
+  go('#home', '/app/home.html');
+  go('#business', '/app/business.html');
+  go('#inventory', '/app/inventory.html');
+  go('#logistics', '/app/logistics.html');
+  go('#pharma', '/app/pharmacy.html');
+  go('#ops', '/app/operations.html');
+  go('#settings', '/app/settings.html');
+});
+</script>
