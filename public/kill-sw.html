@@ -5,10 +5,10 @@
   <script>
   (async()=>{
     try{
-      const regs = await navigator.serviceWorker.getRegistrations();
+      const regs = await navigator.serviceWorker.getRegistrations?.()||[];
       for (const r of regs){ await r.unregister(); }
-      caches && caches.keys && (await Promise.all((await caches.keys()).map(k=>caches.delete(k))));
-      document.getElementById('out').textContent='OK: SW unregistered and caches cleared. Now hard reload.';
+      if (window.caches?.keys) { for (const k of await caches.keys()) { await caches.delete(k); } }
+      document.getElementById('out').textContent='OK: SW unregistered i cache očišćen. Napravi hard reload (Ctrl+F5).';
     }catch(e){
       document.getElementById('out').textContent='Error: '+e;
     }
