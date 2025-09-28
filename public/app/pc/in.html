@@ -1,0 +1,34 @@
+﻿<!doctype html><html lang='hr'><head>
+<meta charset='utf-8'/><meta name='viewport' content='width=device-width,initial-scale=1'/>
+<title>PC – Ulaz</title>
+<link rel='stylesheet' href='../../css/elvora.css'/>
+<script defer src='../../js/scanner.js'></script>
+</head><body><div class='wrap'>
+  <h1>PC – Ulaz</h1>
+  <div class='tabs'><a class='tab' href='./state.html'>1. Stanje</a>
+<a class='tab' href='./in.html'>2. Ulaz</a>
+<a class='tab' href='./out.html'>3. Izlaz</a>
+<a class='tab' href='./search.html'>4. Traži</a></div>
+  <div class='panel'><div class='kv'>
+  <div><b>Skener</b></div>
+  <div class='scanner'>
+    <video id='vid' playsinline muted></video>
+    <div class='note' id='status'>Spremno.</div>
+    <button class='btn' id='start'>Pokreni skener</button>
+    <button class='btn secondary' id='stop'>Zaustavi</button>
+    <div>
+      <label class='note'>Ručno (fallback):</label>
+      <input id='manual' type='text' placeholder='Upiši barkod/QR i Enter'/>
+    </div>
+  </div>
+</div>
+<script>
+const s=ElvoraScanner;
+const vid=document.getElementById('vid');
+const st=document.getElementById('status');
+document.getElementById('start').onclick=()=>s.start(vid,(code)=>{alert('ULAZ ➜ skenirano: '+code);},(m)=>st.textContent=m);
+document.getElementById('stop').onclick=()=>s.stop();
+document.getElementById('manual').addEventListener('keydown',e=>{if(e.key==='Enter'){alert('ULAZ ➜ ručni unos: '+e.target.value)}});
+</script></div>
+  <div class='footer'>© 2025 Elvora</div>
+</div></body></html>
