@@ -2,7 +2,7 @@
   - type: static
     name: elvora-web
     env: static
-    staticPublishPath: .
+    staticPublishPath: public
     routes:
       - type: rewrite
         source: /sw.js
@@ -11,6 +11,8 @@
         source: /manifest.webmanifest
         destination: /manifest.webmanifest
       - type: rewrite
+        source: /assets/(.*)
+        destination: /assets/$1      - type: rewrite
         source: /(.*\.(css|js|png|jpg|jpeg|gif|webp|svg|ico|txt|json))
         destination: /$1
       - type: rewrite
