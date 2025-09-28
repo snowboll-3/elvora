@@ -1,0 +1,32 @@
+﻿<!doctype html><html lang='hr'><head>
+<meta charset='utf-8'/><meta name='viewport' content='width=device-width,initial-scale=1'/>
+<title>Ljekarna – Traži</title>
+<link rel='stylesheet' href='../../css/elvora.css'/>
+<script defer src='../../js/scanner.js'></script>
+</head><body><div class='wrap'>
+  <h1>Ljekarna – Traži</h1>
+  <div class='tabs'><a class='tab' href='./state.html'>1. Stanje</a>
+<a class='tab' href='./in.html'>2. Ulaz</a>
+<a class='tab' href='./out.html'>3. Izlaz</a>
+<a class='tab' href='./search.html'>4. Traži</a></div>
+  <div class='panel'><div class='grid'>
+  <div class='card'>
+    <h2>Traži artikl</h2>
+    <input id='q' type='text' placeholder='Naziv, šifra ili barkod…'>
+    <p class='note'>Možeš skenirati kutiju ili upisati šifru.</p>
+    <button class='btn' id='scan'>Skeniraj</button>
+    <div id='res' class='panel' style='margin-top:12px'>Nema rezultata.</div>
+  </div>
+  <div class='card'>
+    <video id='vid' playsinline muted></video>
+    <div id='status' class='note'>Spremno.</div>
+    <button class='btn secondary' id='stop'>Zaustavi kameru</button>
+  </div>
+</div>
+<script>
+const s=ElvoraScanner, v=document.getElementById('vid'), st=document.getElementById('status');
+document.getElementById('scan').onclick=()=>s.start(v,(code)=>{document.getElementById('q').value=code;document.getElementById('res').innerText='Rezultat za: '+code;},(m)=>st.textContent=m);
+document.getElementById('stop').onclick=()=>s.stop();
+</script></div>
+  <div class='footer'>© 2025 Elvora</div>
+</div></body></html>

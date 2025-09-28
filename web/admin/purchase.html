@@ -1,0 +1,30 @@
+﻿<!doctype html><html lang='hr'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
+<title>Kupnja Elvore</title><link rel='stylesheet' href='/shared/elvora.css'><script defer src='/shared/elvora.js'></script></head>
+<body><div class='wrap'>
+  <h1 id='h'></h1>
+  <div class='alert'>
+    <h3 id='hPlay'></h3>
+    <ul>
+      <li>Aplikacija za mobilne uređaje: distribucija i naplata preko Google Play Store-a.</li>
+      <li>Za aktivaciju poslovnih hubova potreban je <b>token suglasnosti</b> i konfiguracija.</li>
+    </ul>
+  </div>
+  <div class='alert' style='margin-top:12px'>
+    <h3 id='hEnt'></h3>
+    <ul>
+      <li>Za veće narudžbe (npr. više hubova, multi-regija) koristimo ponudu i ugovor.</li>
+      <li id='thr'></li>
+    </ul>
+  </div>
+  <p class='note'>Ovaj tekst je informativan i ne predstavlja pravni ili porezni savjet.</p>
+  <footer>© 2025 Elvora</footer>
+</div>
+<script>
+(async()=>{ await ElvoraI18n.load();
+document.getElementById('h').textContent=ElvoraI18n.t('purchase.heading');
+document.getElementById('hPlay').textContent=ElvoraI18n.t('purchase.play');
+document.getElementById('hEnt').textContent=ElvoraI18n.t('purchase.enterprise');
+document.getElementById('thr').textContent=ElvoraI18n.t('purchase.threshold');
+})();
+</script>
+</body></html>

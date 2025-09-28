@@ -1,0 +1,33 @@
+﻿<!doctype html><html lang='hr'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
+<title>Suglasnost prije kupnje</title><link rel='stylesheet' href='/shared/elvora.css'><script defer src='/shared/elvora.js'></script></head>
+<body><div class='wrap'>
+  <h1 id='h'></h1>
+  <div class='alert'>
+    <label><input type='checkbox' id='c1'> Prihvaćam EULA uvjete.</label><br>
+    <label><input type='checkbox' id='c2'> Prihvaćam Privatnost & GDPR politiku.</label><br>
+    <label><input type='checkbox' id='c3'> Prihvaćam Elvora zaštitu (12 točaka).</label><br>
+    <label><input type='checkbox' id='c4'> Suglasan/sna sam sa svim zahtjevima korištenja.</label>
+  </div>
+  <p class='note' id='n'></p>
+  <div class='row'>
+    <button class='btn primary' id='gen'></button>
+    <input class='input' id='tok' readonly placeholder='Token će se pojaviti ovdje' style='flex:1;min-width:280px'>
+  </div>
+  <p class='note'>Sačuvaj token – prikazuje se i sprema lokalno kao potvrda prihvaćanja (demo). U produkciji ide digitalni potpis i e-mail potvrda.</p>
+  <footer>© 2025 Elvora</footer>
+</div>
+<script>
+(async()=>{ await ElvoraI18n.load();
+document.getElementById('h').textContent=ElvoraI18n.t('consent.heading');
+document.getElementById('n').textContent=ElvoraI18n.t('consent.mustAgree');
+document.getElementById('gen').textContent=ElvoraI18n.t('consent.generate');
+document.getElementById('gen').onclick=()=>{
+  const ok = ['c1','c2','c3','c4'].every(id=>document.getElementById(id).checked);
+  if(!ok) return ElvoraToast(ElvoraI18n.t('consent.mustAgree'));
+  const t = 'ELV-'+Math.random().toString(36).slice(2,8).toUpperCase()+'-'+Date.now().toString().slice(-6);
+  document.getElementById('tok').value=t;
+  ElvoraStore.set('elvora.consent.token',{token:t,ts:Date.now()});
+  ElvoraToast('Token generiran.');
+};})();
+</script>
+</body></html>

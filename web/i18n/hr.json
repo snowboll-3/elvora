@@ -1,0 +1,20 @@
+﻿{
+  "app.title":"Elvora",
+  "nav.home":"Početna",
+  "nav.pc":"PC hub",
+  "nav.pharmacy":"Ljekarna",
+  "nav.legal":"Pravni paket",
+  "nav.purchase":"Kupnja",
+  "nav.consent":"Suglasnost prije kupnje",
+  "nav.notify":"E-mail obavijesti",
+  "consent.heading":"Suglasnost i prihvat uvjeta",
+  "consent.mustAgree":"Morate prihvatiti sve uvjete prije nastavka kupnje.",
+  "consent.generate":"Generiraj token za kupnju",
+  "notify.heading":"Obavezni e-mail primatelji",
+  "notify.add":"Dodaj e-mail",
+  "notify.save":"Spremi primatelje",
+  "purchase.heading":"Kako kupiti Elvoru",
+  "purchase.play":"Kupnja preko Google Play Store-a",
+  "purchase.enterprise":"Enterprise / veće narudžbe",
+  "purchase.threshold":"Napomena: do ~300.000 € — paušalni obrt; iznad toga — trgovačko društvo (npr. d.o.o.). Ovo je informativno, nije pravni savjet."
+}
