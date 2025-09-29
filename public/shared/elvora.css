@@ -27,3 +27,15 @@ a{color:var(--primary)}
 h1,h2,h3,.number,.metric{color:var(--primary)}
 *:where(.purple,.accent,.brand){color:var(--primary)!important;background-color:transparent!important}
 *:where(.purple-bg,.accent-bg){background-color:#0f141a!important}
+
+/* === ELVORA brand override === */
+:root{ --bg:#0b0f14; --panel:#0f141b; --line:#182029; --txt:#e6eef7; --muted:#9fb0c6; --accent:#19b5ff; }
+html,body{background:var(--bg);color:var(--txt);font:16px/1.5 system-ui}
+a{color:var(--accent);text-decoration:none}
+.wrap{max-width:980px;margin:24px auto;padding:16px}
+h1{color:var(--accent);margin:.2em 0}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.tile{display:block;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:14px;color:var(--txt);text-decoration:none}
+.tile:hover{outline:2px solid rgba(25,181,255,.35)}
+.tile img{display:block;width:64px;height:auto;margin-bottom:10px;image-rendering:auto}
+.muted{color:var(--muted)}
