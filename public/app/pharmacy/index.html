@@ -1,14 +1,23 @@
-﻿<!doctype html><html lang='hr'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
-<title>Ljekarna — Modul skladišta</title><link rel='stylesheet' href='/shared/elvora.css'><script defer src='/shared/elvora.js'></script></head>
-<body>
-<header class='top'><div class='wrap'><b>Ljekarna</b> — Modul skladišta</div></header>
-<main class='wrap'>
-  <div class='grid'>
-    <a class='card' href='/app/pharmacy/stanje.html'><img src='/assets/tile-stanje.png'><h3>Stanje</h3></a>
-    <a class='card' href='/app/pharmacy/ulaz.html'><img src='/assets/tile-ulaz.png'><h3>Ulaz</h3></a>
-    <a class='card' href='/app/pharmacy/izlaz.html'><img src='/assets/tile-izlaz.png'><h3>Izlaz</h3></a>
-    <a class='card' href='/app/pharmacy/trazi.html'><img src='/assets/tile-trazi.png'><h3>Traži</h3></a>
+<!doctype html><html lang="hr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Pharmacy — Elvora</title>
+<style>
+:root{--bg:#0b0f14;--txt:#e6eef7;--accent:#19b5ff;--line:#182029}
+html,body{margin:0;background:var(--bg);color:var(--txt);font:16px/1.5 system-ui}
+.wrap{max-width:880px;margin:24px auto;padding:16px}
+h1{color:var(--accent)} .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px}
+.tile{display:block;background:#0f141b;border:1px solid #182029;border-radius:12px;padding:14px;color:var(--txt);text-decoration:none}
+.tile:hover{outline:2px solid rgba(25,181,255,.35)}
+</style></head><body>
+<div class="wrap">
+  <h1>Pharmacy — Hub (stub)</h1>
+  <div class="grid">
+    <a class="tile" href="/app/pharmacy/state.html">📊 Stanje</a>
+    <a class="tile" href="/app/pharmacy/in.html">⬇️ Ulaz</a>
+    <a class="tile" href="/app/pharmacy/out.html">⬆️ Izlaz</a>
+    <a class="tile" href="/app/pharmacy/search.html">🔎 Traži</a>
   </div>
-  <p class='note'>USB skener (HID) radi automatski. Kamera: gumb “Pokreni kameru”.</p>
-</main>
+  <p style="margin-top:14px"><a href="/app/hub.html" style="color:#19b5ff">⟵ Natrag</a></p>
+</div>
+<script defer src="/app/main.js"></script>
 </body></html>
