@@ -1,0 +1,156 @@
+﻿<!doctype html><html lang="en">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Elvora · Hub</title>
+  <link rel="manifest" href="/manifest.webmanifest"/>
+  <meta name="theme-color" content="#0b0f14"/>
+  <link rel="stylesheet" href="/styles.css"/>
+  <style>
+    :root{
+      --bg:#0b0f14;--panel:#0f1520;--card:#101827;--line:#1c2737;
+      --txt:#e6edf6;--muted:#9fb0c6;--accent:#19b5ff;--ok:#2de39f;--warn:#f4c542;--bad:#ff5d5d
+    }
+    body{background:var(--bg);color:var(--txt)}
+    .shell{max-width:1080px;margin:24px auto;padding:0 16px}
+    .brand{display:flex;align-items:center;gap:12px;margin:18px 0 10px}
+    .brand .dot{width:26px;height:26px;border-radius:7px;background:linear-gradient(135deg,#21d0ff,#0aa3e6)}
+    .brand h1{font-size:28px;letter-spacing:.4px;margin:0}
+    .lead{color:var(--muted);margin:0 0 18px}
+
+    .grid{display:grid;grid-template-columns:repeat(2,minmax(260px,1fr));gap:14px}
+    @media (min-width:980px){ .grid{grid-template-columns:repeat(3,minmax(260px,1fr))} }
+
+    .tile{display:flex;align-items:center;gap:14px;padding:16px;border:1px solid var(--line);
+      background:linear-gradient(180deg,#0f1520,#0c121b);border-radius:16px;text-decoration:none;color:var(--txt)}
+    .tile:hover{border-color:#27405a;box-shadow:0 0 0 2px rgba(25,181,255,.12) inset}
+    .ico{width:36px;height:36px;border-radius:10px;display:grid;place-items:center;background:#0c1926;border:1px solid #1b2e42}
+    .tt{display:flex;flex-direction:column}
+    .tt b{font-size:16px}
+    .tt span{color:var(--muted);font-size:13px}
+
+    .accent{color:var(--accent)}
+    .ok{color:var(--ok)} .warn{color:var(--warn)} .bad{color:var(--bad)}
+
+    .footer{margin:28px 0;color:var(--muted);font-size:12px;border-top:1px solid var(--line);padding-top:12px}
+    .footer a{color:var(--muted)}
+  </style>
+  <script defer src="/app.js"></script>
+</head>
+<body>
+  <div class="shell">
+    <div class="brand">
+      <div class="dot" aria-hidden="true"></div>
+      <h1>Elvora</h1>
+    </div>
+    <p class="lead">Select a Hub • everything in one place.</p>
+
+    <div class="grid">
+      <!-- Home (top-left) -->
+      <a class="tile" href="/app/home.html">
+        <div class="ico">🏠</div>
+        <div class="tt"><b>Home</b><span>Fridge • Scanner • OCR • 3D shelves</span></div>
+      </a>
+
+      <a class="tile" href="/app/business.html">
+        <div class="ico">🏢</div>
+        <div class="tt"><b>Business Hub</b><span>POS sinkronizacija, izvještaji, slotovi za firme (ljekarne, kafići, kiosci, restorani, hoteli, moteli)</span></div>
+      </a>
+
+      <a class="tile" href="/app/inventory.html">
+        <div class="ico">📦</div>
+        <div class="tt"><b>Inventory Hub</b><span>AI planogram • counts • moves</span></div>
+      </a>
+
+      <a class="tile" href="/app/logistics.html">
+        <div class="ico">🚚</div>
+        <div class="tt"><b>Logistics Hub</b><span>Dock assign • 3D routing • SOS</span></div>
+      </a>
+
+      <a class="tile" href="/app/pharmacy.html">
+        <div class="ico">💊</div>
+        <div class="tt"><b>Pharma Hub</b><span>Lot/recall • temp logs • audit</span></div>
+      </a>
+
+      <a class="tile" href="/app/operations.html">
+        <div class="ico">⚙️</div>
+        <div class="tt"><b>Operations</b><span>Devices • roles • alerts • backups</span></div>
+      </a>
+
+      <!-- HACCP quick access -->
+      
+
+      <!-- Settings -->
+      <a class="tile" href="/app/settings.html">
+        <div class="ico">🛠️</div>
+        <div class="tt"><b>Settings</b><span>Languages • notifications • install</span></div>
+      </a>
+    </div>
+
+    <div class="footer">© <span id="y"></span> Elvora • <a href="/about.html">About</a> • <a href="/legal/privacy.html">Privacy</a> • <a href="/legal/terms.html">Terms</a></div>
+  </div>
+<script type="module" src="/scripts/help.js"></script><!-- quicknav: start -->
+<style>
+#quickNav{position:fixed;left:12px;top:12px;z-index:99999;background:#0b0f14cc;color:#fff;border:1px solid #22303d;border-radius:10px;padding:8px 10px;font:12px system-ui}
+#quickNav a{display:inline-block;margin:2px 6px 2px 0;color:#19b5ff;text-decoration:none}
+#quickNav b{display:block;margin-bottom:4px;color:#9fb0c6}
+</style>
+<nav id="quickNav">
+  <b>QuickNav</b>
+  <a href="/app/home.html">Home</a>
+  <a href="/app/business.html">Business</a>
+  <a href="/app/inventory.html">Inventory</a>
+  <a href="/app/logistics.html">Logistics</a>
+  <a href="/app/pharmacy.html">Pharma</a>
+  <a href="/app/operations.html">Operations</a>
+  <a href="/app/settings.html">Settings</a>
+</nav>
+<!-- quicknav: end -->
+</body>
+</html>
+
+
+
+<!-- hub-wiring -->
+<script>
+document.addEventListener('DOMContentLoaded', () => {
+  const go = (sel, href) => { const el = document.querySelector(sel); if (el) el.addEventListener('click', () => location.href = href); };
+  go('#home', '/app/home.html');
+  go('#business', '/app/business.html');
+  go('#inventory', '/app/inventory.html');
+  go('#logistics', '/app/logistics.html');
+  go('#pharma', '/app/pharmacy.html');
+  go('#ops', '/app/operations.html');
+  go('#settings', '/app/settings.html');
+});
+</script>
+
+<!-- hub-wire: start -->
+<script>
+(function(){
+  const map = new Map([
+    ['home','/app/home.html'],
+    ['business','/app/business.html'],
+    ['inventory','/app/inventory.html'],
+    ['logistics','/app/logistics.html'],
+    ['pharma','/app/pharmacy.html'],
+    ['operations','/app/operations.html'],
+    ['settings','/app/settings.html']
+  ]);
+  const norm = s => (s||'').toLowerCase();
+  // Nađi sve kandidatske elemente s tekstom i dodaj click
+  const all = Array.from(document.querySelectorAll('a,button,[role="button"],.card,li,div,section,article,h2,h3,h4'));
+  all.forEach(el=>{
+    const t = norm(el.textContent);
+    for (const [k,href] of map.entries()){
+      if (t.includes(k) && !el.dataset.wired){
+        el.style.cursor='pointer';
+        el.dataset.wired='1';
+        el.addEventListener('click', ()=>location.href=href, {once:true});
+        break;
+      }
+    }
+  });
+})();
+</script>
+<!-- hub-wire: end -->

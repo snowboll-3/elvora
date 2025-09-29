@@ -18,12 +18,3 @@ hr{border:none;height:1px;background:#1a2430;margin:16px 0}
 a{color:var(--blue);text-decoration:none}
 footer{margin-top:28px;color:var(--muted);text-align:center}
 .alert{border:1px solid #2a3949;background:#121a23;padding:12px;border-radius:12px}
-/* === ELVORA OVERRIDES === */
-:root{ --primary:#19b5ff; --bg:#0b0f14; --text:#ffffff; --muted:#9fb0c6; --success:#39d98a; --warn:#f0c24b; --danger:#ff5d5d; }
-html,body{background:var(--bg);color:var(--text)}
-a{color:var(--primary)}
-.button,.btn,.pill{background:var(--primary)!important;border-color:var(--primary)!important;color:#0b0f14!important}
-.card,.tile{background:#0f141a;border:1px solid #22303d;border-radius:12px}
-h1,h2,h3,.number,.metric{color:var(--primary)}
-*:where(.purple,.accent,.brand){color:var(--primary)!important;background-color:transparent!important}
-*:where(.purple-bg,.accent-bg){background-color:#0f141a!important}
