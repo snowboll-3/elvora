@@ -1,0 +1,56 @@
+<!doctype html><html lang="hr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Primka AI — Elvora</title>
+<link rel="stylesheet" href="/shared/elvora.css">
+<style>
+.wrap{max-width:980px;margin:24px auto;padding:16px}
+.card{background:#0f141b;border:1px solid #182029;border-radius:12px;padding:14px}
+.row{display:flex;gap:12px;flex-wrap:wrap}
+input,button,select{font:16px system-ui;padding:10px;border-radius:10px;border:1px solid #234;background:#0b1520;color:#e6eef7}
+table{width:100%;border-collapse:collapse;margin-top:12px}
+th,td{border-bottom:1px solid #182029;padding:8px 6px;text-align:left}
+tfoot td{font-weight:600}
+.kg{opacity:.8}
+.ok{color:#39d98a} .warn{color:#f0c24b}
+</style>
+</head><body>
+<div class="wrap">
+  <h1>📸 Primka AI</h1>
+  <div class="card">
+    <div class="row">
+      <div>
+        <label>Učitaj račun/primku (foto/PDF):</label><br/>
+        <input id="file" type="file" accept="image/*,.pdf">
+      </div>
+      <div>
+        <label>E-mail ID (proslijeđeno):</label><br/>
+        <input id="mailId" placeholder="npr. MSG-12345">
+      </div>
+      <div style="align-self:end">
+        <button id="btnParse">Analiziraj</button>
+      </div>
+    </div>
+    <div id="info" class="kg" style="margin-top:8px">Podržano: foto, PDF ili e-mail ID (kroz backend).</div>
+  </div>
+
+  <div id="out" class="card" style="margin-top:12px;display:none">
+    <h2 style="margin:6px 0">Prijedlog knjiženja</h2>
+    <table>
+      <thead><tr><th>Artikl</th><th>EAN/Šifra</th><th>Količina</th><th>UOM</th><th>Lot</th><th>Rok</th></tr></thead>
+      <tbody id="tbody"></tbody>
+      <tfoot><tr><td colspan="6" id="summary"></td></tr></tfoot>
+    </table>
+    <div class="row" style="margin-top:10px">
+      <div>
+        <label>Odredište:</label><br/>
+        <select id="dest"><option value="SKLADISTE">Skladište</option><option value="SANK">Šank</option></select>
+      </div>
+      <div style="align-self:end"><button id="btnCommit">✅ Potvrdi i knjiži</button></div>
+    </div>
+    <div id="msg" style="margin-top:8px"></div>
+  </div>
+
+  <p style="margin-top:18px"><a href="/app/business.html">⟵ Natrag na Business</a></p>
+</div>
+<script type="module" src="/app/receipts/receipts.js"></script>
+</body></html>
