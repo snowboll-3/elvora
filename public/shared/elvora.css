@@ -39,3 +39,11 @@ h1{color:var(--accent);margin:.2em 0}
 .tile:hover{outline:2px solid rgba(25,181,255,.35)}
 .tile img{display:block;width:64px;height:auto;margin-bottom:10px;image-rendering:auto}
 .muted{color:var(--muted)}
+
+/* === ELVORA: feature-gate styles === */
+.tile.locked { position:relative; filter:grayscale(0.9); opacity:0.65; pointer-events:auto; cursor:not-allowed }
+.tile.locked::after {
+  content:'Premium'; position:absolute; top:10px; right:10px; padding:2px 8px; border-radius:10px;
+  background:#14324a; color:#bfe8ff; border:1px solid #104b6a; font:12px system-ui
+}
+.tile .muted { color:#9fb0c6 }
