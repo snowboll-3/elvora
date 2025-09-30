@@ -1,0 +1,16 @@
+﻿<!doctype html><meta charset="utf-8">
+<title>Elvora Debug</title>
+<script src="/env.js"></script>
+<h1>Debug</h1>
+<pre id="o">Loading...</pre>
+<script type="module">
+  import { createClient } from "https://unpkg.com/@supabase/supabase-js@2/dist/esm/index.js"
+  const out = document.getElementById('o')
+  const url = window.SUPABASE_URL, key = window.SUPABASE_ANON_KEY
+  out.textContent = "URL: " + url + "\nKEY begins: " + (key ? key.slice(0,12)+"..." : "(none)")
+  try {
+    const sb = createClient(url, key)
+    const { data: ver, error } = await sb.rpc('pg_net_version').catch(()=>({data:null,error:"rpc not allowed"}))
+    out.textContent += "\nAuth ready ✓"
+  } catch(e){ out.textContent += "\nSupabase init error: "+(e.message||e) }
+</script>
