@@ -1,23 +1,83 @@
 ﻿<!doctype html><html lang="hr"><head>
-<script src="/env.js"></script>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Elvora – AI Scan • Track • Predict</title>
-<meta name="description" content="Elvora – PWA za skeniranje, inventuru, logistiku i HACCP.">
-<link rel="icon" href="/favicon.ico">
-<link rel="apple-touch-icon" href="/apple-touch-icon.png">
-<link rel="manifest" href="/manifest.webmanifest">
 <link rel="stylesheet" href="/styles.css">
+<script src="/env.js"></script>
 </head><body>
 <header>
-<script src="/env.js"></script><div class="container nav"><div class="brand">Elvora</div><nav><a class="btn" href="/products/">Naši proizvodi</a></nav></div></header>
+  <div class="container nav">
+    <div class="brand">Elvora</div>
+    <nav>
+      <a href="/products/" class="btn">Naši proizvodi</a>
+      <a href="/about.html" class="btn">O nama</a>
+      <a href="/regions/" class="btn">Regije</a>
+      <a href="/support.html" class="btn primary">Support</a>
+    </nav>
+  </div>
+</header>
+
 <main class="container">
   <section class="hero">
     <h1>AI Scan • Track • Predict</h1>
-    <p class="subtext">Pametno upravljanje inventurom, logistikom i HACCP-om.</p>
-    <video src="/media/hero-demo.mp4" autoplay muted loop playsinline></video>
+    <p>PWA za hotele, markete i operacije: offline rad, brzi QR/Barcode skener, HACCP nadzor, inventura i pametni alarmi. Radi na mobitelu, tabletu i PC-ju – bez instalacije.</p>
+    <div class="badges">
+      <span class="badge">PWA offline</span>
+      <span class="badge">HACCP Pro</span>
+      <span class="badge">Inventura</span>
+      <span class="badge">Primka/Utovar</span>
+      <span class="badge">Regions Hub</span>
+    </div>
+    <div class="cta">
+      <a class="btn primary" href="/products/">🚀 Otvori proizvode</a>
+      <a class="btn" href="/regions/">🌍 Regije (HR)</a>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi"><b>3×</b><small>brže skeniranje</small></div>
+      <div class="kpi"><b>−60%</b><small>manje grešaka</small></div>
+      <div class="kpi"><b>99.9%</b><small>uptime na Renderu</small></div>
+    </div>
+  </section>
+
+  <section class="grid panels">
+    <div class="panel">
+      <h3>Market & Skladište</h3>
+      <p>Ulaz/izlaz, inventura, rokovi i HACCP – čisto razdvojeno po županijama i marketima.</p>
+    </div>
+    <div class="panel">
+      <h3>Logistika</h3>
+      <p>READY → EN_ROUTE → DISPATCH, temperaturni zapis i automatske primke u marketu.</p>
+    </div>
+    <div class="panel">
+      <h3>Regions Hub</h3>
+      <p>Pregled po županijama ili državama, PDF izvještaji i KPI ploča za direktore.</p>
+    </div>
   </section>
 </main>
-<footer><div class="container rights">© <span id="y"></span> Elvora. Sva prava pridržana.</div></footer>
+
+<footer>
+  <div class="container footer-grid">
+    <div>
+      <h4>Elvora</h4>
+      <p class="rights">© <span id="y"></span> Elvora. Sva prava pridržana.</p>
+    </div>
+    <div>
+      <h4>Pravno</h4>
+      <ul class="clean">
+        <li><a href="/legal/terms.html">Uvjeti korištenja</a></li>
+        <li><a href="/legal/privacy.html">Politika privatnosti</a></li>
+        <li><a href="/legal/dpa.html">DPA</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Support</h4>
+      <ul class="clean">
+        <li><a href="/support.html">Centar za podršku</a></li>
+        <li><a href="mailto:support@elvora.hr">support@elvora.hr</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+
 <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
 </body></html>
-
