@@ -1,0 +1,16 @@
+﻿body{margin:0;background:#0b0f14;color:#eaf3ff;font:16px/1.45 Inter,system-ui}
+.wrap{max-width:980px;margin:0 auto;padding:16px}
+.cam{position:relative;border:1px solid #1b2838;border-radius:16px;overflow:hidden;background:#000}
+video{width:100%;display:block}
+.corn{position:absolute;width:26px;height:26px;border:3px solid #69e3ff;border-radius:6px}
+.corn.tl{top:10px;left:10px;border-right:none;border-bottom:none}
+.corn.tr{top:10px;right:10px;border-left:none;border-bottom:none}
+.corn.bl{bottom:10px;left:10px;border-right:none;border-top:none}
+.corn.br{bottom:10px;right:10px;border-left:none;border-top:none}
+.ocr{position:absolute;left:50%;bottom:14px;transform:translateX(-50%);padding:8px 12px;border:1px solid #1b2838;border-radius:10px;background:rgba(14,25,40,.8);backdrop-filter:blur(6px);opacity:0;transition:.24s;box-shadow:0 6px 22px rgba(0,0,0,.35)}
+.ocr.show{opacity:1}
+.info{display:flex;gap:10px;flex-wrap:wrap;margin:10px 0}
+.pill{background:#122033;border:1px solid #1b2838;border-radius:12px;padding:8px 10px}
+.btn{padding:10px 14px;border:1px solid #1b2838;border-radius:12px;background:#13243a;color:#eaf3ff;cursor:pointer}
+.btn.ghost{background:#0f1826}
+.row{display:flex;gap:10px}

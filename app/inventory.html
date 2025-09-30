@@ -1,0 +1,46 @@
+﻿<!doctype html><html lang="hr"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Elvora · inventory.html</title>
+<link rel="stylesheet" href="/styles.css"/>
+<script defer src="/actions.js"></script>
+<script defer src="/app.js"></script>
+</head><body>
+<div class="section">
+  <div class="lang"><button data-lang="hr">HR</button><button data-lang="en">EN</button></div>
+  <h2 data-i18n="inventoryTitle">inventoryTitle</h2>
+  <p class="muted" data-i18n="inventoryLead">inventoryLead</p>
+
+  <div class="card">
+    <h3 data-i18n="quickActions">Brze radnje</h3>
+    <div class="actions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+      <button class="btn" data-action="planogram" data-i18n="qaPlanogramAI">qaPlanogramAI</button>
+      <button class="btn" data-action="replenish" data-i18n="qaReplenishNow">qaReplenishNow</button>
+      <button class="btn" data-action="cycle" data-i18n="qaCycleCount">qaCycleCount</button>
+      <button class="btn" data-action="markdown" data-i18n="qaMarkDown">qaMarkDown</button>
+      <button class="btn" data-action="move" data-i18n="qaMoveStock">qaMoveStock</button>
+    </div>
+  </div>
+</div>
+<footer class="footer">© <span id="y"></span> Elvora • <a href="/app/hub.html">Hub</a></footer>
+  <div class="card">
+    <h3>HACCP · Temperature Control</h3>
+    <p>Praćenje zona (ambient / chilled / frozen), AI alarmi, PDF izvoz.</p>
+    <p><a class="btn" href="/app/haccp.html">Open HACCP</a></p>
+  </div><script type="module" src="/scripts/move.js"></script><!-- DEMO BUTTONS (safe to remove) -->
+<script type="module">
+  import * as M from "/scripts/move.js";
+  function addBtn(txt, onclick){
+    const b=document.createElement("button"); b.className="btn"; b.style.margin="6px";
+    b.textContent=txt; b.onclick=onclick; return b;
+  }
+  document.addEventListener("DOMContentLoaded", ()=>{
+    const bar=document.createElement("div");
+    bar.style.cssText="position:fixed;right:16px;bottom:16px;z-index:9999;background:#0b0f14cc;padding:8px;border:1px solid #24374d;border-radius:10px";
+    bar.appendChild(addBtn("Mark for Move (SKU 11111111 → Shelf-2)", ()=>M.markForMove("11111111","Aisle-1","Shelf-2")));
+    bar.appendChild(addBtn("Clear move queue", ()=>M.clearMoves()));
+    document.body.appendChild(bar);
+  });
+</script></body></html>
+
+
+

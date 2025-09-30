@@ -1,0 +1,46 @@
+﻿<!doctype html><html lang="hr"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Elvora · logistics.html</title>
+<link rel="stylesheet" href="/styles.css"/>
+<script defer src="/actions.js"></script>
+<script defer src="/app.js"></script>
+</head><body>
+<div class="section">
+  <div class="lang"><button data-lang="hr">HR</button><button data-lang="en">EN</button></div>
+  <h2 data-i18n="logisticsTitle">logisticsTitle</h2>
+  <p class="muted" data-i18n="logisticsLead">logisticsLead</p>
+
+  <div class="card">
+    <h3 data-i18n="quickActions">Brze radnje</h3>
+    <div class="actions" style="display:flex;gap:8px;flex-wrap:wrap;margin-top:8px">
+      <button class="btn" data-action="assignDock" data-i18n="qaAssignDock">qaAssignDock</button>
+      <button class="btn" data-action="guideRamp" data-i18n="qaGuideToRamp">qaGuideToRamp</button>
+      <button class="btn" data-action="reportEarly" data-i18n="qaReportEarly">qaReportEarly</button>
+      <button class="btn" data-action="reqSlot" data-i18n="qaRequestSlot">qaRequestSlot</button>
+      <button class="btn" data-action="helpSOS" data-i18n="qaHelpSOS">qaHelpSOS</button>
+    </div>
+  </div>
+</div>
+<footer class="footer">© <span id="y"></span> Elvora • <a href="/app/hub.html">Hub</a></footer>
+  <div class="card">
+    <h3>HACCP · Temperature Control</h3>
+    <p>Praćenje zona (ambient / chilled / frozen), AI alarmi, PDF izvoz.</p>
+    <p><a class="btn" href="/app/haccp.html">Open HACCP</a></p>
+  </div><script type="module" src="/scripts/logistics.js"></script><!-- DEMO BUTTONS (safe to remove) -->
+<script type="module">
+  import * as L from "/scripts/logistics.js";
+  function addBtn(txt, onclick){
+    const b=document.createElement("button"); b.className="btn"; b.style.margin="6px";
+    b.textContent=txt; b.onclick=onclick; return b;
+  }
+  document.addEventListener("DOMContentLoaded", ()=>{
+    const bar=document.createElement("div");
+    bar.style.cssText="position:fixed;right:16px;bottom:16px;z-index:9999;background:#0b0f14cc;padding:8px;border:1px solid #24374d;border-radius:10px";
+    bar.appendChild(addBtn("Early check-in (TRUCK-42, 25 min)", ()=>L.earlyCheckIn("TRUCK-42",25)));
+    bar.appendChild(addBtn("Notify manager (Dock 3 ready)", ()=>L.notifyManager("Dock 3 ready")));
+    document.body.appendChild(bar);
+  });
+</script></body></html>
+
+
+

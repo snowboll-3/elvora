@@ -1,0 +1,29 @@
+﻿<!doctype html><html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Elvora · Prijava / Obnova</title>
+<link rel="stylesheet" href="/styles.css"/>
+<script defer src="/auth.js"></script>
+</head><body>
+<div class="section">
+  <h2>Prijava / Obnova</h2>
+  <div class="grid">
+    <div class="card">
+      <h3>Prijava e-mailom</h3>
+      <p>Unesi e-mail, poslat ćemo ti Magic Link ili kod.</p>
+      <input id="email" placeholder="you@example.com" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--line)"/>
+      <div style="margin-top:8px"><button class="btn" id="btnMagic">Pošalji Magic Link</button></div>
+      <div style="margin-top:8px"><input id="otp" placeholder="Jednokratni kod (opcionalno)" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--line)"/></div>
+      <div style="margin-top:8px"><button class="btn" id="btnLogin">Prijava</button></div>
+    </div>
+    <div class="card">
+      <h3>Obnova na novi uređaj</h3>
+      <p>Skeniraj QR kod s aktivnog uređaja ili unesi kod.</p>
+      <div id="qrBox" class="card" style="text-align:center">[ QR CODE PLACEHOLDER ]</div>
+      <input id="restoreCode" placeholder="8-znamenkasti kod" style="width:100%;padding:10px;border-radius:10px;border:1px solid var(--line);margin-top:8px"/>
+      <div style="margin-top:8px"><button class="btn" id="btnRestore">Obnovi</button></div>
+      <p class="muted" style="margin-top:8px">Nakon obnove: dopusti kameru/notifikacije i (po potrebi) Re-pair senzora.</p>
+    </div>
+  </div>
+</div>
+<footer class="footer">© <span id="y"></span> Elvora • <a href="/about.html">About</a> • <a href="/legal/privacy.html">Privacy</a> • <a href="/legal/terms.html">Terms</a></footer></body></html>
+

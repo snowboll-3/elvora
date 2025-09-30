@@ -1,0 +1,33 @@
+﻿<!doctype html><html lang="en"><head>
+<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>Elvora · HACCP Report</title>
+<link rel="stylesheet" href="/styles.css"/>
+<style>
+@media print {.noprint{display:none} .section{max-width:none}}
+.table{width:100%;border-collapse:collapse}
+.table th,.table td{border-bottom:1px solid var(--line);padding:8px 6px;text-align:left}
+</style>
+<script>
+async function loadCSV(){
+  const r = await fetch('/api/haccp-log.csv'); const t = await r.text();
+  const rows = t.trim().split(/\r?\n/).map(l=>l.split(','));
+  const [head,...body]=rows;
+  const tbl=document.getElementById('tbl');
+  tbl.innerHTML = '<thead><tr>'+head.map(h=>'<th>'+h+'</th>').join('')+'</tr></thead>'+
+                  '<tbody>'+body.map(r=>'<tr>'+r.map(c=>'<td>'+c+'</td>').join('')+'</tr>').join('')+'</tbody>';
+}
+document.addEventListener('DOMContentLoaded',loadCSV);
+</script>
+</head><body>
+<div class="section">
+  <div class="noprint" style="display:flex;justify-content:space-between;align-items:center;gap:10px">
+    <h2>HACCP Report</h2>
+    <div>
+      <a class="btn" href="/app/haccp.html">← Back</a>
+      <button class="btn" onclick="window.print()">🖨 Print / Save as PDF</button>
+    </div>
+  </div>
+  <p class="muted">Auto-generated from HACCP log CSV.</p>
+  <table id="tbl" class="table"></table>
+</div>
+</body></html>

@@ -1,0 +1,61 @@
+﻿<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="/styles.css">
+<title>Elvora — Inventory Hub</title>
+</head>
+<body>
+  <div class="container">
+    <div class="header">
+      <div class="logo">Elvora</div>
+      <nav class="nav">
+        <a href="/">Početna</a>
+        <a href="/hubs/inventory/index.html">Inventory</a>
+      </nav>
+    </div>
+
+    <h2>Inventory Hub</h2>
+    <div style="display:flex;gap:12px;flex-wrap:wrap;margin:10px 0 4px">
+      <a class="btn" href="#">Uvezi fakturu</a>
+      <a class="btn" href="#">Dopuna</a>
+      <a class="btn" href="#">Pokazatelji</a>
+      <a class="btn" href="#">Inventar</a>
+      <a class="btn" href="#">Upozorenja po roku</a>
+    </div>
+
+    <div class="kpis">
+      <div class="kpi"><strong>Zaliha (kom)</strong><div>1200</div></div>
+      <div class="kpi"><strong>Prodano danas</strong><div>45</div></div>
+      <div class="kpi"><strong>Upozorenja</strong><div class="status-warn">2</div></div>
+    </div>
+
+    <div style="margin:10px 0">
+      <input placeholder="Pretraga proizvoda…" style="width:100%;padding:12px;border-radius:10px;border:1px solid rgba(255,255,255,.08);background:#0e141b;color:#e7eef6">
+    </div>
+
+    <table class="table">
+      <thead>
+        <tr>
+          <th>Šifra artikla</th><th>Naziv proizvoda</th><th>Kategorija</th><th>Rok (DD.MM.YYYY)</th><th>Količina</th><th>Status</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td>900</td><td>Sok naranča 0,5 L</td><td>Pića</td><td>15.07.2025</td><td>80</td><td class="status-warn">Upozorenje</td></tr>
+        <tr><td>777</td><td>Svježe mlijeko 2,8%</td><td>Mliječni proizvod</td><td>22.04.2024</td><td>50</td><td class="status-err">Isteklo</td></tr>
+        <tr><td>385</td><td>Jogurt 1 L</td><td>Mliječni proizvod</td><td>30.09.2025</td><td>120</td><td class="status-ok">OK</td></tr>
+        <tr><td>123</td><td>Kisela kiselina</td><td>DG-8 (Korozivne tvari)</td><td>01.12.2025</td><td>20</td><td class="status-dg">DG</td></tr>
+        <tr><td>444</td><td>Čaše za piće (staklo)</td><td>Ambalaža</td><td>01.03.2026</td><td>200</td><td class="status-ok">OK</td></tr>
+      </tbody>
+    </table>
+
+    <div style="margin:14px 0;display:flex;gap:10px">
+      <a class="btn" href="#">Izvoz CSV</a>
+      <a class="btn" href="#">Izvoz PDF</a>
+    </div>
+
+    <div class="footer">© Elvora · Inventory</div>
+  </div>
+</body>
+</html>

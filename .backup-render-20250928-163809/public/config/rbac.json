@@ -1,0 +1,8 @@
+{
+  "roles": {
+    "Operator": ["scan","view_products","haccp_log_add","move_mark"],
+    "Manager":  ["scan","view_products","haccp_log_add","move_mark","move_complete","logistics_notify","devices_pair"],
+    "Admin":    ["*"]
+  },
+  "defaultRole": "Operator"
+}

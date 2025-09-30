@@ -1,0 +1,37 @@
+﻿<!doctype html><html lang='hr'><head>
+<meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
+<title>Elvora</title><link rel='stylesheet' href='/shared/elvora.css'><script defer src='/shared/elvora.js'></script>
+</head><body><div class='wrap'>
+  <div class='row'>
+    <h1 id='ttl' style='margin:0;color:#19b5ff'>Elvora</h1>
+    <span class='note'>|</span>
+    <a href='/app/pc/index.html'>PC</a>
+    <a href='/app/pharmacy/index.html'>Ljekarna</a>
+    <a href='/app/home/index.html'>Kućanstvo</a>
+    <a href='/legal/index.html'>Pravni paket</a>
+    <a href='/admin/consent.html'>Suglasnost</a>
+    <a href='/admin/notify.html'>E-mail obavijesti</a>
+    <a href='/admin/purchase.html'>Kupnja</a>
+    <select id='lang'>
+      <option value='hr'>HR</option><option value='en'>EN</option>
+    </select>
+  </div>
+  <hr>
+  <div class='grid'>
+    <a class='card' href='/app/comm/index.html'><img src='/assets/tile-trazi.png'><h3>Komunikacija</h3></a>
+    <a class='card' href='/app/pc/index.html'><img src='/assets/tile-stanje.png'><h3>PC — Skladište</h3></a>
+    <a class='card' href='/app/pharmacy/index.html'><img src='/assets/ph-stanje.png'><h3>Ljekarna — Skladište</h3></a>
+    <a class='card' href='/app/home/index.html'><img src='/assets/fridge-final-2buttons.png'><h3>Kućanstvo — Hladnjak</h3></a>
+    <a class='card' href='/admin/consent.html'><img src='/assets/tile-trazi.png'><h3>Suglasnost prije kupnje</h3></a>
+    <a class='card' href='/admin/notify.html'><img src='/assets/tile-ulaz.png'><h3>E-mail obavijesti</h3></a>
+    <a class='card' href='/admin/purchase.html'><img src='/assets/tile-izlaz.png'><h3>Kako kupiti</h3></a>
+    <a class='card' href='/legal/index.html'><img src='/assets/tile-stanje.png'><h3>Pravni paket</h3></a>
+  </div>
+  <footer>© 2025 Elvora</footer>
+</div>
+<script>
+(async()=>{ await ElvoraI18n.load(); document.getElementById('ttl').textContent = ElvoraI18n.t('app.title','Elvora');
+const sel=document.getElementById('lang'); sel.value=ElvoraI18n.getLang(); sel.onchange=e=>ElvoraI18n.setLang(e.target.value);})();
+</script>
+</body></html>
+

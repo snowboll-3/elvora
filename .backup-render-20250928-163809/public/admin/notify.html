@@ -1,0 +1,30 @@
+﻿<!doctype html><html lang='hr'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
+<title>E-mail obavijesti</title><link rel='stylesheet' href='/shared/elvora.css'><script defer src='/shared/elvora.js'></script></head>
+<body><div class='wrap'>
+  <h1 id='h'></h1>
+  <div id='list' class='alert'></div>
+  <div class='row' style='margin-top:10px'>
+    <input id='em' class='input' placeholder='ime@domena.com' style='flex:1;min-width:260px'>
+    <button class='btn' id='add'></button>
+    <button class='btn primary' id='save'></button>
+  </div>
+  <p class='note'>Ovdje kupac unosi sve osobe koje moraju dobivati obavijesti (stanje, problemi, HACCP…). U produkciji se sprema na backend.</p>
+  <footer>© 2025 Elvora</footer>
+</div>
+<script>
+(async()=>{ await ElvoraI18n.load();
+document.getElementById('h').textContent=ElvoraI18n.t('notify.heading');
+document.getElementById('add').textContent=ElvoraI18n.t('notify.add');
+document.getElementById('save').textContent=ElvoraI18n.t('notify.save');
+const key='elvora.notify.emails'; const list=document.getElementById('list');
+function render(){
+  const arr = ElvoraStore.get(key,[]);
+  list.innerHTML = arr.length? arr.map((x,i)=><div class='row'><span></span><button class='btn' onclick='rem()'>Ukloni</button></div>).join('') : "<span class='note'>Nema unesenih adresa.</span>";
+}
+window.rem=(i)=>{ const arr=ElvoraStore.get(key,[]); arr.splice(i,1); ElvoraStore.set(key,arr); render(); }
+document.getElementById('add').onclick=()=>{ const v=document.getElementById('em').value.trim(); if(!v||!v.includes('@')) return ElvoraToast('Neispravna adresa.'); const arr=ElvoraStore.get(key,[]); arr.push(v); ElvoraStore.set(key,arr); document.getElementById('em').value=''; render(); }
+document.getElementById('save').onclick=()=>{ ElvoraToast('Spremljeno (demo: localStorage).'); }
+render();
+})();
+</script>
+</body></html>

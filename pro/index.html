@@ -1,0 +1,70 @@
+﻿<!doctype html>
+<html lang="hr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>ShelfLife Pro — Dashboard</title>
+  <link rel="icon" href="./assets/logo-pro.svg" type="image/svg+xml"/>
+  <link rel="stylesheet" href="./pro-style.css"/>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      
+      <h1>ShelfLife <span class="pro">Pro</span></h1>
+    </div>
+    <nav class="actions">
+      <button id="btnImport" class="btn">📄 Uvezi fakturu (demo)</button>
+      <button id="btnSale" class="btn ghost">🧾 POS prodaja (demo)</button>
+      <button id="btnRestock" class="btn ghost">📦 Dopuna (demo)</button>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <section class="grid">
+      <div class="card">
+        <h2>📊 KPI</h2>
+        <div class="kpi">
+          <div class="tile"><div class="label">Zaliha (kom)</div><div class="big" id="kpiStock">—</div></div>
+          <div class="tile"><div class="label">Prodano danas</div><div class="big" id="kpiSold">—</div></div>
+          <div class="tile"><div class="label">Upozorenja</div><div class="big" id="kpiAlerts">—</div></div>
+        </div>
+      </div>
+      <div class="card">
+        <h2>🚨 Upozorenja po roku</h2>
+        <div id="alerts" class="alerts"></div>
+      </div>
+    </section>
+
+    <section class="card">
+      <div class="row between">
+        <h2>📦 Inventar</h2>
+        <div class="filters">
+          <select id="filterCat" class="select">
+            <option value="">Sve kategorije</option>
+            <option value="Pića">Pića</option>
+            <option value="Hrana">Hrana</option>
+            <option value="Mliječno">Mliječno</option>
+            <option value="Ostalo">Ostalo</option>
+          </select>
+          <input id="search" class="input" placeholder="Pretraga proizvoda…"/>
+        </div>
+      </div>
+      <div class="table-wrap">
+        <table class="table">
+          <thead><tr>
+            <th>SKU/EAN</th><th>Proizvod</th><th>Kategorija</th>
+            <th>Rok</th><th>Količina</th><th>Status</th><th>Akcije</th>
+          </tr></thead>
+          <tbody id="tbody"></tbody>
+        </table>
+      </div>
+    </section>
+  </main>
+
+  <div id="snack" class="snack"></div>
+  <script src="./pro-app.js"></script>
+<footer class="footer">© <span id="y"></span> Elvora • <a href="/about.html">About</a> • <a href="/legal/privacy.html">Privacy</a> • <a href="/legal/terms.html">Terms</a></footer></body>
+</html>
+
+

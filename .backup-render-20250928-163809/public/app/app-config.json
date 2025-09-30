@@ -1,0 +1,10 @@
+﻿{
+  "trialDays": { "home": 30, "pro": 60, "warehouse": 90, "market": 90 },
+  "features": {
+    "ean13": "free",
+    "qr_datamatrix": "premium",
+    "pos": "premium",
+    "hangar": "premium",
+    "ocr_expiry": "beta"
+  }
+}

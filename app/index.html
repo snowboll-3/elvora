@@ -1,0 +1,40 @@
+﻿<!doctype html>
+<html lang="hr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <title>ShelfLife — Skladište / Market</title>
+  <link rel="stylesheet" href="./style.css"/>
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">🥬 ShelfLife</div>
+    <nav class="nav">
+      <a href="/pro/" class="link">Pro</a>
+      <a href="/admin/" class="link">Admin</a>
+    </nav>
+  </header>
+
+  <main class="wrap">
+    <h1>Odaberi mod</h1>
+    <p class="muted">Jedna aplikacija – dva lica. Skladište i Market dijele isti engine; razlikuju se samo po prikazu i ovlastima.</p>
+
+    <div class="modes">
+      <button id="btnWH" class="card wh">
+        <h2>🏭 Skladište</h2>
+        <p>Prijem/izdavanje, 2D/SSCC, ASN, transferi, offline & recovery.</p>
+      </button>
+
+      <button id="btnMK" class="card mk">
+        <h2>🏬 Market</h2>
+        <p>Brzi ADD/USE, police, dnevni sažetak, draft narudžbe.</p>
+      </button>
+    </div>
+
+    <section id="panel" class="panel hidden"></section>
+  </main>
+
+  <script src="./main.js"></script>
+<footer class="footer">© <span id="y"></span> Elvora • <a href="/about.html">About</a> • <a href="/legal/privacy.html">Privacy</a> • <a href="/legal/terms.html">Terms</a></footer></body>
+</html>
+

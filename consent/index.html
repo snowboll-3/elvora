@@ -1,0 +1,80 @@
+﻿<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Elvora — Prihvaćanje uvjeta</title>
+<link rel="stylesheet" href="/styles.css">
+<style>
+  .consent-wrap{max-width:900px;margin:0 auto}
+  .consent-card{background:rgba(255,255,255,.04);border:1px solid rgba(255,255,255,.06);border-radius:16px;padding:18px}
+  .consent-title{font-size:28px;margin:0 0 8px}
+  .consent-note{color:var(--muted);margin:0 0 16px}
+  .consent-list{display:grid;gap:10px}
+  .consent-item{display:flex;gap:12px;align-items:flex-start;padding:10px;border-radius:12px;background:rgba(0,0,0,.18);border:1px solid rgba(255,255,255,.06)}
+  .consent-item input{margin-top:3px;transform:scale(1.2)}
+  .consent-actions{display:flex;justify-content:space-between;align-items:center;margin-top:16px;gap:12px}
+  .btn[disabled]{opacity:.5;cursor:not-allowed}
+  .lang{color:var(--muted);font-size:14px}
+</style>
+</head>
+<body>
+  <div class="container">
+    <header class="site-header">
+      <a class="brand" href="/">Elvora</a>
+      <nav class="nav">
+        <a href="/">Početna</a>
+        <a href="/hubs/inventory/index.html">Inventory</a>
+        <a href="/legal/Elvora_Terms_Multilingual.pdf" target="_blank">/legal</a>
+      </nav>
+    </header>
+
+    <main class="consent-wrap">
+      <div class="consent-card">
+        <h1 class="consent-title">Prihvaćanje uvjeta</h1>
+        <p class="consent-note">Pročitaj i označi <strong>svaku</strong> stavku. Gumb je zaključan dok sve kvačice nisu označene.</p>
+
+        <div id="consentList" class="consent-list">
+          <!-- 12 items -->
+          <label class="consent-item"><input type="checkbox"> <span>Prihvaćam pravila o pohrani podataka i odgovornosti.</span></label>
+          <label class="consent-item"><input type="checkbox"> <span>Prihvaćam da su sve skenirane i uvezene stavke moja imovina.</span></label>
+          <label class="consent-item"><input type="checkbox"> <span>Prihvaćam odgovornost za postupke svojih zaposlenika i korisnika.</span></label>
+          <label class="consent-item"><input type="checkbox"> <span>Prihvaćam da Elvora samo upozorava, a ne sprječava neodgovorno ponašanje.</span></label>
+          <label class="consent-item"><input type="checkbox"> <span>Prihvaćam da je moja obaveza reagirati na upozorenja (rok trajanja, sigurnost, HACCP).</span></label>
+          <label class="consent-item"><input type="checkbox"> <span>Prihvaćam da Elvora ne snosi odgovornost ako se upozorenja ignoriraju.</span></label>
+          <label class="consent-item"><input type="checkbox"> <span>Prihvaćam da je ispravnost i održavanje uređaja (POS, skeneri, senzori) moja odgovornost.</span></label>
+          <label class="consent-item"><input type="checkbox"> <span>Prihvaćam da se sve aktivnosti bilježe (datum, vrijeme, korisnik/ID).</span></label>
+          <label class="consent-item"><input type="checkbox"> <span>Prihvaćam da se dnevni izvještaji šalju menadžeru, skladištaru i/ili drugim odgovornim osobama.</span></label>
+          <label class="consent-item"><input type="checkbox"> <span>Prihvaćam da je maksimalna odgovornost Elvore ograničena na iznos koji sam platio u zadnjih 12 mjeseci.</span></label>
+          <label class="consent-item"><input type="checkbox"> <span>Prihvaćam da je softver licenciran za korištenje, a ne prodan, te da je zabranjeno kopiranje, hakiranje i reverzno inženjerstvo.</span></label>
+          <label class="consent-item"><input type="checkbox"> <span>Prihvaćam da se sporovi rješavaju prema zakonima RH i EU, uz nadležnost suda u Hrvatskoj.</span></label>
+        </div>
+
+        <div class="consent-actions">
+          <span class="lang">Jezik: HR • <a href="/legal/Elvora_Terms_Multilingual.pdf" target="_blank">Više jezika (PDF)</a></span>
+          <button id="agreeBtn" class="btn btn-primary" disabled>Prihvaćam i kupujem</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+<script>
+  // Disable button until all checkboxes are checked
+  const checks = Array.from(document.querySelectorAll('#consentList input[type="checkbox"]'));
+  const btn = document.getElementById('agreeBtn');
+
+  function update() {
+    const allChecked = checks.every(c => c.checked);
+    btn.disabled = !allChecked;
+  }
+  checks.forEach(c => c.addEventListener('change', update));
+  update();
+
+  // (Primjer) Klik vodi dalje na checkout ili payment gateway (stub)
+  btn.addEventListener('click', () => {
+    // Ovdje bi inače: generiranje PDF potvrde + redirect na plaćanje
+    window.location.href = '/hubs/inventory/index.html';
+  });
+</script>
+</body>
+</html>

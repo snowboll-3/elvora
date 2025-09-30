@@ -1,0 +1,24 @@
+﻿<!doctype html><html lang='hr'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
+<title>Kućanstvo — Hladnjak</title><link rel='stylesheet' href='/shared/elvora.css'><script defer src='/shared/elvora.js'></script></head>
+<body><div class='wrap'>
+  <h1>Kućanstvo — Hladnjak</h1>
+  <div class='stage'>
+    <div>
+      <img src='/assets/fridge-final-2buttons.png' alt='Hladnjak'>
+      <div class='row' style='justify-content:center;margin-top:12px'>
+        <a class='btn primary' href='/app/home/stanje.html'>Stanje</a>
+        <button class='btn' onclick='emptyFridge()'>Isprazni hladnjak</button>
+      </div>
+    </div>
+  </div>
+  <footer>© 2025 Elvora</footer>
+</div>
+<script>
+async function emptyFridge(){
+  try{
+    const r = await fetch('/functions/api/fridge-empty',{method:'POST'});
+    if(r.ok) ElvoraToast("Hladnjak ispražnjen."); else ElvoraToast("Greška pri pražnjenju.");
+  }catch{ ElvoraToast("Greška mreže."); }
+}
+</script>
+</body></html>

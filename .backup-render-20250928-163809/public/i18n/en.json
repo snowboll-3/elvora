@@ -1,0 +1,20 @@
+﻿{
+  "app.title":"Elvora",
+  "nav.home":"Home",
+  "nav.pc":"PC hub",
+  "nav.pharmacy":"Pharmacy",
+  "nav.legal":"Legal package",
+  "nav.purchase":"Purchase",
+  "nav.consent":"Pre-purchase consent",
+  "nav.notify":"Email notifications",
+  "consent.heading":"Consent and acceptance of terms",
+  "consent.mustAgree":"You must accept all terms before purchase.",
+  "consent.generate":"Generate purchase token",
+  "notify.heading":"Required email recipients",
+  "notify.add":"Add email",
+  "notify.save":"Save recipients",
+  "purchase.heading":"How to buy Elvora",
+  "purchase.play":"Buy via Google Play Store",
+  "purchase.enterprise":"Enterprise / large orders",
+  "purchase.threshold":"Note: up to ~300,000 € — flat-tax sole trade; above — company (Ltd). This is informational, not legal advice."
+}

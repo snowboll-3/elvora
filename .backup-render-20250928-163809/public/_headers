@@ -1,0 +1,9 @@
+﻿/*
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: DENY
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(self), microphone=(), geolocation=()
+  Content-Security-Policy: default-src 'self'; img-src 'self' data: https:; style-src 'self' 'unsafe-inline'; script-src 'self'; connect-src 'self' https://world.openfoodfacts.org https:; media-src 'self' blob:; object-src 'none'
+  Cache-Control: public, max-age=600
+
+

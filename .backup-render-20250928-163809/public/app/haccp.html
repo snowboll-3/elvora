@@ -1,0 +1,39 @@
+﻿<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Elvora · HACCP & Temperature</title>
+<link rel="stylesheet" href="/styles.css"/>
+<script defer src="/haccp.js"></script>
+</head>
+<body>
+<div class="section">
+  <h2>HACCP · Temperature Control</h2> <a class="btn" style="float:right" href="/app/haccp-report.html">⬇ Export PDF</a>
+  <p class="muted">Real-time nadzor zona (Ambient • Chilled • Frozen) + HACCP log i export.</p>
+
+  <div class="grid">
+    <div class="card">
+      <h3>Zone status</h3>
+      <div id="zones" class="zones"></div>
+      <div class="info" style="margin-top:10px">
+        <div class="pill">Legend: <b>🟢 OK</b> · <b>🟡 Near limit</b> · <b>🔴 Out of spec</b></div>
+        <a class="btn" href="/api/haccp-log.csv" download>⬇ Export CSV (HACCP log)</a>
+      </div>
+    </div>
+    <div class="card">
+      <h3>AI Alerts</h3>
+      <ul id="alerts" class="list"></ul>
+      <p class="muted">AI predlaže akcije: premještaj robe, servis, eskalacija.</p>
+    </div>
+  </div>
+
+  <div class="card" style="margin-top:12px">
+    <h3>Recent measurements</h3>
+    <table id="tbl" class="table"></table>
+  </div>
+</div>
+<footer class="footer">© <span id="y"></span> Elvora • <a href="/about.html">About</a> • <a href="/legal/privacy.html">Privacy</a> • <a href="/legal/terms.html">Terms</a></footer></body>
+</html>
+
+
