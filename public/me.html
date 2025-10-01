@@ -1,0 +1,59 @@
+﻿<!doctype html><html lang="hr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Elvora – Moj račun</title>
+<link rel="stylesheet" href="/styles.css">
+<script src="/env.js"></script>
+</head><body>
+<header><div class="container nav">
+  <div class="brand">Elvora</div>
+  <nav><a class="btn" href="/">Početna</a> <a class="btn" href="/login.html">Prijava</a></nav>
+</div></header>
+
+<main class="container">
+  <h1 style="color:#19b5ff">Moj račun</h1>
+  <div id="status" class="subtext">Provjeravam prijavu…</div>
+  <div id="who" style="margin:10px 0"></div>
+  <h3>Moje uloge / marketi</h3>
+  <pre id="roles" style="background:#0f1722;border:1px solid #244;padding:10px;border-radius:8px;white-space:pre-wrap"></pre>
+
+  <div id="adminLinks" style="display:none;margin-top:12px">
+    <a class="btn" href="/admin/messages/">Admin: Poruke s kontakta</a>
+    <a class="btn" href="/admin/conversations/">Admin: Interna komunikacija</a>
+  </div>
+</main>
+
+<footer><div class="container rights">© <span id="y"></span> Elvora. Sva prava pridržana.</div></footer>
+
+<script type="module">
+import { createClient } from "https://esm.sh/@supabase/supabase-js@2"
+document.getElementById('y').textContent = new Date().getFullYear()
+
+const sb = createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY)
+const status = document.getElementById('status')
+const who = document.getElementById('who')
+const rolesBox = document.getElementById('roles')
+const adminLinks = document.getElementById('adminLinks')
+
+try {
+  const { data: { user }, error } = await sb.auth.getUser()
+  if (error) throw error
+  if (!user) {
+    status.textContent = 'Niste prijavljeni. Otvorite /login.html i prijavite se.'
+    who.textContent = ''
+  } else {
+    status.textContent = 'Prijavljeni ste.'
+    who.textContent = 'E-mail: ' + (user.email ?? '(nepoznato)')
+    const { data, error: selErr } = await sb.from('user_roles').select('role, market_id')
+    if (selErr) {
+      rolesBox.textContent = 'Greška pri čitanju uloga: ' + selErr.message
+    } else {
+      rolesBox.textContent = JSON.stringify(data, null, 2)
+      const high = (data ?? []).some(r => ['admin','manager','director'].includes(String(r.role).toLowerCase()))
+      if (high) adminLinks.style.display = 'block'
+    }
+  }
+} catch (e) {
+  status.textContent = 'Greška: ' + (e?.message || e)
+}
+</script>
+</body></html>
