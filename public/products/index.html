@@ -1,4 +1,4 @@
-﻿<!doctype html><html lang="hr"><head>
+<!doctype html><html lang="hr"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Elvora – Naši proizvodi</title>
 <link rel="stylesheet" href="/styles.css">
@@ -20,6 +20,11 @@
   <p class="muted">Sve na jednom mjestu – klikom otvori modul. Dokumentacija i prava: u dnu stranice.</p>
 
   <div class="grid panels" style="margin-top:16px">
+    <div class="panel">
+      <h3>🧱 Skladište (AI)</h3>
+      <p>Samostalno · Standard (s Logistikom) · Regionalno. AI Primka, manifesti, rute.</p>
+      <a class="btn" href="#" id="pick-warehouse">Odaberi varijantu</a>
+    </div>
     <div class="panel">
       <h3>📦 Inventura</h3>
       <p>Vođena/slobodna, PIN potvrda, CSV izvoz, offline red i Δ kontrola.</p>
@@ -72,4 +77,81 @@
   </div>
 </footer>
 <script>document.getElementById('y').textContent=new Date().getFullYear()</script>
+<!-- ELVORA: Warehouse Wizard -->
+<div id="wh-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999">
+  <div style="max-width:520px;margin:8% auto;background:#0f141b;border:1px solid #182029;border-radius:14px;padding:16px;color:#e6eef7">
+    <h3 style="color:#19b5ff;margin-top:0">Koje Skladište trebaš?</h3>
+
+    <label style="display:block;margin:8px 0">
+      <input type="radio" name="plan" value="solo" checked> Samo Skladište (1 lokacija)
+    </label>
+    <label style="display:block;margin:8px 0">
+      <input type="radio" name="plan" value="std"> Skladište + Logistika (više lokacija)
+    </label>
+    <label style="display:block;margin:8px 0">
+      <input type="radio" name="plan" value="regional"> Regionalno Skladište (više gradova/regija)
+    </label>
+
+    <div id="fx-solo" style="margin:10px 0">
+      <small>Lokacije:</small>
+      <input id="fx-slots" type="number" min="1" value="1" style="width:80px;background:#0b0f14;color:#e6eef7;border:1px solid #182029;border-radius:8px;padding:6px">
+    </div>
+
+    <div id="fx-std" style="display:none;margin:10px 0">
+      <small>Lokacije:</small>
+      <input id="fx-slots2" type="number" min="1" value="2" style="width:80px;background:#0b0f14;color:#e6eef7;border:1px solid #182029;border-radius:8px;padding:6px">
+      <label style="margin-left:10px">
+        <input id="fx-gps" type="checkbox"> GPS/rute
+      </label>
+    </div>
+
+    <div id="fx-reg" style="display:none;margin:10px 0">
+      <small>Regije/države (npr. HR-08, HR-17):</small>
+      <input id="fx-regions" placeholder="HR-01,HR-08,HR-17…" style="width:100%;background:#0b0f14;color:#e6eef7;border:1px solid #182029;border-radius:8px;padding:6px">
+    </div>
+
+    <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
+      <button id="wh-cancel" class="btn" style="background:#12344f;border:1px solid #244;border-radius:12px;padding:10px 14px;color:#e6eef7">Odustani</button>
+      <button id="wh-go" class="btn primary" style="background:linear-gradient(135deg,#19b5ff,#0fb1ff);border:0;border-radius:12px;padding:10px 14px;color:#02141f">Nastavi</button>
+    </div>
+  </div>
+</div>
+<script>
+(function(){
+  const modal = document.getElementById('wh-modal');
+  const show = ()=> modal.style.display='block';
+  const hide = ()=> modal.style.display='none';
+  const } = s => document.querySelectorAll(s);
+  const $  = s => document.querySelector(s);
+
+  function updateFx(){
+    const p = [...}('input[name="plan"]')].find(r=>r.checked)?.value;
+    #fx-solo.style.display = (p==='solo')?'block':'none';
+    #fx-std.style.display  = (p==='std') ?'block':'none';
+    #fx-reg.style.display  = (p==='regional')?'block':'none';
+  }
+
+  document.getElementById('pick-warehouse')?.addEventListener('click', e=>{ e.preventDefault(); show(); updateFx(); });
+  modal.addEventListener('click', e=>{ if(e.target===modal) hide(); });
+  document.getElementById('wh-cancel')?.addEventListener('click', hide);
+  [...}('input[name="plan"]')].forEach(r=>r.addEventListener('change', updateFx));
+
+  document.getElementById('wh-go')?.addEventListener('click', ()=>{
+    const plan = [...}('input[name="plan"]')].find(r=>r.checked)?.value || 'solo';
+    let url = '/onboard/warehouse.html?plan='+encodeURIComponent(plan);
+    if(plan==='solo'){
+      const slots = Math.max(1, Number(#fx-slots.value||1));
+      url += '&slots='+slots;
+    }else if(plan==='std'){
+      const slots = Math.max(1, Number(#fx-slots2.value||2));
+      const gps = #fx-gps.checked ? '1':'0';
+      url += '&slots='+slots+'&gps='+gps;
+    }else{
+      const regions = (#fx-regions.value||'').trim();
+      if(regions) url += '&regions='+encodeURIComponent(regions);
+    }
+    location.href = url;
+  });
+})();
+</script>
 </body></html>
