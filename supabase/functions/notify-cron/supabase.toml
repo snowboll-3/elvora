@@ -1,0 +1,2 @@
+﻿[functions.notify-cron]
+verify_jwt = false
