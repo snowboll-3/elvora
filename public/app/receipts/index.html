@@ -1,6 +1,6 @@
-<!doctype html><html lang="hr"><head>
+﻿<!doctype html><html lang="hr"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Primka AI — Elvora</title>
+<title>Primka AI â€” Elvora</title>
 <link rel="stylesheet" href="/shared/elvora.css">
 <style>
 .wrap{max-width:980px;margin:24px auto;padding:16px}
@@ -15,42 +15,42 @@ tfoot td{font-weight:600}
 </style>
 </head><body>
 <div class="wrap">
-  <h1>📸 Primka AI</h1>
+  <h1>đź“¸ Primka AI</h1>
   <div class="card">
     <div class="row">
       <div>
-        <label>Učitaj račun/primku (foto/PDF):</label><br/>
+        <label>UÄŤitaj raÄŤun/primku (foto/PDF):</label><br/>
         <input id="file" type="file" accept="image/*,.pdf">
       </div>
       <div>
-        <label>E-mail ID (proslijeđeno):</label><br/>
+        <label>E-mail ID (proslijeÄ‘eno):</label><br/>
         <input id="mailId" placeholder="npr. MSG-12345">
       </div>
       <div style="align-self:end">
         <button id="btnParse">Analiziraj</button>
       </div>
     </div>
-    <div id="info" class="kg" style="margin-top:8px">Podržano: foto, PDF ili e-mail ID (kroz backend).</div>
+    <div id="info" class="kg" style="margin-top:8px">PodrĹľano: foto, PDF ili e-mail ID (kroz backend).</div>
   </div>
 
   <div id="out" class="card" style="margin-top:12px;display:none">
-    <h2 style="margin:6px 0">Prijedlog knjiženja</h2>
+    <h2 style="margin:6px 0">Prijedlog knjiĹľenja</h2>
     <table>
-      <thead><tr><th>Artikl</th><th>EAN/Šifra</th><th>Količina</th><th>UOM</th><th>Lot</th><th>Rok</th></tr></thead>
+      <thead><tr><th>Artikl</th><th>EAN/Ĺ ifra</th><th>KoliÄŤina</th><th>UOM</th><th>Lot</th><th>Rok</th></tr></thead>
       <tbody id="tbody"></tbody>
       <tfoot><tr><td colspan="6" id="summary"></td></tr></tfoot>
     </table>
     <div class="row" style="margin-top:10px">
       <div>
-        <label>Odredište:</label><br/>
-        <select id="dest"><option value="SKLADISTE">Skladište</option><option value="SANK">Šank</option></select>
+        <label>OdrediĹˇte:</label><br/>
+        <select id="dest"><option value="SKLADISTE">SkladiĹˇte</option><option value="SANK">Ĺ ank</option></select>
       </div>
-      <div style="align-self:end"><button id="btnCommit">✅ Potvrdi i knjiži</button></div>
+      <div style="align-self:end"><button id="btnCommit">âś… Potvrdi i knjiĹľi</button></div>
     </div>
     <div id="msg" style="margin-top:8px"></div>
   </div>
 
-  <p style="margin-top:18px"><a href="/app/business.html">⟵ Natrag na Business</a></p>
+  <p style="margin-top:18px"><a href="/app/business.html">âźµ Natrag na Business</a></p>
 </div>
 <script type="module" src="/app/receipts/receipts.js"></script>
 </body></html>

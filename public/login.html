@@ -24,7 +24,7 @@
 <footer><div class='container rights'>© <span id='y'></span> Elvora. Sva prava pridržana.</div></footer>
 
 <script type='module'>
-import { createClient } from 'https://unpkg.com/@supabase/supabase-js@2/dist/esm/index.js'
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 document.getElementById('y').textContent=new Date().getFullYear()
 const sb = createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY)
 
@@ -52,5 +52,6 @@ form.addEventListener('submit', async (e)=>{
     setTimeout(()=>console.log('Supabase signInWithOtp sent...'), 0);
   });
 </script></body></html>
+
 
 

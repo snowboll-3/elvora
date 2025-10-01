@@ -1,6 +1,6 @@
-<!doctype html><html lang="hr"><head>
+﻿<!doctype html><html lang="hr"><head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Elvora – Naši proizvodi</title>
+<title>Elvora â€“ NaĹˇi proizvodi</title>
 <link rel="stylesheet" href="/styles.css">
 <script src="/env.js"></script>
 </head><body>
@@ -8,7 +8,7 @@
   <div class="container nav">
     <div class="brand">Elvora</div>
     <nav>
-      <a href="/" class="btn">Početna</a>
+      <a href="/" class="btn">PoÄŤetna</a>
       <a href="/support.html" class="btn">Support</a>
       <a href="/regions/" class="btn">Regije</a>
     </nav>
@@ -16,40 +16,40 @@
 </header>
 
 <main class="container products-hero">
-  <h1>Naši proizvodi</h1>
-  <p class="muted">Sve na jednom mjestu – klikom otvori modul. Dokumentacija i prava: u dnu stranice.</p>
+  <h1>NaĹˇi proizvodi</h1>
+  <p class="muted">Sve na jednom mjestu â€“ klikom otvori modul. Dokumentacija i prava: u dnu stranice.</p>
 
   <div class="grid panels" style="margin-top:16px">
     <div class="panel">
-      <h3>🧱 Skladište (AI)</h3>
-      <p>Samostalno · Standard (s Logistikom) · Regionalno. AI Primka, manifesti, rute.</p>
+      <h3>đź§± SkladiĹˇte (AI)</h3>
+      <p>Samostalno Â· Standard (s Logistikom) Â· Regionalno. AI Primka, manifesti, rute.</p>
       <a class="btn" href="#" id="pick-warehouse">Odaberi varijantu</a>
     </div>
     <div class="panel">
-      <h3>📦 Inventura</h3>
-      <p>Vođena/slobodna, PIN potvrda, CSV izvoz, offline red i Δ kontrola.</p>
+      <h3>đź“¦ Inventura</h3>
+      <p>VoÄ‘ena/slobodna, PIN potvrda, CSV izvoz, offline red i Î” kontrola.</p>
       <a class="btn" href="/market.html">Otvori</a>
     </div>
     <div class="panel">
-      <h3>🚚 Primka & Utovar</h3>
+      <h3>đźšš Primka & Utovar</h3>
       <p>GS1 skeniranje (LOT/rok), palete s QR-om, idempotentni eventi.</p>
       <a class="btn" href="/market.html">Otvori</a>
     </div>
     <div class="panel">
-      <h3>🧊 HACCP Pro</h3>
+      <h3>đź§Š HACCP Pro</h3>
       <p>Pragovi po kategoriji, foto-evidencija i automatski incidenti.</p>
       <a class="btn" href="/market.html">Otvori</a>
     </div>
     <div class="panel">
-      <h3>🌍 Regions Hub</h3>
-      <p>Pregled po županijama/državama i PDF izvještaji po razinama.</p>
+      <h3>đźŚŤ Regions Hub</h3>
+      <p>Pregled po Ĺľupanijama/drĹľavama i PDF izvjeĹˇtaji po razinama.</p>
       <a class="btn" href="/regions/">Otvori</a>
     </div>
   </div>
 
   <section class="card" style="margin-top:18px">
     <h3>Licenciranje</h3>
-    <p class="muted">Regional (1 zemlja) ili Global (više zemalja). Cijena po lokaciji uz volumni popust. SLA i SSO/MFA dostupni u Enterprise paketu.</p>
+    <p class="muted">Regional (1 zemlja) ili Global (viĹˇe zemalja). Cijena po lokaciji uz volumni popust. SLA i SSO/MFA dostupni u Enterprise paketu.</p>
   </section>
 </main>
 
@@ -57,12 +57,12 @@
   <div class="container footer-grid">
     <div>
       <h4>Elvora</h4>
-      <p class="rights">© <span id="y"></span> Elvora. Sva prava pridržana.</p>
+      <p class="rights">Â© <span id="y"></span> Elvora. Sva prava pridrĹľana.</p>
     </div>
     <div>
       <h4>Pravno</h4>
       <ul class="clean">
-        <li><a href="/legal/terms.html">Uvjeti korištenja</a></li>
+        <li><a href="/legal/terms.html">Uvjeti koriĹˇtenja</a></li>
         <li><a href="/legal/privacy.html">Politika privatnosti</a></li>
         <li><a href="/legal/dpa.html">DPA</a></li>
       </ul>
@@ -70,7 +70,7 @@
     <div>
       <h4>Support</h4>
       <ul class="clean">
-        <li><a href="/support.html">Centar za podršku</a></li>
+        <li><a href="/support.html">Centar za podrĹˇku</a></li>
         <li><a href="mailto:support@elvora.hr">support@elvora.hr</a></li>
       </ul>
     </div>
@@ -80,16 +80,16 @@
 <!-- ELVORA: Warehouse Wizard -->
 <div id="wh-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:9999">
   <div style="max-width:520px;margin:8% auto;background:#0f141b;border:1px solid #182029;border-radius:14px;padding:16px;color:#e6eef7">
-    <h3 style="color:#19b5ff;margin-top:0">Koje Skladište trebaš?</h3>
+    <h3 style="color:#19b5ff;margin-top:0">Koje SkladiĹˇte trebaĹˇ?</h3>
 
     <label style="display:block;margin:8px 0">
-      <input type="radio" name="plan" value="solo" checked> Samo Skladište (1 lokacija)
+      <input type="radio" name="plan" value="solo" checked> Samo SkladiĹˇte (1 lokacija)
     </label>
     <label style="display:block;margin:8px 0">
-      <input type="radio" name="plan" value="std"> Skladište + Logistika (više lokacija)
+      <input type="radio" name="plan" value="std"> SkladiĹˇte + Logistika (viĹˇe lokacija)
     </label>
     <label style="display:block;margin:8px 0">
-      <input type="radio" name="plan" value="regional"> Regionalno Skladište (više gradova/regija)
+      <input type="radio" name="plan" value="regional"> Regionalno SkladiĹˇte (viĹˇe gradova/regija)
     </label>
 
     <div id="fx-solo" style="margin:10px 0">
@@ -106,8 +106,8 @@
     </div>
 
     <div id="fx-reg" style="display:none;margin:10px 0">
-      <small>Regije/države (npr. HR-08, HR-17):</small>
-      <input id="fx-regions" placeholder="HR-01,HR-08,HR-17…" style="width:100%;background:#0b0f14;color:#e6eef7;border:1px solid #182029;border-radius:8px;padding:6px">
+      <small>Regije/drĹľave (npr. HR-08, HR-17):</small>
+      <input id="fx-regions" placeholder="HR-01,HR-08,HR-17â€¦" style="width:100%;background:#0b0f14;color:#e6eef7;border:1px solid #182029;border-radius:8px;padding:6px">
     </div>
 
     <div style="display:flex;gap:8px;justify-content:flex-end;margin-top:12px">
@@ -155,3 +155,4 @@
 })();
 </script>
 </body></html>
+

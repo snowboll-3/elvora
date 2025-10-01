@@ -1,0 +1,75 @@
+﻿<!doctype html><html lang="hr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Elvora – Naši proizvodi</title>
+<link rel="stylesheet" href="/styles.css">
+<script src="/env.js"></script>
+</head><body>
+<header>
+  <div class="container nav">
+    <div class="brand">Elvora</div>
+    <nav>
+      <a href="/" class="btn">Početna</a>
+      <a href="/support.html" class="btn">Support</a>
+      <a href="/regions/" class="btn">Regije</a>
+    </nav>
+  </div>
+</header>
+
+<main class="container products-hero">
+  <h1>Naši proizvodi</h1>
+  <p class="muted">Sve na jednom mjestu – klikom otvori modul. Dokumentacija i prava: u dnu stranice.</p>
+
+  <div class="grid panels" style="margin-top:16px">
+    <div class="panel">
+      <h3>📦 Inventura</h3>
+      <p>Vođena/slobodna, PIN potvrda, CSV izvoz, offline red i Δ kontrola.</p>
+      <a class="btn" href="/market.html">Otvori</a>
+    </div>
+    <div class="panel">
+      <h3>🚚 Primka & Utovar</h3>
+      <p>GS1 skeniranje (LOT/rok), palete s QR-om, idempotentni eventi.</p>
+      <a class="btn" href="/market.html">Otvori</a>
+    </div>
+    <div class="panel">
+      <h3>🧊 HACCP Pro</h3>
+      <p>Pragovi po kategoriji, foto-evidencija i automatski incidenti.</p>
+      <a class="btn" href="/market.html">Otvori</a>
+    </div>
+    <div class="panel">
+      <h3>🌍 Regions Hub</h3>
+      <p>Pregled po županijama/državama i PDF izvještaji po razinama.</p>
+      <a class="btn" href="/regions/">Otvori</a>
+    </div>
+  </div>
+
+  <section class="card" style="margin-top:18px">
+    <h3>Licenciranje</h3>
+    <p class="muted">Regional (1 zemlja) ili Global (više zemalja). Cijena po lokaciji uz volumni popust. SLA i SSO/MFA dostupni u Enterprise paketu.</p>
+  </section>
+</main>
+
+<footer>
+  <div class="container footer-grid">
+    <div>
+      <h4>Elvora</h4>
+      <p class="rights">© <span id="y"></span> Elvora. Sva prava pridržana.</p>
+    </div>
+    <div>
+      <h4>Pravno</h4>
+      <ul class="clean">
+        <li><a href="/legal/terms.html">Uvjeti korištenja</a></li>
+        <li><a href="/legal/privacy.html">Politika privatnosti</a></li>
+        <li><a href="/legal/dpa.html">DPA</a></li>
+      </ul>
+    </div>
+    <div>
+      <h4>Support</h4>
+      <ul class="clean">
+        <li><a href="/support.html">Centar za podršku</a></li>
+        <li><a href="mailto:support@elvora.hr">support@elvora.hr</a></li>
+      </ul>
+    </div>
+  </div>
+</footer>
+<script>document.getElementById('y').textContent=new Date().getFullYear()</script>
+</body></html>
