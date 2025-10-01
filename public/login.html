@@ -45,6 +45,12 @@ form.addEventListener('submit', async (e)=>{
     s.textContent = 'Greška: ' + (err.message || err)
   }
 })
-</script>
-</body></html>
+  console.log('ENV URL:', window.SUPABASE_URL);
+  console.log('ENV KEY starts:', (window.SUPABASE_ANON_KEY||'').slice(0,12));
+  form.addEventListener('submit', async (e)=>{
+    // već postoji handler; dopuni ga s konzolnim logom
+    setTimeout(()=>console.log('Supabase signInWithOtp sent...'), 0);
+  });
+</script></body></html>
+
 
