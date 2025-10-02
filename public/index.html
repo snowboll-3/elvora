@@ -1,24 +1,19 @@
-﻿<!doctype html><html lang="en"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Elvora® – Global Platform</title>
-<link rel="stylesheet" href="/styles.css">
-<meta name="theme-color" content="#0b0f14">
-</head><body>
-<header class="hero">
-  <h1>Elvora®</h1>
-  <h2>Global Platform for Secure & Compliant Supply Chains</h2>
-  <p class="subtitle">Trusted worldwide · EU · US · JP · CN</p>
-  <a href="/legal/ip_notice.html" class="btn">Intellectual Property Notice</a>
-</header>
-<section class="features">
-  <div><h3>🔐 Security</h3><p>End-to-end authenticity and integrity. Patent pending technologies.</p></div>
-  <div><h3>📦 Supply Chain</h3><p>Visibility, compliance and resilience across all sectors.</p></div>
-  <div><h3>🌍 Global Reach</h3><p>Protected in EU, US, Japan and China. Enterprise-ready.</p></div>
-</section>
-<section class="cta">
-  <h2>Patent Pending · Trademark Protected</h2>
-  <p>Elvora® is a global brand with innovation at its core.</p>
-  <a href="/legal/terms.html" class="btn">Terms of Service</a>
-</section>
+﻿<!doctype html><html lang='en'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
+<title>Elvora® – Global Platform</title><link rel='stylesheet' href='/styles.css'></head><body>
+<header class='topbar'><div class='brand'>Elvora®</div><nav class='lang'><button data-lang='en' class='lang-btn active'>EN</button><button data-lang='hr' class='lang-btn'>HR</button></nav></header>
+<header class='hero'><h1 data-i18n='h1'>Global Platform for Secure & Compliant Supply Chains</h1>
+<p class='subtitle' data-i18n='subtitle'>Trusted worldwide · EU · US · JP · CN</p><a href='/legal/ip_notice.html' class='btn' data-i18n='ipNotice'>Intellectual Property Notice</a></header>
+<section class='features'><div><h3 data-i18n='f1t'>🔐 Security</h3><p data-i18n='f1d'>End-to-end authenticity and integrity. Patent pending technologies.</p></div>
+<div><h3 data-i18n='f2t'>📦 Supply Chain</h3><p data-i18n='f2d'>Visibility, compliance and resilience across all sectors.</p></div>
+<div><h3 data-i18n='f3t'>🌍 Global Reach</h3><p data-i18n='f3d'>Protected in EU, US, Japan and China. Enterprise-ready.</p></div></section>
+<section class='cta'><h2 data-i18n='ctaTitle'>Patent Pending · Trademark Protected</h2><p data-i18n='ctaBody'>Elvora® is a global brand with innovation at its core.</p>
+<div class='cta-actions'><a href='/legal/terms.html' class='btn ghost' data-i18n='terms'>Terms of Service</a><a href='/legal/privacy.html' class='btn ghost' data-i18n='privacy'>Privacy Policy</a></div></section>
 <footer><p>© 2025 Elvora®. All rights reserved.</p></footer>
-</body></html>
+<script>
+const D={en:{h1:"Global Platform for Secure & Compliant Supply Chains",subtitle:"Trusted worldwide · EU · US · JP · CN",ipNotice:"Intellectual Property Notice",f1t:"🔐 Security",f1d:"End-to-end authenticity and integrity. Patent pending technologies.",f2t:"📦 Supply Chain",f2d:"Visibility, compliance and resilience across all sectors.",f3t:"🌍 Global Reach",f3d:"Protected in EU, US, Japan and China. Enterprise-ready.",ctaTitle:"Patent Pending · Trademark Protected",ctaBody:"Elvora® is a global brand with innovation at its core.",terms:"Terms of Service",privacy:"Privacy Policy"},
+hr:{h1:"Globalna platforma za sigurnost i usklađenost opskrbnih lanaca",subtitle:"Povjerenje diljem svijeta · EU · SAD · JP · CN",ipNotice:"Obavijest o intelektualnom vlasništvu",f1t:"🔐 Sigurnost",f1d:"Cjelovita autentičnost i integritet. Tehnologije pod prijavom patenta.",f2t:"📦 Opskrbni lanac",f2d:"Vidljivost, usklađenost i otpornost u svim sektorima.",f3t:"🌍 Globalni doseg",f3d:"Zaštita u EU, SAD-u, Japanu i Kini. Spremno za Enterprise.",ctaTitle:"Patent pending · Zaštićeni žigovi",ctaBody:"Elvora® je globalni brend s inovacijom u svojoj srži.",terms:"Uvjete korištenja",privacy:"Politiku privatnosti"}};
+function L(x){const d=D[x]||D.en;document.querySelectorAll("[data-i18n]").forEach(e=>{const k=e.getAttribute("data-i18n");if(d[k])e.textContent=d[k];});
+document.documentElement.lang=x;localStorage.setItem("lang",x);document.querySelectorAll(".lang-btn").forEach(b=>b.classList.toggle("active",b.dataset.lang===x));}
+const s=new URLSearchParams(location.search).get("lang")||localStorage.getItem("lang")||(navigator.language||"en").slice(0,2);L(s.startsWith("hr")?"hr":"en");
+document.querySelectorAll(".lang-btn").forEach(b=>b.addEventListener("click",()=>L(b.dataset.lang)));
+</script></body></html>

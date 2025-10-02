@@ -2,5 +2,5 @@
   - type: static
     name: elvora-landing
     env: static
-    buildCommand: echo 'Static only'
+    buildCommand: echo 'Static bilingual site'
     staticPublishPath: public
