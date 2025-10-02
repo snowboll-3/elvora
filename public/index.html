@@ -8,7 +8,20 @@
 <div><h3 data-i18n='f3t'>🌍 Global Reach</h3><p data-i18n='f3d'>Protected in EU, US, Japan and China. Enterprise-ready.</p></div></section>
 <section class='cta'><h2 data-i18n='ctaTitle'>Patent Pending · Trademark Protected</h2><p data-i18n='ctaBody'>Elvora® is a global brand with innovation at its core.</p>
 <div class='cta-actions'><a href='/legal/terms.html' class='btn ghost' data-i18n='terms'>Terms of Service</a><a href='/legal/privacy.html' class='btn ghost' data-i18n='privacy'>Privacy Policy</a></div></section>
-<footer><p>© 2025 Elvora®. All rights reserved.</p></footer>
+<footer><p>© 2025 Elvora®. All rights reserved.</p><section class="features" id="solutions">
+  <div style="grid-column:1/-1">
+    <h2>Solutions / Rješenja</h2>
+    <p class="subtitle">High-impact modules. Details under NDA.</p>
+    <ul style="list-style:disc;padding-left:24px">
+        <li><a href='/apps/selfhealing/' target='_self'>Self-Healing Inventory™</a></li>
+        <li><a href='/apps/invisibleqr/' target='_self'>Invisible QR™ + Bio-link</a></li>
+        <li><a href='/apps/shelfliferadar/' target='_self'>Shelf-Life Radar™ + Auto-Reorder</a></li>
+        <li><a href='/apps/stolentracker/' target='_self'>AI Theft Alert (Stolen Goods)</a></li>
+        <li><a href='/apps/guardian/' target='_self'>AI Compliance Guardian™</a></li>
+    </ul>
+  </div>
+</section>
+</footer>
 <script>
 const D={en:{h1:"Global Platform for Secure & Compliant Supply Chains",subtitle:"Trusted worldwide · EU · US · JP · CN",ipNotice:"Intellectual Property Notice",f1t:"🔐 Security",f1d:"End-to-end authenticity and integrity. Patent pending technologies.",f2t:"📦 Supply Chain",f2d:"Visibility, compliance and resilience across all sectors.",f3t:"🌍 Global Reach",f3d:"Protected in EU, US, Japan and China. Enterprise-ready.",ctaTitle:"Patent Pending · Trademark Protected",ctaBody:"Elvora® is a global brand with innovation at its core.",terms:"Terms of Service",privacy:"Privacy Policy"},
 hr:{h1:"Globalna platforma za sigurnost i usklađenost opskrbnih lanaca",subtitle:"Povjerenje diljem svijeta · EU · SAD · JP · CN",ipNotice:"Obavijest o intelektualnom vlasništvu",f1t:"🔐 Sigurnost",f1d:"Cjelovita autentičnost i integritet. Tehnologije pod prijavom patenta.",f2t:"📦 Opskrbni lanac",f2d:"Vidljivost, usklađenost i otpornost u svim sektorima.",f3t:"🌍 Globalni doseg",f3d:"Zaštita u EU, SAD-u, Japanu i Kini. Spremno za Enterprise.",ctaTitle:"Patent pending · Zaštićeni žigovi",ctaBody:"Elvora® je globalni brend s inovacijom u svojoj srži.",terms:"Uvjete korištenja",privacy:"Politiku privatnosti"}};
@@ -17,3 +30,4 @@ document.documentElement.lang=x;localStorage.setItem("lang",x);document.querySel
 const s=new URLSearchParams(location.search).get("lang")||localStorage.getItem("lang")||(navigator.language||"en").slice(0,2);L(s.startsWith("hr")?"hr":"en");
 document.querySelectorAll(".lang-btn").forEach(b=>b.addEventListener("click",()=>L(b.dataset.lang)));
 </script></body></html>
+

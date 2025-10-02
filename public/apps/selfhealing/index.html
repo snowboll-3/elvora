@@ -1,0 +1,24 @@
+﻿<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Elvora — Self-Healing Inventory™</title>
+<link rel="stylesheet" href="/styles.css"></head>
+<body>
+<div class="topbar"><div class="brand"><a class="btn ghost" href="/">← Elvora</a></div>
+<div class="lang"><button data-lang="en" class="lang-btn active">EN</button><button data-lang="hr" class="lang-btn">HR</button></div></div>
+<main style="max-width:900px;margin:auto;padding:28px">
+  <h1 data-i18n="t">Self-Healing Inventory™</h1>
+  <p class="subtitle" data-i18n="d">AI fixes missing/dirty records automatically.</p>
+  <div class="card" style="background:#0f141b;border:1px solid rgba(25,181,255,.18);border-radius:12px;padding:16px;margin-top:12px">
+    <h3 data-i18n="ndaTitle">Details on request (NDA)</h3>
+    <p data-i18n="ndaBody">Technical details, demos and pricing are available under NDA for qualified partners.</p>
+    <p><a class="btn" href="/legal/ip_notice.html" data-i18n="ip">IP Notice</a> <a class="btn ghost" href="/legal/terms.html" data-i18n="terms">Terms</a></p>
+  </div>
+</main>
+<script>
+const D={en:{t:$TitleEn,d:$DescEn,ndaTitle:"Details on request (NDA)",ndaBody:"Technical details, demos and pricing are available under NDA for qualified partners.",ip:"IP Notice",terms:"Terms"},
+         hr:{t:$TitleHr,d:$DescHr,ndaTitle:"Detalji na zahtjev (NDA)",ndaBody:"Tehnički detalji, demo i cijene dostupni su uz NDA za kvalificirane partnere.",ip:"IP obavijest",terms:"Uvjeti"}};
+function L(x){const a=D[x]||D.en;document.querySelectorAll("[data-i18n]").forEach(e=>{const k=e.getAttribute("data-i18n");if(a[k])e.textContent=a[k];});
+document.documentElement.lang=x;localStorage.setItem("lang",x);document.querySelectorAll(".lang-btn").forEach(b=>b.classList.toggle("active",b.dataset.lang===x));}
+const s=new URLSearchParams(location.search).get("lang")||localStorage.getItem("lang")||(navigator.language||"en").slice(0,2);
+L(s.startsWith("hr")?"hr":"en");document.querySelectorAll(".lang-btn").forEach(b=>b.addEventListener("click",()=>L(b.dataset.lang)));
+</script></body></html>
