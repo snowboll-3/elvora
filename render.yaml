@@ -1,44 +1,6 @@
 ﻿services:
-  - type: web
-    name: elvora-static
+  - type: static
+    name: elvora-landing
     env: static
-    staticPublishPath: elvora/public
-    buildCommand: ""
-    pullRequestPreviewsEnabled: false
-    headers:
-      - path: "/*.html"
-        name: Cache-Control
-        value: "no-cache, no-store, must-revalidate"
-      - path: "/*"
-        name: Cache-Control
-        value: "no-cache, no-store, must-revalidate"
-      - path: "/*.css"
-        name: Cache-Control
-        value: "public, max-age=3600"
-      - path: "/*.js"
-        name: Cache-Control
-        value: "public, max-age=3600"
-      - path: "/media/*"
-        name: Cache-Control
-        value: "public, max-age=86400, immutable"
-      - path: "/og-image.png"
-        name: Cache-Control
-        value: "public, max-age=604800, immutable"
-      - path: "/favicon.ico"
-        name: Cache-Control
-        value: "public, max-age=604800, immutable"
-      - path: "/apple-touch-icon.png"
-        name: Cache-Control
-        value: "public, max-age=604800, immutable"
-      - path: "/*"
-        name: X-Content-Type-Options
-        value: "nosniff"
-      - path: "/*"
-        name: X-Frame-Options
-        value: "SAMEORIGIN"
-      - path: "/*"
-        name: Referrer-Policy
-        value: "strict-origin-when-cross-origin"
-      - path: "/*"
-        name: Strict-Transport-Security
-        value: "max-age=31536000; includeSubDomains; preload"
+    buildCommand: echo 'Static only'
+    staticPublishPath: public

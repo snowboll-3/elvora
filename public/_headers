@@ -1,13 +1,6 @@
-# Render static headers
-/*
-  Cache-Control: no-cache
-/manifest.webmanifest
-  Cache-Control: no-cache
-/sw.js
-  Cache-Control: no-cache
-/status.html
-  Cache-Control: no-cache
-/features.json
-  Cache-Control: no-cache
-/version.txt
-  Cache-Control: no-cache
+﻿/*
+  X-Frame-Options: DENY
+  X-Content-Type-Options: nosniff
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=()
+*/
