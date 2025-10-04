@@ -1,16 +1,38 @@
 ﻿services:
 - type: static
   name: elvora-web
-  envVars:
-    - key: NODE_VERSION
-      value: 18
-  buildCommand: ""
   staticPublishPath: public
+  buildCommand: ""
   routes:
-    - type: rewrite
-      source: /apps/.*
-      destination: /index.html
     - type: header
       path: /*
       name: Strict-Transport-Security
       value: max-age=31536000; includeSubDomains; preload
+
+- type: web
+  name: elvora-leads
+  env: node
+  plan: free
+  rootDir: leads-server
+  buildCommand: npm install
+  startCommand: node server.js
+  envVars:
+    - key: NODE_VERSION
+      value: 18
+
+- type: web
+  name: elvora-transitseal
+  env: node
+  plan: free
+  rootDir: transitseal/server
+  buildCommand: npm install
+  startCommand: node server.js
+  envVars:
+    - key: NODE_VERSION
+      value: 18
+    - key: PORT
+      value: 8080
+    - key: API_KEY
+      sync: false
+    - key: KEY_ID
+      value: ELV-P256-1

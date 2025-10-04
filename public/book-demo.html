@@ -14,7 +14,7 @@
 <script>
 const F=document.getElementById('f'),M=document.getElementById('msg');
 F.onsubmit=async(e)=>{e.preventDefault();M.textContent='';const b=Object.fromEntries(new FormData(F).entries());
-try{const r=await fetch('/api/demo',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});
+try{const r=await fetch('# 1) Postavi varijable RUČNO (zamijeni URL-ove stvarnima iz Rendera)/api/demo',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)});
 const j=await r.json(); if(j.ok){M.innerHTML='<div style="color:#39d98a">Thanks. We will confirm a slot.</div>'; F.reset();} else {M.textContent='Submission failed';}}
 catch{M.textContent='Network error';}}
 </script>
