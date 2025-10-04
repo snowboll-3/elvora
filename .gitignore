@@ -1,5 +1,18 @@
-﻿.DS_Store
+﻿# OS
+.DS_Store
 Thumbs.db
+
+# Node
 node_modules/
+npm-debug.log*
+yarn.lock
+pnpm-lock.yaml
+
+# Build
 dist/
+build/
 *.log
+
+# Local env
+.env
+*.local
