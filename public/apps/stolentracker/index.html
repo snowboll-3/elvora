@@ -1,8 +1,17 @@
-﻿<!doctype html><html lang="en"><head>
+﻿<!doctype html><html lang="en"><head><meta name="robots" content="noindex,nofollow">
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Elvora — AI Theft Alert (Stolen Goods)</title>
 <link rel="stylesheet" href="/styles.css"></head>
 <body>
+<script id="elvora_app_guard">
+(function(){
+  try{
+    if(localStorage.getItem('elvora_director')!=='1'){
+      location.replace('/'); // nema pristupa appovima
+    }
+  }catch(e){ location.replace('/'); }
+})();
+</script>
 <div class="topbar"><div class="brand"><a class="btn ghost" href="/">← Elvora</a></div>
 <div class="lang"><button data-lang="en" class="lang-btn active">EN</button><button data-lang="hr" class="lang-btn">HR</button></div></div>
 <main style="max-width:900px;margin:auto;padding:28px">
@@ -22,3 +31,4 @@ document.documentElement.lang=x;localStorage.setItem("lang",x);document.querySel
 const s=new URLSearchParams(location.search).get("lang")||localStorage.getItem("lang")||(navigator.language||"en").slice(0,2);
 L(s.startsWith("hr")?"hr":"en");document.querySelectorAll(".lang-btn").forEach(b=>b.addEventListener("click",()=>L(b.dataset.lang)));
 </script></body></html>
+
