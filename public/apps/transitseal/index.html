@@ -1,27 +1,16 @@
-﻿<!doctype html><meta charset='utf-8'><title>TransitSeal™</title>
-<link rel='stylesheet' href='/styles.css'>
-<body style='background:#0b0f14;color:#e8f2ff;font:500 16px system-ui;margin:0'>
+﻿<!doctype html><html lang="en"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>TransitSeal™</title>
+<meta name="robots" content="noindex,nofollow">
+<link rel="stylesheet" href="/styles.css">
+</head><body>
 <script id="elvora_app_guard">
-(function(){
-  try{
-    if(localStorage.getItem('elvora_director')!=='1'){
-      location.replace('/'); // nema pristupa appovima
-    }
-  }catch(e){ location.replace('/'); }
-})();
+(function(){try{if(localStorage.getItem('elvora_director')!=='1'){location.replace('/');}}catch(e){location.replace('/');}})();
 </script>
-<div style='padding:14px;border-bottom:1px solid rgba(25,181,255,.18);background:#0f141b'>
-  <a href='/' style='color:#19b5ff;text-decoration:none'>← Elvora</a>
-</div>
-<main style='max-width:860px;margin:28px auto;padding:0 16px'>
+<div class="topbar"><a class="btn" href="/">← Elvora</a></div>
+<main style="max-width:860px;margin:28px auto;padding:0 16px">
   <h1>TransitSeal™</h1>
-  <p style='color:#9fb0c6'>Potpisani proof-of-transit zapisi (ECDSA) za pošiljke i kamione.</p>
-  <div style='background:#0f141b;border:1px solid rgba(25,181,255,.18);border-radius:12px;padding:16px;margin-top:12px'>
-    <strong>Details under NDA.</strong>
-  </div>
+  <p class="subtitle">Potpisani proof-of-transit zapisi (ECDSA) za pošiljke i kamione.</p>
+  <div class="features"><div class="card"><h3>Details on request (NDA)</h3><p>Technical brief & pricing under NDA.</p></div></div>
 </main>
-
-
-
-
-
+</body></html>
