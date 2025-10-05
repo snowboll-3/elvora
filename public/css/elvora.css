@@ -29,13 +29,14 @@ html,body{margin:0;padding:0;background:var(--bg-deep);color:var(--text);font-fa
 }
 
 .hero h2{
-  color:#e8f6ff;
+  color: var(--elvora-blue);
   font-weight:500;
   line-height:1.4;
   font-size: clamp(16px,2vw,20px);
   margin:0 auto 28px;
   max-width:980px;
   opacity:.95;
+  text-shadow: 0 0 14px rgba(25,181,255,.30);
 }
 
 .brand{
@@ -97,3 +98,4 @@ html,body{margin:0;padding:0;background:var(--bg-deep);color:var(--text);font-fa
   border-top:1px solid rgba(25,181,255,.18);
 }
 .site-footer p{margin:6px 0;font-size:14px;opacity:.95}
+
