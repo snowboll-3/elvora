@@ -100,3 +100,101 @@ html,body{margin:0;padding:0;background:var(--bg-deep);color:var(--text);font-fa
 .site-footer p{margin:6px 0;font-size:14px;opacity:.95}
 
 
+
+
+/* === ELVORA BASE === */
+:root{
+  --elvora-blue:#19B5FF;
+  --bg-deep:#0B1220;
+  --card-bg:rgba(14,22,38,.55);
+  --card-brd:rgba(25,181,255,.25);
+  --glow:0 0 22px rgba(25,181,255,.35);
+}
+
+.elvora-body{
+  margin:0; background: radial-gradient(1200px 800px at 50% -10%, #0e1a2e 0%, #0b1220 60%, #0a0f1a 100%);
+  color:#cfefff; font-family: Inter,Segoe UI,Roboto,system-ui,-apple-system,sans-serif;
+}
+
+/* === HERO === */
+.hero{ position:relative; overflow:hidden; padding:72px 16px 56px; min-height: 72vh; display:grid; place-items:center; }
+.hero-inner{ width:min(1100px, 92vw); text-align:center; position:relative; z-index:2; }
+.hero-title{
+  color:var(--elvora-blue);
+  text-shadow: var(--glow);
+  font-weight:800;
+  font-size:clamp(22px, 3.4vw, 42px);
+  line-height:1.22;
+  margin:0 0 14px;
+}
+.hero-subtitle{
+  color:var(--elvora-blue);
+  text-shadow: 0 0 14px rgba(25,181,255,.28);
+  font-weight:500;
+  font-size:clamp(15px, 1.6vw, 19px);
+  line-height:1.5;
+  margin:0 auto 28px;
+  max-width: 980px;
+  opacity:.96;
+}
+
+/* Elvora u sredini + puls */
+.hero-brand .brand{
+  display:inline-block;
+  color:var(--elvora-blue);
+  font-weight:900;
+  letter-spacing:.4px;
+  font-size:clamp(38px, 5vw, 64px);
+  text-shadow: 0 0 30px rgba(25,181,255,.45), 0 0 4px rgba(25,181,255,.8);
+  animation: pulse 3.8s ease-in-out infinite;
+}
+@keyframes pulse{
+  0%,100%{ filter: drop-shadow(0 0 10px rgba(25,181,255,.45)); opacity:.95; }
+  50%{ filter: drop-shadow(0 0 20px rgba(25,181,255,.7)); opacity:1; }
+}
+
+/* Kartice softvera */
+.hero-cards{ margin:28px auto 0; display:grid; gap:14px; grid-template-columns: repeat(3, minmax(0,1fr)); max-width: 1100px; }
+@media (max-width:920px){ .hero-cards{ grid-template-columns:1fr; max-width:680px; } }
+.card{
+  background: var(--card-bg);
+  border:1px solid var(--card-brd);
+  border-radius:12px;
+  padding:18px 16px;
+  backdrop-filter: blur(4px);
+  box-shadow: 0 6px 26px rgba(0,0,0,.25);
+}
+.card h3{ margin:0 0 8px; color:#e7f7ff; font-weight:700; font-size:clamp(15px,1.4vw,18px); }
+.card p{ margin:0; color:#c9eaff; opacity:.92; font-size:clamp(13px,1.2vw,15px); line-height:1.6; }
+
+/* Mapa svijeta (točkice + linije) */
+.world-map{
+  position:absolute; inset: -10% -5% -10% -5%;
+  background:
+    radial-gradient(700px 420px at 50% 15%, rgba(25,181,255,.08), transparent 60%),
+    url("data:image/svg+xml;utf8,
+<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 800'>
+  <g fill='none' stroke='rgba(25,181,255,0.2)' stroke-width='1'>
+    <path d='M140 300 C 500 100, 1100 120, 1450 320' />
+    <path d='M170 520 C 600 420, 1050 450, 1460 560' />
+    <path d='M220 250 C 520 280, 900 250, 1320 260' />
+  </g>
+  <g fill='rgba(25,181,255,0.9)'>
+    <circle cx='240' cy='300' r='3'/><circle cx='320' cy='540' r='3'/>
+    <circle cx='480' cy='420' r='3'/><circle cx='680' cy='360' r='3'/>
+    <circle cx='820' cy='420' r='3'/><circle cx='980' cy='300' r='3'/>
+    <circle cx='1120' cy='360' r='3'/><circle cx='1320' cy='520' r='3'/>
+    <circle cx='1420' cy='340' r='3'/>
+  </g>
+</svg>") center/cover no-repeat,
+    radial-gradient(1200px 900px at 50% 20%, rgba(25,181,255,.06), transparent 70%),
+    linear-gradient(180deg, rgba(5,10,18,.0), rgba(5,10,18,.35)),
+    #07101d;
+  filter: saturate(120%) contrast(105%);
+  opacity:.9;
+}
+
+/* FOOTER */
+.site-footer{ padding:28px 16px 42px; background: linear-gradient(180deg, rgba(7,16,29,0) 0%, rgba(7,16,29,.7) 32%, rgba(7,16,29,1) 100%); }
+.footer-inner{ width:min(1100px,92vw); margin:0 auto; text-align:center; color:#bfeaff; }
+.footer-inner p{ margin:6px 0; font-size:14px; opacity:.9; }

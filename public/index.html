@@ -19,98 +19,49 @@ footer{margin-top:60px;padding:20px;font-size:13px;color:#9fb0c6;}
   <link rel='stylesheet' href='assets/css/hero.css' />
 <link rel="stylesheet" href="/css/elvora.css">
 </head>
-<body><div id="world-bg" aria-hidden="true"></div>
-<!-- HERO START -->
-<section class="hero">
-  <div class="hero-inner">
-    <h1>Inteligentni sustav koji unapređuje, povezuje i pokreće svjetske lance opskrbe i transporta.</h1>
-    <h2>Nova generacija softvera koji spaja poslovanje, trgovinu i logistiku — predviđa potrebe, optimizira resurse i štiti svaki proces i podatke.</h2>
+<body class="elvora-body">
+  <!-- HERO START -->
+  <section class="hero">
+    <div class="world-map"></div>
+    <div class="hero-inner">
+      <h1 class="hero-title">Inteligentni sustav koji unapređuje, povezuje i pokreće svjetske lance opskrbe i transporta.</h1>
+      <h2 class="hero-subtitle">Nova generacija softvera koji spaja poslovanje, trgovinu i logistiku — predviđa potrebe, optimizira resurse i štiti svaki proces i podatke.</h2>
 
-    <div class="brand">Elvora<span class="tm">™</span></div>
+      <div class="hero-brand">
+        <span class="brand">Elvora™</span>
+      </div>
 
-    <div class="cards">
-      <div class="card">
-        <h3>Self-Healing Logistics™</h3>
-        <p>AI ispravlja nestale ili netočne zapise između centara — manje zastoja i brži protok.</p>
-      </div>
-      <div class="card">
-        <h3>Shelf-Life Radar™</h3>
-        <p>Izračun prognoza i automatsko punjenje smanjuju količinu otpada u operacijama.</p>
-      </div>
-      <div class="card">
-        <h3>Custom Mode</h3>
-        <p>Samostalno kreirajte kafiće, restorane, hotele, ljekarne, markete i skladišta — prilagođeno vašim potrebama.</p>
+      <div class="hero-cards">
+        <article class="card">
+          <h3>Self-Healing Logistics™</h3>
+          <p>AI ispravlja nestale ili netočne zapise između centara — manje iznimki i brži protok.</p>
+        </article>
+        <article class="card">
+          <h3>Shelf-Life Radar™</h3>
+          <p>Izračun prognoza i automatsko punjenje smanjuju količinu otpada u operacijama.</p>
+        </article>
+        <article class="card">
+          <h3>Custom Mode</h3>
+          <p>Samostalno kreirajte kafiće, restorane, hotele, ljekarne, markete i skladišta — prilagođeno vašim potrebama.</p>
+        </article>
       </div>
     </div>
-  </div>
-  <div class="hero-fade"></div>
-</section>
-<!-- HERO END -->
+  </section>
+  <!-- HERO END -->
 
-<!-- FOOTER START -->
-<footer class="site-footer">
-  <p>© 2025 Elvora™ — Sva prava pridržana.</p>
-  <p>Povjerljivo: Zabranjeno otkrivanje poslovnih tajni i dijeljenje sadržaja.</p>
-  <p>Svaki pokušaj neovlaštenog pristupa ili kopiranja bit će prijavljen nadležnim tijelima.</p>
-  <p>Mi čuvamo vas, jer bez vas nema nas.</p>
-</footer>
-<!-- FOOTER END -->
-
-
-
-<header class="hero">
-  <div class="hero__inner">
-    <h1 class="hero__title">Inteligentni sustav koji unapređuje, povezuje i pokreće svjetske lance opskrbe i transporta.</h1>
-    <p class="hero__subtitle">Nova generacija softvera koji spaja poslovanje, trgovinu i logistiku — predviđa potrebe, optimizira resurse i štiti svaki proces i podatke.</p>
-    <a href="#products" class="btn btn--primary">Naši proizvodi</a>
-  </div>
-</header>
-
-<section id="products" class="products">
-  <h2>Naši proizvodi</h2>
-
-  <div class="product">
-    <h3>Home Hub</h3>
-    <p>Kućni modul za praćenje zaliha i rokova — jednostavan pregled „što, gdje i do kada“.</p>
-  </div>
-
-  <div class="product">
-    <h3>Business Hub</h3>
-    <p>Za kafiće, restorane, hotele, ljekarne i markete — uvid u promet, nabavu, usklađenost i sigurnost.</p>
-  </div>
-
-  <div class="product">
-    <h3>Skladište i logistika</h3>
-    <p>AI raspored skladišta, nadzor ulaza/izlaza i inventura jednim dodirom. Podrška za regije i poštanske brojeve.</p>
-  </div>
-</section>
-
-<footer class="site-footer">
-  <p>© 2025 Elvora™ — Sva prava pridržana.</p>
-  <p>Povjerljivo: Zabranjeno otkrivanje poslovnih tajni i dijeljenje sadržaja.</p>
-  <p>Svaki pokušaj neovlaštenog pristupa ili kopiranja bit će prijavljen nadležnim tijelima.</p>
-  <p>Mi čuvamo vas, jer bez vas nema nas.</p>
-</footer>
-
-<script id="elvora_director_guard">
-(function(){
-  try{
-    var ok = localStorage.getItem('elvora_director')==='1';
-    if(!ok){
-      document.querySelectorAll('[data-guard="director"]').forEach(function(el){ el.style.display='none'; });
-      document.querySelectorAll('a[href^="/apps/"]').forEach(function(a){ a.style.display='none'; });
-    }
-  }catch(e){}
-})();
-</script>
-<footer class="site-footer">
-  <p>© 2025 Elvora™ — Sva prava pridržana.</p>
-  <p>Povjerljivo: Zabranjeno otkrivanje poslovnih tajni i dijeljenje sadržaja.</p>
-  <p>Svaki pokušaj neovlaštenog pristupa ili kopiranja bit će prijavljen nadležnim tijelima.</p>
-  <p>Mi čuvamo vas, jer bez vas nema nas.</p>
-</footer>
+  <!-- FOOTER START -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>© 2025 Elvora™ — Sva prava pridržana.</p>
+      <p>Povjerljivo: Zabranjeno otkrivanje poslovnih tajni i dijeljenje sadržaja.</p>
+      <p>Svaki pokušaj neovlaštenog pristupa ili kopiranja bit će prijavljen nadležnim tijelima.</p>
+      <p>Naši klijenti su naša odgovornost. Mi čuvamo vas, jer bez vas nema nas.</p>
+    </div>
+  </footer>
+  <!-- FOOTER END -->
 </body>
 </html>
+
 
 
 
