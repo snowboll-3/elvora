@@ -1,30 +1,99 @@
 ﻿:root{
-  --bg:#0e0f12; --card:#14161b; --text:#e8f1ff; --muted:#9bb3c7; --accent:#22c1f1;
-  --ok:#2ecc71; --warn:#f1c40f; --bad:#e74c3c;
-  --tile:#0f1116;
+  --elvora-blue:#19b5ff;
+  --bg-deep:#070b10;
+  --text:#dfefff;
+  --card:#0b1118;
+  --card-stroke:rgba(25,181,255,.35);
 }
+
 *{box-sizing:border-box}
-html,body{margin:0;padding:0;background:var(--bg);color:var(--text);font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif}
-a{color:var(--accent);text-decoration:none}
-.wrap{max-width:1024px;margin:0 auto;padding:24px}
-h1,h2{font-weight:800;letter-spacing:.3px}
-.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px}
-.card{background:var(--card);border-radius:16px;padding:18px;box-shadow:0 6px 18px rgb(0 0 0 / .35)}
-.tile{background:var(--tile);border-radius:22px;padding:18px;display:flex;flex-direction:column;gap:12px;align-items:center;justify-content:center;min-height:220px}
-.tile img{max-width:160px;height:auto;filter:drop-shadow(0 8px 20px rgba(0,0,0,.35))}
-.tile .lbl{font-size:28px;font-weight:900;color:#37b5ff}
-.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:10px 0 14px 0}
-.tab{padding:10px 14px;border-radius:999px;background:#1a1f27;color:#9ec7e9}
-.tab.active{background:#1e2a36;color:#fff;border:1px solid #2a9df4}
-.panel{background:var(--card);border-radius:16px;padding:16px}
-.btn{background:#2a9df4;color:#fff;border:none;border-radius:12px;padding:10px 14px;font-weight:700;cursor:pointer}
-.btn.secondary{background:#2b3340}
-.note{color:var(--muted);font-size:14px}
-.kv{display:grid;grid-template-columns:160px 1fr;gap:10px}
-hr{border:none;height:1px;background:#232630;margin:18px 0}
-.footer{margin-top:40px;color:var(--muted);font-size:12px;text-align:center}
-.center{display:flex;justify-content:center;align-items:center}
-.scanner{display:grid;gap:10px}
-video{width:100%;max-height:360px;border-radius:12px;background:#000}
-input[type=text]{background:#10131a;border:1px solid #222937;color:#dfefff;border-radius:10px;padding:10px}
-@media(min-width:900px){.grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
+html,body{margin:0;padding:0;background:var(--bg-deep);color:var(--text);font-family:Inter,Segoe UI,Roboto,Arial,sans-serif}
+
+.hero{
+  position:relative;
+  min-height:100vh;
+  display:flex;align-items:center;justify-content:center;
+  background:#060a0f url('/assets/world-net-elvora.jpg') center/cover no-repeat;
+  overflow:hidden;
+}
+
+.hero-inner{max-width:1120px;width:100%;padding: clamp(16px,3vw,32px);text-align:center}
+
+.hero h1{
+  color:var(--elvora-blue);
+  font-weight:800;
+  line-height:1.15;
+  font-size: clamp(28px,3.8vw,44px);
+  margin:0 0 12px;
+  text-shadow:0 0 18px rgba(25,181,255,.35);
+}
+
+.hero h2{
+  color:#e8f6ff;
+  font-weight:500;
+  line-height:1.4;
+  font-size: clamp(16px,2vw,20px);
+  margin:0 auto 28px;
+  max-width:980px;
+  opacity:.95;
+}
+
+.brand{
+  font-size: clamp(40px,6vw,72px);
+  font-weight:800;
+  color:var(--elvora-blue);
+  letter-spacing:.5px;
+  text-shadow:0 0 22px rgba(25,181,255,.45), 0 0 44px rgba(25,181,255,.25);
+  animation:glow 3.5s ease-in-out infinite;
+  margin:12px 0 22px;
+}
+.brand .tm{font-size:.45em;vertical-align:super;opacity:.9}
+
+@keyframes glow{
+  0%,100%{text-shadow:0 0 18px rgba(25,181,255,.35),0 0 34px rgba(25,181,255,.20)}
+  50%    {text-shadow:0 0 28px rgba(25,181,255,.55),0 0 64px rgba(25,181,255,.35)}
+}
+
+.cards{
+  display:grid;
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:16px;
+  margin: 0 auto;
+  max-width: 1024px;
+}
+@media (max-width:900px){ .cards{grid-template-columns:1fr} }
+
+.card{
+  background:linear-gradient(180deg,#0b1118 0%,#0a0f15 100%);
+  border:1px solid var(--card-stroke);
+  border-radius:14px;
+  padding:16px 18px;
+  backdrop-filter: blur(6px);
+  box-shadow:0 6px 20px rgba(0,0,0,.35), inset 0 0 0 1px rgba(25,181,255,.06);
+}
+.card h3{
+  color:var(--elvora-blue);
+  margin:0 0 6px;
+  font-size: clamp(16px,2.1vw,18px);
+  font-weight:700;
+}
+.card p{
+  margin:0;
+  color:#cfe9ff;
+  font-size:14.5px;
+  line-height:1.45;
+}
+
+.hero-fade{
+  position:absolute;left:0;right:0;bottom:0;height:120px;
+  background:linear-gradient(to bottom, transparent, rgba(7,11,16,1));
+}
+
+.site-footer{
+  background:#0b0f14;
+  color:var(--elvora-blue);
+  text-align:center;
+  padding:26px 12px 34px;
+  border-top:1px solid rgba(25,181,255,.18);
+}
+.site-footer p{margin:6px 0;font-size:14px;opacity:.95}
