@@ -1,0 +1,28 @@
+﻿<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1600 900'>
+  <defs>
+    <linearGradient id='g' x1='0' y1='0' x2='1' y2='1'>
+      <stop offset='0%' stop-color='#0b0f14'/>
+      <stop offset='100%' stop-color='#061018'/>
+    </linearGradient>
+    <filter id='glow'><feGaussianBlur stdDeviation='2.5' result='b'/><feMerge><feMergeNode in='b'/><feMergeNode in='SourceGraphic'/></feMerge></filter>
+  </defs>
+  <rect width='100%' height='100%' fill='url(#g)'/>
+  <!-- stilizirana mreža -->
+  <g stroke='#19b5ff' stroke-opacity='0.22'>
+    <!-- lagane krivulje preko karte -->
+    <path d='M50,200 C400,120 1200,150 1550,220' fill='none'/>
+    <path d='M100,500 C500,420 1100,480 1500,520' fill='none'/>
+    <path d='M80,720 C420,640 1180,690 1540,760' fill='none'/>
+    <path d='M320,120 C680,200 980,60 1400,140' fill='none'/>
+    <path d='M260,340 C700,300 950,360 1380,300' fill='none'/>
+  </g>
+  <!-- čvorovi / gradovi -->
+  <g fill='#19b5ff' filter='url(#glow)'>
+    <circle cx='260' cy='340' r='3'/><circle cx='420' cy='300' r='3'/><circle cx='700' cy='310' r='3'/>
+    <circle cx='980' cy='360' r='3'/><circle cx='1380' cy='300' r='3'/><circle cx='320' cy='120' r='3'/>
+    <circle cx='680' cy='200' r='3'/><circle cx='980' cy='60' r='3'/><circle cx='1400' cy='140' r='3'/>
+    <circle cx='100' cy='500' r='3'/><circle cx='500' cy='420' r='3'/><circle cx='1100' cy='480' r='3'/><circle cx='1500' cy='520' r='3'/>
+    <circle cx='80' cy='720' r='3'/><circle cx='420' cy='640' r='3'/><circle cx='1180' cy='690' r='3'/><circle cx='1540' cy='760' r='3'/>
+    <circle cx='50' cy='200' r='3'/><circle cx='400' cy='120' r='3'/><circle cx='1200' cy='150' r='3'/><circle cx='1550' cy='220' r='3'/>
+  </g>
+</svg>

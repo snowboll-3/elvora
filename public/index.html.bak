@@ -18,36 +18,6 @@ footer{margin-top:60px;padding:20px;font-size:13px;color:#9fb0c6;}
 </style>
 </head>
 <body>
-<header class="hero">
-  <div class="hero__inner">
-    <h1 class="hero__title">Inteligentni sustav koji unapređuje, povezuje i pokreće svjetske lance opskrbe i transporta.</h1>
-    <p class="hero__subtitle">Nova generacija softvera koji spaja poslovanje, trgovinu i logistiku — predviđa potrebe, optimizira resurse i štiti svaki proces i podatke.</p>
-    <a href="#products" class="btn btn--primary">Naši proizvodi</a>
-  </div>
-</header>
-<section class="worldnet">
-  <div class="worldnet__overlay">
-    <div class="worldnet__logo">Elvora</div>
-  </div>
-</section>
-<section id="products" class="products">
-  <h2>Naši proizvodi</h2>
-
-  <div class="product">
-    <h3>Home Hub</h3>
-    <p>Kućni modul za praćenje zaliha i rokova — jednostavan pregled „što, gdje i do kada“.</p>
-  </div>
-
-  <div class="product">
-    <h3>Business Hub</h3>
-    <p>Za kafiće, restorane, hotele, ljekarne i markete — uvid u promet, nabavu, usklađenost i sigurnost.</p>
-  </div>
-
-  <div class="product">
-    <h3>Skladište i logistika</h3>
-    <p>AI raspored skladišta, nadzor ulaza/izlaza i inventura jednim dodirom. Podrška za regije i poštanske brojeve.</p>
-  </div>
-</section>
 
 <h1 style='color:#19b5ff; text-align:center;'>
   Inteligentni sustav koji unapređuje, povezuje i pokreće svjetske lance opskrbe i transporta.
@@ -86,24 +56,6 @@ footer{margin-top:60px;padding:20px;font-size:13px;color:#9fb0c6;}
 
 </div>
 </section>
-<section id="products" class="products">
-  <h2>Naši proizvodi</h2>
-
-  <div class="product">
-    <h3>Home Hub</h3>
-    <p>Kućni modul za praćenje zaliha i rokova — jednostavan pregled „što, gdje i do kada“.</p>
-  </div>
-
-  <div class="product">
-    <h3>Business Hub</h3>
-    <p>Za kafiće, restorane, hotele, ljekarne i markete — uvid u promet, nabavu, usklađenost i sigurnost.</p>
-  </div>
-
-  <div class="product">
-    <h3>Skladište i logistika</h3>
-    <p>AI raspored skladišta, nadzor ulaza/izlaza i inventura jednim dodirom. Podrška za regije i poštanske brojeve.</p>
-  </div>
-</section>
 
 <footer>
 © 2025 Elvora. Sva prava pridržana. — <a href="/legal/terms.html">Uvjeti</a> · <a href="/legal/privacy.html">Privatnost</a>
@@ -120,14 +72,8 @@ footer{margin-top:60px;padding:20px;font-size:13px;color:#9fb0c6;}
   }catch(e){}
 })();
 </script>
-<footer class="site-footer">
-  <p>© 2025 Elvora™ — Sva prava pridržana.</p>
-  <p><strong>Povjerljivo:</strong> Zabranjeno otkrivanje poslovnih tajni i dijeljenje sadržaja. Svaki pokušaj neovlaštenog pristupa ili kopiranja bit će prijavljen nadležnim tijelima.</p>
-  <p>Naši klijenti su naša odgovornost. <strong>Mi čuvamo vas, jer bez vas nema nas.</strong></p>
-</footer>
 </body>
 </html>
-
 
 
 
