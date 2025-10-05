@@ -20,3 +20,44 @@
 .app p{color:#b8e8ff; font-size:.95rem;}
 .site-footer{text-align:center; padding:30px 20px; background:#0b0f14; color:#b8e8ff; border-top:1px solid rgba(25,181,255,.25);}
 .site-footer p{margin:8px 0;}
+/* === Elvora hero full-width + world network background + pulse === */
+:root { --hero-max: 1400px; --elv-cyan:#1fd6ff; --bg:#070b12; }
+
+html, body { background:#070b12; }
+
+#world-bg{
+  position:fixed; inset:0; z-index:-1;
+  background-image: url("/assets/hero/world-network.jpg");
+  background-size:cover; background-position:center;
+  filter: saturate(1.15) brightness(1.05);
+  opacity:.55; animation:ev-pulse 9s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes ev-pulse { 0%{opacity:.50} 50%{opacity:.68} 100%{opacity:.50} }
+
+.hero, .hero-wrap, main, header, section {
+  max-width: var(--hero-max);
+  width: min(var(--hero-max), 96vw);
+  margin-inline:auto;
+}
+
+.hero { text-align:center; padding: min(8vh,6rem) 0; }
+.hero h1{
+  color: var(--elv-cyan);
+  font-weight:800; letter-spacing:.3px;
+  line-height:1.15;
+  font-size: clamp(28px, 3.4vw, 44px);
+  margin: 0 0 .75rem;
+}
+.hero p.sub{
+  color:#cfefff; opacity:.92;
+  font-size: clamp(16px, 1.45vw, 20px);
+  margin:0 0 1.25rem;
+}
+
+.hero .elvora-logo{
+  font-size: clamp(42px, 6vw, 72px);
+  color: var(--elv-cyan);
+  text-shadow: 0 0 22px rgba(31,214,255,.45), 0 0 60px rgba(31,214,255,.25);
+  margin:.35rem 0 1rem;
+}
