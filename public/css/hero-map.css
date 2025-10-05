@@ -1,0 +1,25 @@
+﻿:root{
+  --elvora-blue:#19b5ff;
+  --elvora-blue-soft:#00aaff;
+  --copy:#cfefff;
+}
+.hero-map{
+  position:relative;min-height:80vh;display:flex;align-items:center;justify-content:center;
+  text-align:center;overflow:hidden;isolation:isolate;
+}
+.hero-map::before{
+  content:"";position:absolute;inset:0;
+  background:url("/assets/world-network-hero.png") center/cover no-repeat;
+  opacity:.35;filter:saturate(130%) brightness(1.1);
+  z-index:-1;
+}
+.hero-title{color:var(--elvora-blue);font-weight:800;animation:glow 3s infinite alternate;}
+.hero-sub{color:var(--elvora-blue);font-weight:500;margin:8px 0 14px;}
+.hero-brand{font-size:72px;color:var(--elvora-blue);font-weight:800;text-shadow:0 0 20px var(--elvora-blue);}
+.hero-cards{display:flex;justify-content:center;gap:14px;flex-wrap:wrap;margin-top:10px;}
+.hero-card{background:rgba(12,25,38,0.45);border:1px solid rgba(25,181,255,0.3);border-radius:10px;
+  padding:14px 16px;max-width:260px;}
+.hero-card h3{color:var(--elvora-blue);}
+.hero-card p{color:var(--copy);font-size:0.95rem;}
+.hero-footer{text-align:center;color:var(--copy);margin-top:22px;}
+@keyframes glow{from{text-shadow:0 0 5px var(--elvora-blue);}to{text-shadow:0 0 20px var(--elvora-blue);}}
