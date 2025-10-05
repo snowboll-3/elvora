@@ -1,0 +1,57 @@
+﻿<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1920 1080">
+  <defs>
+    <radialGradient id="g" cx="50%" cy="50%" r="70%">
+      <stop offset="0%" stop-color="#0a1320"/>
+      <stop offset="100%" stop-color="#070b12"/>
+    </radialGradient>
+    <filter id="glow">
+      <feGaussianBlur stdDeviation="2.2" result="b"/>
+      <feMerge>
+        <feMergeNode in="b"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <!-- tamna podloga -->
+  <rect width="100%" height="100%" fill="url(#g)"/>
+
+  <!-- svjetla mreža (kontinenti minimalistički) -->
+  <g opacity="0.22" stroke="#1fd6ff" stroke-width="1">
+    <path d="M180 420 L260 430 L310 410 L380 420 L420 450 L490 460 L540 430" fill="none"/>
+    <path d="M680 410 L760 430 L830 420 L890 430 L970 450 L1030 430 L1100 440" fill="none"/>
+    <path d="M1200 430 L1280 420 L1350 430 L1420 420 L1500 430 L1580 450 L1640 440" fill="none"/>
+    <path d="M260 640 L320 620 L380 640 L430 660 L520 650 L600 640" fill="none"/>
+    <path d="M720 660 L800 650 L870 660 L940 650 L1000 660 L1080 650 L1160 660" fill="none"/>
+    <path d="M1260 650 L1340 660 L1420 650 L1500 660 L1580 650" fill="none"/>
+  </g>
+
+  <!-- točke-gradovi -->
+  <g filter="url(#glow)" fill="#1fd6ff">
+    <!-- Amerika -->
+    <circle cx="240" cy="430" r="3"/><circle cx="300" cy="415" r="3"/>
+    <circle cx="360" cy="428" r="3"/><circle cx="420" cy="452" r="3"/>
+    <circle cx="500" cy="460" r="3"/><circle cx="560" cy="436" r="3"/>
+    <circle cx="320" cy="624" r="3"/><circle cx="420" cy="660" r="3"/>
+
+    <!-- Europa/Afrika -->
+    <circle cx="760" cy="432" r="3"/><circle cx="830" cy="420" r="3"/>
+    <circle cx="900" cy="432" r="3"/><circle cx="970" cy="448" r="3"/>
+    <circle cx="1030" cy="432" r="3"/>
+    <circle cx="800" cy="652" r="3"/><circle cx="940" cy="650" r="3"/>
+
+    <!-- Azija -->
+    <circle cx="1200" cy="432" r="3"/><circle cx="1280" cy="422" r="3"/>
+    <circle cx="1360" cy="432" r="3"/><circle cx="1440" cy="422" r="3"/>
+    <circle cx="1520" cy="432" r="3"/><circle cx="1580" cy="450" r="3"/>
+    <circle cx="1340" cy="660" r="3"/><circle cx="1500" cy="660" r="3"/>
+  </g>
+
+  <!-- lukovi-veze (globalne linije) -->
+  <g opacity="0.55" stroke="#1fd6ff" stroke-width="1.4" fill="none" filter="url(#glow)">
+    <path d="M300,415 C620,280 1280,300 1520,432"/>
+    <path d="M420,660 C760,520 1180,520 1500,660"/>
+    <path d="M560,436 C760,360 1100,360 1360,432"/>
+    <path d="M320,624 C520,560 880,560 1160,660"/>
+  </g>
+</svg>

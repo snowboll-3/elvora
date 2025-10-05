@@ -61,3 +61,57 @@ html, body { background:#070b12; }
   text-shadow: 0 0 22px rgba(31,214,255,.45), 0 0 60px rgba(31,214,255,.25);
   margin:.35rem 0 1rem;
 }
+/* === Elvora: hero full-width + svjetska mreža + pulse === */
+:root{ --hero-max:1400px; --elv-cyan:#1fd6ff; --bg:#070b12; }
+
+html,body{ background:#070b12; }
+
+#world-bg{
+  position:fixed; inset:0; z-index:-1;
+  background-image:url("/assets/hero/world-network.svg");
+  background-size:cover; background-position:center;
+  opacity:.56; animation:ev-pulse 9s ease-in-out infinite;
+  pointer-events:none;
+}
+@keyframes ev-pulse{0%{opacity:.50}50%{opacity:.68}100%{opacity:.50}}
+
+.hero, .hero-wrap, main, header, section{
+  max-width:var(--hero-max);
+  width:min(var(--hero-max),96vw);
+  margin-inline:auto;
+}
+.hero{ text-align:center; padding:min(8vh,6rem) 0; }
+
+.hero h1{
+  color:var(--elv-cyan);
+  font-weight:800; letter-spacing:.3px;
+  line-height:1.15;
+  font-size:clamp(28px,3.4vw,44px);
+  margin:0 0 .75rem;
+}
+.hero h2{ color:var(--elv-cyan); font-weight:700; margin:.25rem 0 1rem; }
+.hero p.sub{
+  color:#cfefff; opacity:.92;
+  font-size:clamp(16px,1.45vw,20px);
+  margin:0 0 1.25rem;
+}
+
+.hero .elvora-logo{
+  font-size:clamp(42px,6vw,72px);
+  color:var(--elv-cyan);
+  text-shadow:0 0 22px rgba(31,214,255,.45), 0 0 60px rgba(31,214,255,.25);
+  margin:.35rem 0 1rem;
+  animation:logo-breathe 8s ease-in-out infinite;
+}
+@keyframes logo-breathe{
+  0%{ text-shadow:0 0 18px rgba(31,214,255,.35), 0 0 45px rgba(31,214,255,.2)}
+  50%{ text-shadow:0 0 28px rgba(31,214,255,.55), 0 0 80px rgba(31,214,255,.28)}
+  100%{ text-shadow:0 0 18px rgba(31,214,255,.35), 0 0 45px rgba(31,214,255,.2)}
+}
+
+/* pokrij “uske” layout kontejnere */
+.container, main, .wrap, .content{
+  max-width:var(--hero-max) !important;
+  width:min(var(--hero-max),96vw) !important;
+  margin-inline:auto !important;
+}
