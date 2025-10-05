@@ -16,64 +16,86 @@ a:hover{text-decoration:underline;}
 .card{background:#11161e;border:1px solid #19b5ff40;padding:16px;border-radius:10px;}
 footer{margin-top:60px;padding:20px;font-size:13px;color:#9fb0c6;}
 </style>
+  <link rel='stylesheet' href='assets/css/hero.css' />
+<link rel="stylesheet" href="/css/elvora.css">
+
+<link rel="stylesheet" href="/css/hero-map.css">
 </head>
-<body>
+<body class="elvora-body">
+<!-- HERO START -->
+<link rel="stylesheet" href="/css/hero-map.css">
 
-<h1 style='color:#19b5ff; text-align:center;'>
-  Inteligentni sustav koji unapređuje, povezuje i pokreće svjetske lance opskrbe i transporta.
-</h1>
-<p style='color:#9fb0c6; text-align:center; max-width:700px; margin:20px auto; font-size:18px;'>
-  Nova generacija softvera koji spaja poslovanje, trgovinu i logistiku — predviđa potrebe, optimizira resurse i štiti svaki proces i podatke.
-</p>
+<section class="hero-map">
+  <!-- Canvas neon network -->
+  <canvas id="heroNetwork" class="hero-canvas" aria-hidden="true"></canvas>
 
-<section>
-<h2>Ekskluzivni Softveri (2025)</h2>
-<div class="grid">
+  <div class="hero-inner">
+    <h1 class="hero-title">
+      Inteligentni sustav koji unapređuje, povezuje i pokreće svjetske lance opskrbe i transporta.
+    </h1>
 
-<div class="card"><h3>1️⃣ Self-Healing Inventory™</h3><p>AI automatski ispravlja i vraća nestale artikle kroz podatke iz hubova.</p></div>
+    <h2 class="hero-sub">
+      Nova generacija softvera koji spaja poslovanje, trgovinu i logistiku — predviđa potrebe,
+      optimizira resurse i štiti svaki proces i podatke.
+    </h2>
 
-<div class="card"><h3>2️⃣ Invisible QR™ + Bio-link</h3><p>Nevidljivi QR s anti-fake funkcijom i biometrijskim podacima proizvoda.</p></div>
+    <div class="hero-brand">Elvora™</div>
 
-<div class="card"><h3>3️⃣ Shelf-Life Radar™ + Auto-Reorder</h3><p>Predviđa rok trajanja i automatski pokreće pametne narudžbe.</p></div>
-
-<div class="card"><h3>4️⃣ Stolen Goods Tracker (AI Theft Alert)</h3><p>Detektira krađu ili rutu izvan plana, aktivira alarm pri pokušaju skeniranja.</p></div>
-
-<div class="card"><h3>5️⃣ AI Compliance Guardian™</h3><p>Automatska usklađenost sa zakonima (HACCP, FDA, halal, kosher...)</p></div>
-
-<div class="card"><h3>6️⃣ Smart Warehouse Mapping (SF Edition)</h3><p>AI sam mapira prostor skladišta bez naljepnica i senzora.</p></div>
-
-<div class="card"><h3>7️⃣ Business Hub AI Customizer</h3><p>Kupac sam kreira mrežu (ljekarna, kafić, hotel, market) — AI sve povezuje.</p></div>
-
-<div class="card"><h3>8️⃣ Semi-Custom Warehouse Mode</h3><p>Kupac sam postavlja zone skladišta — AI mapira i dodjeljuje artikle.</p></div>
-
-<div class="card"><h3>9️⃣ AI Theft-Forensics Watermark</h3><p>Nevidljivi otisak na svakoj jedinici proizvoda — forenzički dokaz pri krađi.</p></div>
-
-<div class="card"><h3>🔟 Global Auto-Regulation Switch</h3><p>AI automatski prebacuje pravila kad roba prelazi granice (EU–US–Japan).</p></div>
-
-<div class="card"><h3>11️⃣ Quantum Route Optimizer™</h3><p>Fleet rutiranje koje sprječava gužve balansiranjem ruta u stvarnom vremenu.</p></div>
-
-<div class="card"><h3>12️⃣ TransitSeal™</h3><p>Potpisani i vremenski ovjereni “proof-of-transit” zapisi za pošiljke i kamione.</p></div>
-
-</div>
+    <div class="hero-cards">
+      <div class="hero-card">
+        <h3>Self-Healing Logistics™</h3>
+        <p>AI ispravlja nestale ili netočne zapise između centara — manje iznimki i brži protok.</p>
+      </div>
+      <div class="hero-card">
+        <h3>Shelf-Life Radar™</h3>
+        <p>Izračun prognoza i automatsko punjenje smanjuju količinu otpada u operacijama.</p>
+      </div>
+      <div class="hero-card">
+        <h3>Custom Mode</h3>
+        <p>Samostalno kreirajte kafiće, restorane, hotele, ljekarne, markete i skladišta — prilagođeno vašim potrebama.</p>
+      </div>
+    </div>
+  </div>
 </section>
 
-<footer>
-© 2025 Elvora. Sva prava pridržana. — <a href="/legal/terms.html">Uvjeti</a> · <a href="/legal/privacy.html">Privatnost</a>
-<p style="text-align:center;margin-top:8px"><a href="/director.html" style="opacity:.6">Director</a></p></footer>
+<footer class="hero-footer">
+  <p>© 2025 Elvora™ — Sva prava pridržana.</p>
+  <p>Povjerljivo: Zabranjeno otkrivanje poslovnih tajni i dijeljenje sadržaja.</p>
+  <p>Svaki pokušaj neovlaštenog pristupa ili kopiranja bit će prijavljen nadležnim tijelima.</p>
+  <p>Naši klijenti su naša odgovornost. Mi čuvamo vas, jer bez vas nema nas.</p>
+</footer>
 
-<script id="elvora_director_guard">
-(function(){
-  try{
-    var ok = localStorage.getItem('elvora_director')==='1';
-    if(!ok){
-      document.querySelectorAll('[data-guard="director"]').forEach(function(el){ el.style.display='none'; });
-      document.querySelectorAll('a[href^="/apps/"]').forEach(function(a){ a.style.display='none'; });
-    }
-  }catch(e){}
-})();
-</script>
+<script defer src="/js/hero-network.js"></script>
+<!-- HERO END -->
+
+
+
+  
+
+  <!-- FOOTER START -->
+  <footer class="site-footer">
+    <div class="footer-inner">
+      <p>© 2025 Elvora™ — Sva prava pridržana.</p>
+      <p>Povjerljivo: Zabranjeno otkrivanje poslovnih tajni i dijeljenje sadržaja.</p>
+      <p>Svaki pokušaj neovlaštenog pristupa ili kopiranja bit će prijavljen nadležnim tijelima.</p>
+      <p>Naši klijenti su naša odgovornost. Mi čuvamo vas, jer bez vas nema nas.</p>
+    </div>
+  </footer>
+  <!-- FOOTER END -->
 </body>
 </html>
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
