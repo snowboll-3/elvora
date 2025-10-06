@@ -1,0 +1,32 @@
+<!doctype html><html lang="hr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Elvora Support</title>
+<style>
+body{margin:0;background:#0b0f14;color:#e6eef7;font-family:Inter,system-ui}
+.container{max-width:880px;margin:0 auto;padding:20px}
+.card{background:#0f151b;border:1px solid #15212c;border-radius:12px;padding:16px}
+label{display:block;margin:8px 0 4px} input,select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #15212c;background:#0f1821;color:#e6eef7}
+.btn{display:inline-block;padding:12px 14px;border-radius:10px;border:1px solid #1a2a36;background:#0f1821;color:#e6eef7;cursor:pointer}
+a{color:#19b5ff}
+</style></head><body>
+<div class="container">
+  <h1>Elvora — Support</h1>
+  <p>Jedini službeni kontakt: <a href="mailto:support@elvora.app">support@elvora.app</a></p>
+  <div class="card">
+    <form id="f">
+      <label>Tema</label>
+      <select name="topic"><option>[POC] On-site pilot</option><option>[DEMO] Sandbox upit</option><option>[LEGAL] Pravna obavijest</option><option>[SUPPORT] Tehnièka podrška</option><option>[PARTNER] Partnerstvo</option></select>
+      <label>Ime i tvrtka</label><input name="name" required>
+      <label>E-mail</label><input name="email" type="email" required>
+      <label>Poruka</label><textarea name="msg" rows="6" required></textarea>
+      <div style="margin-top:10px"><button class="btn" type="submit">Pošalji na Support</button></div>
+    </form>
+  </div>
+</div>
+<script>
+document.getElementById('f').onsubmit=(e)=>{ e.preventDefault(); const d=Object.fromEntries(new FormData(e.target).entries());
+  const subject=encodeURIComponent(d.topic+' — '+d.name);
+  const body=encodeURIComponent(`Ime/Tvrtka: ${d.name}\nEmail: ${d.email}\n\n${d.msg}`);
+  location.href=`mailto:support@elvora.app?subject=${subject}&body=${body}`;
+};
+</script>
+

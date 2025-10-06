@@ -1,0 +1,96 @@
+<!doctype html><html lang="hr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Elvora — Showroom softvera</title>
+<meta name="description" content="Katalog softvera Elvora s AI cjenikom nakon kratke analize potrebe.">
+<style>
+:root{--bg:#0b0f14;--card:#0f151b;--line:#15212c;--mut:#9fb0c6;--txt:#e6eef7;--blue:#19b5ff}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--txt);font-family:Inter,system-ui}
+.container{max-width:1200px;margin:0 auto;padding:16px}
+h1{margin:8px 0 12px;color:#e6f1ff} h2{margin:6px 0 8px;color:#cfe6ff}
+.small{color:var(--mut);font-size:13px}
+.btn{display:inline-block;padding:10px 14px;border-radius:10px;border:1px solid var(--line);background:#0f1821;color:#e6eef7;cursor:pointer}
+.btn:hover{border-color:var(--blue)}
+.grid{display:grid;gap:14px}.cards{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))}
+.card{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:14px;display:flex;flex-direction:column;gap:8px}
+.tag{display:inline-flex;gap:6px;align-items:center;border:1px solid var(--line);background:#0f1821;border-radius:999px;padding:6px 10px;color:#cfe6ff;font-size:12px}
+.header{display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid #12202b;padding-bottom:10px}
+.nav a{color:#cfe6ff;text-decoration:none;margin-left:10px;border:1px solid var(--line);border-radius:10px;padding:8px 10px;background:#0f1821}
+.nav a:hover{border-color:var(--blue)}
+footer{margin-top:20px;padding-top:12px;border-top:1px solid #12202b;color:#9fb0c6;text-align:center}
+.modal{position:fixed;inset:0;background:#00000080;display:none;align-items:center;justify-content:center;z-index:9}
+.modal .content{background:var(--card);border:1px solid var(--line);border-radius:12px;padding:16px;max-width:640px;width:92%}
+label{display:block;margin:8px 0 4px} input,select{width:100%;padding:10px;border-radius:8px;border:1px solid var(--line);background:#0f1821;color:#e6eef7}
+.row{display:flex;gap:8px;flex-wrap:wrap}
+.badge{background:#0f1821;border:1px solid var(--line);border-radius:999px;padding:6px 10px;color:#cfe6ff;font-size:12px}
+.hero{background:linear-gradient(180deg,#0f151b,#0b1016);border:1px solid #12202b;border-radius:12px;padding:16px;margin-bottom:12px}
+</style></head><body><div class="container">
+  <div class="header">
+    <h1>Elvora — <span style="color:#19b5ff">Showroom softvera</span></h1>
+    <nav class="nav"><a href="/index.html">Poèetna</a><a href="/command-center.html">Command Center</a><a href="/demo/?mode=sandbox" target="_blank">Demo</a><a href="/support.html">Support</a></nav>
+  </div>
+  <section class="hero">
+    <div class="row" style="justify-content:space-between;align-items:center">
+      <div>
+        <h1>“Spremni smo preuzeti vaša skladišta.” — i transport.</h1>
+        <p class="small">Elvora orkestrira dronove i robote, indoor & outdoor. AI odreðuje cijenu nakon kratke analize.</p>
+        <div class="row" style="margin-top:6px"><span class="badge">?? Signed-only · Geofence · Audit Seal</span><span class="badge">?? AI cjenik</span></div>
+      </div>
+      <div><button class="btn" id="openWizard">Pokreni AI cjenik ›</button></div>
+    </div>
+  </section>
+  <h2>Naši softveri</h2>
+  <div class="grid cards">
+    <div class="card"><div class="tag">?? Warehouse AI</div><strong>“Warehouse AI koji sam mapira prostor.”</strong>
+      <p class="small">Noæna inventura bez naljepnica, spot-check, rastereæenje gužvi, inteligentno razmještanje.</p>
+      <div class="row"><button class="btn priceBtn" data-sku="warehouse">AI cijena</button><a class="btn" href="/command-center.html">Pokreni</a></div>
+    </div>
+    <div class="card"><div class="tag">?? Logistics Hub</div><strong>“AI koji vidi rampe i skraæuje èekanja.”</strong>
+      <p class="small">Yard patrol, zauzeæe rampi, foto-dokazi dolazaka/odlazaka, optimizacija istovara/utovara.</p>
+      <div class="row"><button class="btn priceBtn" data-sku="logistics">AI cijena</button><a class="btn" href="/command-center.html">Planiraj rute</a></div>
+    </div>
+    <div class="card"><div class="tag">??? Operations & Compliance</div><strong>“Sigurnost koja ne smeta poslu.”</strong>
+      <p class="small">Signed-only by default, geofence, incident workflow (RTH/Land/Quarantine), audit/hash.</p>
+      <div class="row"><button class="btn priceBtn" data-sku="compliance">AI cijena</button><a class="btn" href="/command-center.html">Upravljaj pravilima</a></div>
+    </div>
+    <div class="card"><div class="tag">?? Business Intelligence</div><strong>“Vidljivost koja vodi akciji.”</strong>
+      <p class="small">KPI nadzorne ploèe, predikcija peaka i preporuke re-layouta.</p>
+      <div class="row"><button class="btn priceBtn" data-sku="bi">AI cijena</button><a class="btn" href="/command-center.html">Otvori izvještaje</a></div>
+    </div>
+    <div class="card"><div class="tag">?? Checkout & Payment</div><strong>“Plaæanje koje se prilagoðava prometu.”</strong>
+      <p class="small">Siguran checkout, tokenizacija, dinamièna pravila naplate, export u raèunovodstvo.</p>
+      <div class="row"><button class="btn priceBtn" data-sku="payment">AI cijena</button><a class="btn" href="/command-center.html">Postavi billing</a></div>
+    </div>
+    <div class="card"><div class="tag">?? Live Lab (Sandbox)</div><strong>“Pogledajte Elvoru uživo — bez hardvera.”</strong>
+      <p class="small">Gužva › dron patrola › roboti interveniraju. Sigurno, u pregledniku.</p>
+      <div class="row"><a class="btn" href="/demo/?mode=sandbox" target="_blank">Isprobaj Demo</a><a class="btn" href="mailto:support@elvora.app?subject=%5BPOC%5D%20Zahtjev%20za%20pilot">Zatraži POC</a></div>
+    </div>
+  </div>
+  <footer>© 2025 Elvora · Sva prava pridržana · ?? <a href="mailto:support@elvora.app" style="color:#19b5ff">support@elvora.app</a> · ?? RH</footer>
+</div>
+
+<div class="modal" id="wiz"><div class="content">
+  <h2>AI cjenik — brza procjena</h2>
+  <p class="small">Odgovorite na par pitanja — dobit æete preporuèeni plan i raspon cijene.</p>
+  <div class="row"><div style="flex:1"><label>Vrsta prostora</label><select id="qType"><option value="indoor">Unutarnje</option><option value="outdoor">Vanjsko</option><option value="mixed">Kombinirano</option></select></div>
+    <div style="flex:1"><label>Površina (m2)</label><input id="qArea" type="number" min="100" value="12000"></div></div>
+  <div class="row"><div style="flex:1"><label>Zone</label><input id="qZones" type="number" min="1" value="3"></div>
+    <div style="flex:1"><label>Flota (dronovi+roboti)</label><input id="qFleet" type="number" min="1" value="4"></div></div>
+  <div class="row"><div style="flex:1"><label>SLA & podrška</label><select id="qSla"><option value="std">Standard</option><option value="plus">Plus (12/5)</option><option value="ent">Enterprise (24/7)</option></select></div>
+    <div style="flex:1"><label>Moduli</label><select id="qSku"><option value="warehouse">Warehouse AI</option><option value="logistics">Logistics Hub</option><option value="compliance">Operations & Compliance</option><option value="bi">Business Intelligence</option><option value="payment">Checkout & Payment</option><option value="bundle">Bundle (preporuka)</option></select></div></div>
+  <div class="row" style="margin-top:10px"><button class="btn" id="calc">Izraèunaj</button><button class="btn" id="close">Zatvori</button>
+    <a class="btn" id="contact" href="mailto:support@elvora.app?subject=%5BPRICING%5D%20Upit" style="margin-left:auto">Kontakt Support</a></div>
+  <div id="out" class="small" style="margin-top:10px;white-space:pre-wrap"></div>
+</div></div>
+
+<script>
+const wiz=document.getElementById('wiz');
+document.getElementById('openWizard').onclick=()=>wiz.style.display='flex';
+document.getElementById('close').onclick=()=>wiz.style.display='none';
+document.querySelectorAll('.priceBtn').forEach(b=>b.onclick=()=>{ document.getElementById('qSku').value=b.dataset.sku; wiz.style.display='flex';});
+function priceCalc({type,area,zones,fleet,sla,sku}){ const base={warehouse:1800, logistics:1500, compliance:1200, bi:900, payment:700, bundle:3600}; let b=base[sku]||1500;
+  if(area>15000) b*=1.25; if(area>30000) b*=1.45; b*=(1+(zones-1)*0.06); b*=(1+(fleet-1)*0.05); if(type==='mixed') b*=1.10; else if(type==='outdoor') b*=1.06; if(sla==='plus') b*=1.15; if(sla==='ent') b*=1.35; if(sku==='bundle') b*=0.82;
+  const lo=Math.round(b*0.88/10)*10, hi=Math.round(b*1.12/10)*10; return {plan:(sku==='bundle'?'Elvora ONE (bundle)':'Single module'), lo, hi}; }
+document.getElementById('calc').onclick=()=>{ const data={ type:document.getElementById('qType').value, area:parseInt(document.getElementById('qArea').value||0,10), zones:parseInt(document.getElementById('qZones').value||1,10), fleet:parseInt(document.getElementById('qFleet').value||1,10), sla:document.getElementById('qSla').value, sku:document.getElementById('qSku').value };
+  const {plan,lo,hi}=priceCalc(data); document.getElementById('out').textContent = `Preporuèeni plan: ${plan}\nProcijenjeni raspon: € ${lo.toLocaleString()} – € ${hi.toLocaleString()} / mj\nNapomena: Indicativno na temelju vaših odgovora. Za konaènu ponudu: support@elvora.app`; };
+</script>
+

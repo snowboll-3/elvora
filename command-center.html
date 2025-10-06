@@ -1,0 +1,112 @@
+<!doctype html><html lang="hr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Elvora Command Center v2</title>
+<style>
+:root{--bg:#0b0f14;--blue:#19b5ff;--ok:#39d98a;--warn:#f0c24b;--err:#ff5d5d;--mut:#9fb0c6}
+*{box-sizing:border-box}body{margin:0;font-family:Inter,system-ui,Segoe UI,Roboto,Arial;background:var(--bg);color:#e6eef7}
+.container{max-width:1200px;margin:0 auto;padding:16px}
+h1{font-size:24px;margin:10px 0;color:#e6f1ff}h2{font-size:18px;margin:6px 0;color:#cfe6ff}
+.btn{background:#0f1821;border:1px solid #1a2a36;border-radius:10px;padding:10px 14px;color:#e6eef7;cursor:pointer}
+.btn:hover{border-color:#19b5ff}
+.badge{background:#0f1821;border:1px solid #1a2a36;border-radius:999px;padding:6px 12px;color:#cfe6ff;display:inline-flex;gap:6px;align-items:center}
+.grid{display:grid;gap:14px}.panels{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.panel{background:#0f151b;border:1px solid #15212c;border-radius:12px;padding:14px;transition:.3s}
+.panel:hover{border-color:#19b5ff40}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+input,select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #1a2a36;background:#0f1821;color:#e6eef7}
+footer{margin-top:14px;padding-top:12px;border-top:1px solid #12202b;color:#9fb0c6;font-size:12px;text-align:center}
+.small{font-size:13px;color:#9fb0c6}.quick{display:flex;gap:8px;overflow-x:auto;padding:8px 0}
+.quick button{flex-shrink:0;background:#0f1821;border:1px solid #1a2a36;border-radius:10px;padding:10px 12px;color:#cfe6ff;cursor:pointer}
+.quick button:hover{border-color:#19b5ff}
+.scene{height:180px;border:1px solid #1a2a36;border-radius:10px;background:linear-gradient(180deg,#0f151b,#0b1016);position:relative;overflow:hidden}
+.drone,.robot{position:absolute;width:18px;height:18px;border-radius:50%;transform:translate(-9px,-9px)}
+.drone{background:#19b5ff;box-shadow:0 0 10px #19b5ff}.robot{background:#39d98a;box-shadow:0 0 8px #39d98a}
+.help{position:fixed;right:16px;bottom:16px;background:#0f1821;border:1px solid #1a2a36;border-radius:12px;padding:12px;width:260px;display:none}
+.help.open{display:block}.kpi{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:16px}
+.kpi .card{background:#0f151b;border:1px solid #15212c;border-radius:12px;padding:12px}
+.kpi .val{font-size:22px;font-weight:700}.kpi .ok{color:var(--ok)}.kpi .warn{color:var(--warn)}.kpi .err{color:var(--err)}
+.expert-only{display:none}body.expert .expert-only{display:block}
+#loader{position:fixed;inset:0;display:flex;align-items:center;justify-content:center;background:#0b0f14;z-index:9999}
+.spinner{width:64px;height:64px;border-radius:50%;border:4px solid #12202b;border-top-color:#19b5ff;animation:spin 1s linear infinite;box-shadow:0 0 30px #19b5ff40 inset}
+@keyframes spin{to{transform:rotate(360deg)}}
+#loader .text{margin-top:12px;color:#9fb0c6;text-align:center}
+</style></head><body>
+<div id="loader"><div style="display:flex;flex-direction:column;align-items:center"><div class="spinner"></div><div class="text">Elvora is loading…</div></div></div>
+<div class="container" id="app" style="opacity:0">
+  <header class="row" style="justify-content:space-between">
+    <div><h1>?? Elvora Command Center</h1></div>
+    <div class="row">
+      <label class="badge">Mode:
+        <select id="modeSel"><option value="express" selected>Express</option><option value="expert">Expert</option></select>
+      </label>
+      <button class="btn" id="helpBtn">?</button>
+    </div>
+  </header>
+  <section>
+    <div class="row" style="align-items:center;gap:8px">
+      <input id="aiCmd" placeholder="Napiši meni... npr. 'Inventura zone A noæu svaki dan'">
+      <button class="btn" id="aiRun">Pretvori u plan</button>
+    </div>
+    <div id="aiOut" class="small" style="margin-top:6px"></div>
+  </section>
+  <section style="margin-top:16px"><div class="grid panels">
+    <div class="panel"><h2>1?? Mapiraj skladište</h2><p class="small">Status: <span id="mapStatus">nije mapirano</span></p>
+      <div class="row"><button class="btn" id="btnMap">Pokreni mapiranje</button><select id="mapType"><option>Auto</option><option>Ruèno (tlocrt)</option></select></div>
+    </div>
+    <div class="panel"><h2>2?? Ciljevi & raspored</h2>
+      <div class="small">Inventura @ <input id="invTime" value="02:00" style="width:120px"> · Patrola <select id="patrolEvery" style="width:140px"><option value="PT60M">60 min</option><option value="PT120M" selected>120 min</option><option value="PT240M">240 min</option></select></div>
+      <div class="small expert-only" style="margin-top:8px">Policy: <label class="badge"><input type="checkbox" id="signed" checked> Signed-only</label> <label class="badge"><input type="checkbox" id="geofence" checked> Geofence</label></div>
+      <div class="row" style="margin-top:8px"><button class="btn">Spremi raspored</button></div>
+    </div>
+    <div class="panel"><h2>3?? Pokreni sada</h2><p class="small">Ruèno pokretanje inventure, patrole ili spot-checka.</p>
+      <div class="row"><button class="btn" id="runInv">Inventura</button><button class="btn" id="runPatrol">Patrola</button><button class="btn expert-only" id="runSpot">Spot-check</button></div>
+    </div>
+    <div class="panel"><h2>4?? Gužve & incidenti</h2><p class="small">Trenutno: <span id="jamCount">0</span> aktivnih gužvi</p>
+      <div class="row"><button class="btn" id="simCong">Simuliraj gužvu</button><button class="btn expert-only" id="clrInc">Oèisti incidente</button></div>
+    </div>
+    <div class="panel"><h2>5?? Resursi</h2><p class="small">Dronovi: <span id="dCount">2</span> • Roboti: <span id="rCount">4</span> • Dockovi: 2</p><button class="btn">Pregled flote</button></div>
+    <div class="panel"><h2>6?? Izvještaji</h2><p class="small">Pregled posljednjih misija i rezultata inventure.</p><button class="btn">Otvori izvještaje</button></div>
+  </div></section>
+  <section style="margin-top:18px"><h2>? Brzi predlošci</h2>
+    <div class="quick"><button data-t="inventory">Noæna inventura</button><button data-t="yard">Yard patrol</button><button data-t="antijam">Anti-gužva</button><button data-t="outbound">Outbound check</button><button data-t="security">Security sweep</button></div>
+  </section>
+  <section style="margin-top:18px"><h2>??? Live Demo (sandbox)</h2>
+    <div class="scene" id="scene"><div class="drone" id="d1"></div><div class="drone" id="d2"></div><div class="robot" id="r1"></div><div class="robot" id="r2"></div><div class="robot" id="r3"></div></div>
+  </section>
+  <section class="kpi"><div class="card"><div class="small">Pokrivenost inventure (24h)</div><div id="kpiInv" class="val ok">95%</div></div>
+    <div class="card"><div class="small">Gužve riješene</div><div id="kpiJam" class="val ok">100%</div></div>
+    <div class="card"><div class="small">Uptime flote</div><div id="kpiUptime" class="val ok">99.7%</div></div>
+  </section>
+</div>
+<div id="helpPanel" class="help"><h3>? Upute</h3><p class="small">Express: osnovne funkcije. Expert: Mission Builder, API i sigurnosne politike.</p></div>
+<script>
+setTimeout(()=>{ document.getElementById('loader').style.display='none'; const app=document.getElementById('app'); app.style.opacity=1; app.style.transition='opacity .4s'; }, 700);
+const modeSel=document.getElementById('modeSel'); modeSel.onchange=()=>{ document.body.classList.toggle('expert', modeSel.value==='expert'); };
+document.getElementById('helpBtn').onclick=()=> document.getElementById('helpPanel').classList.toggle('open');
+document.getElementById('aiRun').onclick=()=>{ const v=document.getElementById('aiCmd').value.trim(); const out=document.getElementById('aiOut'); if(!v){ out.textContent='Unesite naredbu…'; return; } out.textContent='?? \"'+v+'\" › plan: INVENTURA @ '+(document.getElementById('invTime').value||'02:00')+' · AUTO · SIGNED-ONLY ?'; };
+const scene=document.getElementById('scene');
+const drones=[{el:document.getElementById('d1'),x:60,y:150,dir:1},{el:document.getElementById('d2'),x:260,y:60,dir:-1}];
+const robots=[{el:document.getElementById('r1'),x:300,y:140},{el:document.getElementById('r2'),x:340,y:160},{el:document.getElementById('r3'),x:380,y:180}];
+function place(el,x,y){ el.style.left=x+'px'; el.style.top=y+'px'; }
+(function loop(){drones.forEach(d=>{d.x+=d.dir*1.2;if(d.x<40||d.x>560)d.dir*=-1;place(d.el,d.x,d.y);});robots.forEach((r,i)=>{r.x+=Math.sin(Date.now()/700+i)*0.5;place(r.el,r.x,r.y);});requestAnimationFrame(loop);})();
+document.querySelectorAll('.quick button').forEach(b=>b.onclick=()=>{ const t=b.dataset.t; const out=document.getElementById('aiOut');
+  if(t==='inventory'){ out.textContent='?? Noæna inventura postavljena @ 02:00 (Auto, Signed-only, Indoor).'; bumpKPI('inv', +2); }
+  if(t==='antijam'){ out.textContent='?? Anti-gužva: dron patrola + 2 AMR pojaèanja.'; bumpKPI('jam', +5); }
+  if(t==='yard'){ out.textContent='?? Yard patrol svaka 120 min (RTK/MIXED).'; }
+  if(t==='outbound'){ out.textContent='?? Outbound spot-check (10% random).'; }
+  if(t==='security'){ out.textContent='?? Security sweep: vrata/rampe, dokazi i alarmi.'; }
+});
+let jam=0;
+document.getElementById('simCong').onclick=()=>{ jam++; document.getElementById('jamCount').textContent=jam; document.getElementById('aiOut').textContent='?? Gužva u zoni B › dron patrola + poziv robota.'; bumpKPI('jam', -10); };
+document.getElementById('clrInc').onclick=()=>{ jam=0; document.getElementById('jamCount').textContent=jam; document.getElementById('aiOut').textContent='Incidenti oèišæeni.'; bumpKPI('jam', +15); };
+document.getElementById('runInv').onclick=()=>{ document.getElementById('aiOut').textContent='? Pokrenuta inventura (SWEEP.VOLUME)…'; bumpKPI('inv', +1); };
+document.getElementById('runPatrol').onclick=()=>{ document.getElementById('aiOut').textContent='? Pokrenuta patrola (FOLLOW.TRAJECTORY)…'; };
+document.getElementById('runSpot').onclick=()=>{ document.getElementById('aiOut').textContent='? Spot-check (zona B)…'; };
+function bumpKPI(which, delta){
+  if(which==='inv'){ const el=document.getElementById('kpiInv'); let v=parseInt(el.textContent); v=Math.min(100,Math.max(0,v+delta)); el.textContent=v+'%'; colorize(el,v,90,75); }
+  if(which==='jam'){ const el=document.getElementById('kpiJam'); let v=parseInt(el.textContent); v=Math.min(100,Math.max(0,v+delta)); el.textContent=v+'%'; colorize(el,v,95,70); }
+  const u=document.getElementById('kpiUptime'); let uv=parseFloat(u.textContent); uv=Math.max(95,Math.min(100, uv + (delta>0?0.02:-0.03))); u.textContent=uv.toFixed(1)+'%'; colorize(u,uv,99,97);
+}
+function colorize(el,val,ok,wrn){ el.classList.remove('ok','warn','err'); if(val>=ok) el.classList.add('ok'); else if(val>=wrn) el.classList.add('warn'); else el.classList.add('err'); }
+document.getElementById('btnMap').onclick=()=>{ document.getElementById('mapStatus').textContent='u tijeku…'; setTimeout(()=>document.getElementById('mapStatus').textContent='gotovo',1200); };
+</script>
+

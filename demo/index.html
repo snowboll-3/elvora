@@ -1,0 +1,215 @@
+<!doctype html><html lang="hr"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Elvora Demo — Sandbox Robots & Drones</title>
+<meta name="description" content="Sandbox demonstracija Elvore: gužva, patrola, auto-mode, mission builder, dock/charge, validacija.">
+<style>
+:root{--bg:#0b0f14;--blue:#19b5ff;--ok:#39d98a;--warn:#f0c24b;--err:#ff5d5d;--mut:#9fb0c6}
+*{box-sizing:border-box} html,body{margin:0;background:var(--bg);color:#e6eef7;font-family:Inter,system-ui}
+.container{max-width:1280px;margin:0 auto;padding:16px}
+.top{display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #12202b;padding-bottom:10px}
+.badge{display:inline-flex;gap:8px;align-items:center;border:1px solid #1a2a36;background:#0f1821;border-radius:999px;padding:8px 12px;color:#cfe6ff}
+.btn{display:inline-block;padding:10px 12px;border-radius:10px;border:1px solid #1a2a36;background:#0f1821;color:#e6f1ff;cursor:pointer}
+.btn:hover{border-color:#19b5ff}
+.kicker{letter-spacing:.12em;color:#19b5ff;font-size:12px;font-weight:600;text-transform:uppercase}
+.small{color:#9fb0c6;font-size:12px}.row{display:flex;gap:8px;flex-wrap:wrap}.grid{display:grid;gap:14px}.two{grid-template-columns:380px 1fr}
+.card{background:#0f151b;border:1px solid #15212c;border-radius:12px;padding:14px}
+.pill{display:inline-flex;gap:6px;align-items:center;border:1px solid #1a2a36;background:#0f1821;border-radius:999px;padding:6px 10px;color:#cfe6ff}
+.hint{background:#0b1117aa;border:1px dashed #1a2a36;border-radius:10px;padding:10px}
+.tabbar{display:flex;gap:8px;margin-bottom:8px}.tabbar .btn.on{border-color:#19b5ff}
+#scene{position:relative;height:520px;border:1px solid #15212c;border-radius:12px;background:linear-gradient(180deg,#0f151b,#0b1016);overflow:hidden}
+#grid{position:absolute;inset:0}
+.unit{position:absolute;width:18px;height:18px;border-radius:50%;transform:translate(-9px,-9px)}
+.drone{background:#19b5ff;box-shadow:0 0 14px #19b5ff}
+.robot{background:#39d98a;box-shadow:0 0 12px #39d98a}
+.dock{position:absolute;width:24px;height:24px;border:2px dashed #1a2a36;border-radius:6px;background:#0f1821;transform:translate(-12px,-12px)}
+.alert{background:#f0c24b;color:#0b0f14;border-radius:6px;padding:2px 6px}
+.log{height:120px;overflow:auto;background:#0f181f;border:1px solid #1a2a36;border-radius:8px;padding:8px}
+.kv{display:grid;grid-template-columns:120px 1fr;gap:6px}#alarms{display:grid;gap:6px}
+.alarm{background:#0f181f;border:1px solid #1a2a36;border-radius:8px;padding:8px}
+.alarm.crit{border-color:#ff5d5d80}.alarm.warn{border-color:#f0c24b80}
+.banner{display:flex;justify-content:space-between;align-items:center;padding:10px 12px;border:1px dashed #1a2a36;border-radius:10px;margin:12px 0;background:#0f181f}
+.modal{position:fixed;inset:0;background:#00000080;display:none;align-items:center;justify-content:center}
+.modal .content{background:#0f151b;border:1px solid #15212c;border-radius:12px;padding:16px;max-width:560px;width:90%}
+input,select,textarea{width:100%;padding:10px;border-radius:8px;border:1px solid #1a2a36;background:#0f1821;color:#e6f1ff}
+footer{margin-top:14px;padding-top:12px;border-top:1px solid #12202b;color:#9fb0c6}
+</style></head><body>
+<div class="container">
+  <div class="top">
+    <div class="row">
+      <div class="badge">?? Elvora Demo</div>
+      <div class="badge">?? Signed: <strong id="signedState">ON</strong></div>
+      <div class="badge">??? Profil: <strong id="profileState">INDOOR.VIO</strong></div>
+    </div>
+    <div class="row">
+      <a class="btn" href="/" target="_blank">Poèetna</a>
+      <a class="btn" href="/showroom.html" target="_blank">Showroom</a>
+      <button class="btn" id="btnPOC">Zatraži on-site POC</button>
+    </div>
+  </div>
+  <div class="banner">
+    <div>?? <strong>Sandbox simulacija</strong> — bez stvarnog hardvera. Želite probu? Pokrenite POC zahtjev.</div>
+    <div><a class="btn" href="/command-center.html" target="_blank">Otvori Command Center</a></div>
+  </div>
+  <div class="grid two">
+    <div class="grid">
+      <div class="card"><div class="kicker">Trigeri i sigurnost</div>
+        <div class="row"><button class="btn" id="btnCongestion">Gužva (Zona B)</button><button class="btn" id="btnDoor">Otvorena vrata (outdoor)</button><button class="btn" id="btnReset">Reset</button></div>
+        <div class="row" style="margin-top:8px">
+          <label class="badge"><input type="checkbox" id="chkSigned" checked> Signed-only</label>
+          <label class="badge"><input type="checkbox" id="chkGeofence" checked> Geofence</label>
+          <label class="badge"><input type="checkbox" id="chkYield" checked> Yield-to-human</label>
+        </div>
+        <div class="kv small" style="margin-top:8px">
+          <div>Inventura @</div><input id="invTime" value="02:00">
+          <div>Patrola</div><select id="patrolEvery"><option value="PT60M">60 min</option><option value="PT120M" selected>120 min</option><option value="PT240M">240 min</option></select>
+        </div>
+      </div>
+      <div class="card">
+        <div class="kicker">Mission Builder (Custom)</div>
+        <div class="row">
+          <select id="cmd"><option value="TAKEOFF">TAKEOFF{alt}</option><option value="SWEEP.VOLUME">SWEEP.VOLUME{bbox,pattern,speed}</option><option value="FOLLOW.TRAJECTORY">FOLLOW.TRAJECTORY{points,v_mps}</option><option value="GOTO">GOTO{x,y,z,yaw}</option><option value="DOCK">DOCK{dock_id}</option><option value="LAND">LAND{mode}</option></select>
+          <input id="params" placeholder='npr {"alt":2.2} ili {"dock_id":"D1"}'><button class="btn" id="btnAdd">Dodaj blok</button>
+        </div>
+        <textarea id="program" rows="6" class="small" placeholder='Program (svaka linija JSON bloka)'></textarea>
+        <div class="row" style="margin-top:6px"><button class="btn" id="btnRun">Pokreni</button><button class="btn" id="btnClearProg">Oèisti</button></div>
+        <div class="small" style="margin-top:8px">Primjer: TAKEOFF›SWEEP.VOLUME›DOCK D2›LAND. Signed i Geofence neka budu ON.</div>
+      </div>
+      <div class="card"><div class="kicker">Alarmi</div><div id="alarms"></div><div class="row" style="margin-top:6px"><button class="btn" id="btnClearAlarms">Oèisti alarme</button></div></div>
+      <div class="card"><div class="kicker">Konfiguracija & API</div>
+        <div class="row"><button class="btn" id="btnValidate">Validate</button><button class="btn" id="btnExport">Export YAML</button><button class="btn" id="btnAPI">API payloads</button></div>
+        <pre id="configOut" class="small" style="margin-top:8px"></pre>
+      </div>
+      <div class="card"><div class="kicker">Log</div><div id="log" class="log small"></div></div>
+    </div>
+    <div class="card" style="position:relative">
+      <div class="tabbar"><button class="btn on" data-tab="map">Mapa</button><button class="btn" data-tab="telemetry">Telemetrija</button><button class="btn" data-tab="help">Upute</button></div>
+      <div id="tab-map">
+        <div id="scene">
+          <canvas id="grid"></canvas>
+          <div id="dock1" class="dock" title="Dock D1"></div><div id="dock2" class="dock" title="Dock D2"></div>
+          <div id="d1" class="unit drone" title="Dron 1"></div><div id="d2" class="unit drone" title="Dron 2"></div>
+          <div id="r1" class="unit robot" title="Robot 1"></div><div id="r2" class="unit robot" title="Robot 2"></div><div id="r3" class="unit robot" title="Robot 3"></div>
+          <div id="notif" class="alert" style="position:absolute;left:10px;top:10px;display:none"></div>
+          <div id="hud" class="badge" style="position:absolute;right:10px;top:10px;background:#0b1117aa">ALT <span id="alt">2.0</span> m • SPD <span id="spd">0.0</span> m/s • LINK <span id="link">OK</span></div>
+        </div>
+        <div class="row" style="margin-top:8px"><span class="pill">Zone: A • <strong>B</strong> • C</span><span class="pill">Geofence: <strong>1.8–6.0 m</strong></span><span class="pill">Dockovi: <strong>D1</strong> • <strong>D2</strong></span></div>
+      </div>
+      <div id="tab-telemetry" style="display:none">
+        <div class="grid" style="grid-template-columns:1fr 1fr">
+          <div class="card"><h3>Let (aktivni dron)</h3>
+            <div class="kv small"><div>Pozicija</div><div id="telePose">x:0 y:0 z:0</div><div>Brzina</div><div id="teleVel">0.0 m/s</div><div>Profil</div><div id="teleProfile">INDOOR.VIO</div><div>Geofence</div><div id="teleFence">OK</div></div>
+          </div>
+          <div class="card"><h3>Zdravlje</h3>
+            <div class="kv small"><div>Baterija</div><div id="teleBat">98%</div><div>Link</div><div id="teleLink">OK</div><div>VIO quality</div><div id="teleVIO">0.98</div><div>Wind</div><div id="teleWind">—</div></div>
+          </div>
+        </div>
+      </div>
+      <div id="tab-help" style="display:none">
+        <div class="kicker">Upute • Elvora OS</div>
+        <div class="grid">
+          <div class="card"><h3>1) Mapiranje</h3><p class="small">Auto: kamera/dron skenira hodnike; Ruèno: uèitaj tlocrt › grid & zone.</p></div>
+          <div class="card"><h3>2) Mod rada</h3><p class="small"><strong>Auto</strong> – raspored + triggere; <strong>Custom</strong> – Mission Builder; <strong>Manual</strong> – test.</p></div>
+          <div class="card"><h3>3) Sigurnost</h3><p class="small">Geofence (1.8–6.0 m), potpisane naredbe, yield-to-human, watchdog RTH/Land/Quarantine.</p></div>
+          <div class="card"><h3>4) Gužva</h3><p class="small">Elvora šalje dron u patrolu i poziva AMR-ove. Rute se reoptimiziraju.</p></div>
+          <div class="card"><h3>5) Dock/Charge</h3><p class="small">Po završetku misije dron ide na dock, puni bateriju i èeka novu misiju.</p></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <footer>© 2025 Elvora — “We don’t predict logistics — we shape it.”</footer>
+</div>
+
+<!-- POC modal -->
+<div class="modal" id="pocModal" role="dialog" aria-modal="true" aria-label="POC zahtjev">
+  <div class="content">
+    <div class="kicker">POC zahtjev</div><h3 style="margin:6px 0 10px 0">Zatraži on-site POC</h3>
+    <form id="pocForm">
+      <label>Tvrtka</label><input name="company" required>
+      <label>Lokacija</label><input name="location" required>
+      <label>Kontakt e-mail</label><input type="email" name="email" required>
+      <label>Tip skladišta</label><select name="type"><option>Unutarnje</option><option>Vanjsko</option><option>Kombinirano</option></select>
+      <label>Površina i broj zona</label><input name="size" placeholder="npr. 12.000 m2, zone A–C">
+      <label>Ciljevi</label><textarea name="goals" rows="3" placeholder="npr. noæna inventura, patrola dvorišta, outbound"></textarea>
+      <div class="row" style="margin-top:8px"><button class="btn" type="submit">Pošalji</button><button class="btn" type="button" id="pocClose">Zatvori</button></div>
+      <div class="small" id="pocMsg" style="margin-top:6px;color:#9fb0c6"></div>
+    </form>
+  </div>
+</div>
+
+<script>
+const url = new URL(location.href); const MODE = url.searchParams.get('mode') || 'sandbox'; const DEMO_MODE = true; const GUIDED = MODE==='guided';
+const S = { auto:true, signed:true, geofence:true, yield:true, profile:'INDOOR.VIO',
+  drones:[ {id:'d1', x:60,y:470,z:2.0,spd:0,bat:98,charging:false,dock:'D1'}, {id:'d2', x:1220,y:470,z:2.0,spd:0,bat:98,charging:false,dock:'D2'} ],
+  robots:[ {id:'r1',x:1180,y:470},{id:'r2',x:1180,y:430},{id:'r3',x:1180,y:390} ],
+  docks:{D1:{x:60,y:470}, D2:{x:1220,y:470}}, cur:0, running:false, congestion:false, door:false, patrolTimer:0, alarms:[]
+};
+const grid = document.getElementById('grid'), scene=document.getElementById('scene');
+const dEls=[document.getElementById('d1'),document.getElementById('d2')];
+const rEls=[document.getElementById('r1'),document.getElementById('r2'),document.getElementById('r3')];
+const dock1=document.getElementById('dock1'), dock2=document.getElementById('dock2');
+const altEl=document.getElementById('alt'), spdEl=document.getElementById('spd'), linkEl=document.getElementById('link');
+const telePose=document.getElementById('telePose'), teleVel=document.getElementById('teleVel'), teleProfile=document.getElementById('teleProfile');
+const teleFence=document.getElementById('teleFence'), teleBat=document.getElementById('teleBat'), teleVIO=document.getElementById('teleVIO'), teleWind=document.getElementById('teleWind');
+const notif=document.getElementById('notif'), logEl=document.getElementById('log'), alarmsEl=document.getElementById('alarms'), cfgOut=document.getElementById('configOut');
+function place(el,x,y){ el.style.left=x+'px'; el.style.top=y+'px'; }
+function log(s,cls=''){ const d=document.createElement('div'); if(cls) d.className=cls; d.textContent=s; logEl.appendChild(d); logEl.scrollTop=logEl.scrollHeight; }
+function alarm(kind,text){ const ts=new Date().toLocaleTimeString(); S.alarms.push({kind,text,ts}); renderAlarms(); }
+function renderAlarms(){ alarmsEl.innerHTML=''; S.alarms.slice(-8).forEach(a=>{ const div=document.createElement('div'); div.className='alarm '+(a.kind==='crit'?'crit':a.kind==='warn'?'warn':''); div.textContent=`[${a.ts}] ${a.text}`; alarmsEl.appendChild(div); }); }
+let notifTimer=null; function toast(t){ notif.style.display='block'; notif.textContent=t; clearTimeout(notifTimer); notifTimer=setTimeout(()=>notif.style.display='none',2200); }
+function drawGrid(){ const ctx=grid.getContext('2d'); const r=scene.getBoundingClientRect(); grid.width=r.width; grid.height=r.height;
+  ctx.clearRect(0,0,grid.width,grid.height); ctx.globalAlpha=.25; ctx.strokeStyle='#1a2a36';
+  for(let x=0;x<grid.width;x+=40){ ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,grid.height); ctx.stroke(); }
+  for(let y=0;y<grid.height;y+=40){ ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(0,y); ctx.moveTo(0,y); ctx.lineTo(grid.width,y); ctx.stroke(); }
+  ctx.globalAlpha=.12; ctx.fillStyle='#19b5ff'; ctx.fillRect(grid.width*0.35, grid.height*0.35, grid.width*0.3, grid.height*0.3);
+  place(dock1,60,grid.height-50); place(dock2,grid.width-60,grid.height-50);
+}
+document.querySelectorAll('.tabbar .btn').forEach(b=>b.onclick=()=>{
+  document.querySelectorAll('.tabbar .btn').forEach(x=>x.classList.remove('on')); b.classList.add('on');
+  const t=b.dataset.tab; document.getElementById('tab-map').style.display = t==='map'?'block':'none';
+  document.getElementById('tab-telemetry').style.display = t==='telemetry'?'block':'none';
+  document.getElementById('tab-help').style.display = t==='help'?'block':'none';
+});
+document.getElementById('btnReset').onclick=reset;
+document.getElementById('btnCongestion').onclick=()=>{ S.congestion=true; toast('?? Gužva u Zoni B'); log('?? Gužva u Zoni B','warn'); alarm('warn','Congestion @ B'); callRobots(); };
+document.getElementById('btnDoor').onclick=()=>{ S.door=true; toast('?? Vrata otvorena (OUTDOOR.MIXED)'); log('Door open › OUTDOOR.MIXED','warn'); alarm('warn','Door open after hours'); };
+document.getElementById('chkSigned').onchange=(e)=>{ S.signed=e.target.checked; if(!S.signed){ alarm('crit','Unsigned mode — komande blokirane'); } };
+document.getElementById('chkGeofence').onchange=(e)=>{ S.geofence=e.target.checked; };
+document.getElementById('chkYield').onchange=(e)=>{ S.yield=e.target.checked; };
+const cmdSel=document.getElementById('cmd'), paramsInput=document.getElementById('params'), programEl=document.getElementById('program');
+document.getElementById('btnAdd').onclick=()=>{ let p={}; try{ if(paramsInput.value.trim()) p=JSON.parse(paramsInput.value);}catch(e){ return log('Parametri nisu valjan JSON','err'); } programEl.value += JSON.stringify({cmd:cmdSel.value, params:p})+'\n'; };
+document.getElementById('btnClearProg').onclick=()=> programEl.value='';
+document.getElementById('btnRun').onclick=()=>{ const blocks=programEl.value.split('\n').map(s=>s.trim()).filter(Boolean).map(JSON.parse); runBlocks(blocks); };
+function active(){ return S.drones[0]; }
+function move(d,x,y){ d.spd=2.2; d.x=x; d.y=y; }
+function gotoXY(x,y,cb){ const d=active(); (function step(){ const dx=x-d.x, dy=y-d.y, L=Math.hypot(dx,dy); if(L<3){cb&&cb();return;} move(d,d.x+dx/L*2.4,d.y+dy/L*2.4); requestAnimationFrame(step); })(); }
+function sweep(done){ const d=active(), W=grid.width,H=grid.height; let x=W*0.35+20, y=H*0.65-20, dir=1, rows=0; (function step(){ x+=dir*2.2; if(x>W*0.65-20){dir=-1;y-=24;rows++;} if(x<W*0.35+20){dir=1;y-=24;rows++;} move(d,x,y); if(rows>10){ autoDock(done); return;} requestAnimationFrame(step); })(); }
+function follow(done){ const d=active(), pts=[{x:60,y:grid.height-80},{x:grid.width-60,y:grid.height-80},{x:grid.width-60,y:80},{x:60,y:80},{x:60,y:grid.height-80}]; let i=0; (function step(){ const p=pts[i], dx=p.x-d.x, dy=p.y-d.y, L=Math.hypot(dx,dy)||1; if(L<3){i++; if(i>=pts.length){done&&done(); return;} } move(d,d.x+dx/(L||1)*2.4,d.y+dy/(L||1)*2.4); requestAnimationFrame(step); })(); }
+function takeoff(alt, cb){ log(`[${active().id}] TAKEOFF › ${alt} m`); cb&&cb(); }
+function land(cb){ log(`[${active().id}] LAND`); cb&&cb(); }
+function dockTo(id, cb){ const d=active(), dst=S.docks[id]||S.docks.D1; log(`[${d.id}] DOCK › ${id}`); gotoXY(dst.x,dst.y, ()=>{ cb&&cb(); }); }
+function autoDock(cb){ const d=active(); const nearest = (Math.abs(d.x-S.docks.D1.x)<Math.abs(d.x-S.docks.D2.x))?'D1':'D2'; dockTo(nearest, cb); }
+function exec(b, cb){ const p=b.params||{}; switch(b.cmd){ case 'TAKEOFF': return takeoff(p.alt||2.2, cb);
+  case 'SWEEP.VOLUME': log(`[${active().id}] SWEEP.VOLUME @ Zone B`); return sweep(cb);
+  case 'FOLLOW.TRAJECTORY': log(`[${active().id}] FOLLOW.TRAJECTORY`); return follow(cb);
+  case 'GOTO': log(`[${active().id}] GOTO ${JSON.stringify(p)}`); return gotoXY(p.x||200,p.y||200, cb);
+  case 'DOCK': return dockTo(p.dock_id||'D1', cb);
+  case 'LAND': return land(cb);
+  default: log('Nepoznata komanda '+b.cmd,'err'); return cb(); } }
+function patrol(){ log(`??? [${active().id}] Patrola`,'ok'); sweep(()=>{}); }
+function callRobots(){ setTimeout(()=>log('?? AMR-12 i AMR-18 pozvani u zonu B','ok'),800); }
+function validate(){ const issues=[]; if(!S.signed) issues.push('[CRIT] Signed-only OFF'); if(!S.geofence) issues.push('[WARN] Geofence OFF'); return issues; }
+document.getElementById('btnValidate').onclick=()=>{ const r=validate(); cfgOut.textContent = r.length?('VALIDATE:\n'+r.join('\n')):'VALIDATE: OK'; };
+document.getElementById('btnExport').onclick=()=>{ const y = `fleet:\n  profile: INDOOR.VIO\n  geofence: { alt_min: 1.8, alt_max: 6.0, zones: [A,B,C] }\n  signed_only: ${S.signed}\nscheduler:\n  inventory_at: "${document.getElementById('invTime').value||'02:00'}"\n  patrol_every: "${document.getElementById('patrolEvery').value||'PT120M'}"\ntriggers: [congestion@B, door_open_after_hours]\n`; cfgOut.textContent=y;
+  const a=document.createElement('a'); a.href=URL.createObjectURL(new Blob([y],{type:'text/yaml'})); a.download='elvora_config.yaml'; a.click(); URL.revokeObjectURL(a.href); };
+document.getElementById('btnAPI').onclick=()=>{ const payloads={ mission_inventory:{vehicle_id:"drone-07",mission_id:"INV-2025-04-01-A",cmd:"SWEEP.VOLUME",params:{bbox:{min:[12,3.5,1.8],max:[38,18.5,6.0]},pattern:"lawnmower",speed_mps:2.2,camera:{mode:"photo",every_m:1.2,tilt_deg:-15}},security:{signed:true,nonce:"9f2c...",hash:"sha256:..."}}, mission_patrol:{vehicle_id:"drone-02",mission_id:"PAT-2025-04-01-06h",cmd:"FOLLOW.TRAJECTORY",params:{points:[{x:0,y:0,z:8},{x:60,y:0,z:8},{x:60,y:40,z:8},{x:0,y:40,z:8}],v_mps:4.0,compliance:{geofence:"yard-A",alt_min:3.0,alt_max:30.0}},security:{signed:true,nonce:"a1b2...",hash:"sha256:..."}} }; cfgOut.textContent='API PAYLOADS:\n'+JSON.stringify(payloads,null,2); };
+document.querySelectorAll('.tabbar .btn').forEach(b=>b.onclick=b.onclick);
+const pocModal=document.getElementById('pocModal'), pocForm=document.getElementById('pocForm'), pocMsg=document.getElementById('pocMsg');
+document.getElementById('btnPOC').onclick=()=>{ pocModal.style.display='flex'; }; document.getElementById('pocClose').onclick=()=>{ pocModal.style.display='none'; };
+pocForm.onsubmit=(e)=>{ e.preventDefault(); const data=Object.fromEntries(new FormData(pocForm).entries());
+  pocMsg.textContent='Hvala! Poslano timu. Potvrda stiže na e-mail.'; const mailto=`mailto:support@elvora.app?subject=%5BPOC%5D%20Zahtjev&body=${encodeURIComponent(JSON.stringify(data,null,2))}`; window.open(mailto,'_blank'); };
+addEventListener('resize', ()=>{ drawGrid(); layout(); });
+function layout(){ drawGrid(); dEls.forEach((el,i)=>place(el,S.drones[i].x,S.drones[i].y)); rEls.forEach((el,i)=>place(el,S.robots[i].x,S.robots[i].y)); }
+function reset(){ drawGrid(); S.drones[0].x=60;S.drones[0].y=scene.getBoundingClientRect().height-50; S.drones[1].x=scene.getBoundingClientRect().width-60;S.drones[1].y=scene.getBoundingClientRect().height-50; log('Sandbox spreman.'); layout(); }
+reset();
+</script>
+
