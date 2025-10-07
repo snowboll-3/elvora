@@ -1,0 +1,57 @@
+﻿<!doctype html><html lang='hr'><head>
+<meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
+<title>Elvora – Prijava</title>
+<link rel='stylesheet' href='/styles.css'>
+<script src='/env.js'></script>
+</head><body>
+<header><div class='container nav'>
+  <div class='brand'>Elvora</div>
+  <nav><a class='btn' href='/'>Početna</a><a class='btn' href='/products/'>Naši proizvodi</a></nav>
+</div></header>
+
+<main class='container'>
+  <h1 style='color:#19b5ff'>Prijava</h1>
+  <p class='subtext'>Unesite e-mail i poslat ćemo vam magic link za prijavu.</p>
+  <form id='f' class='form' style='max-width:420px'>
+    <div class='input'><label for='email'>E-mail *</label>
+      <input id='email' type='email' required autocomplete='email' style='width:100%;padding:10px;border-radius:8px;border:1px solid #244;background:#0f1722;color:#e6eef7'>
+    </div>
+    <button class='btn primary' type='submit' style='margin-top:10px'>Pošalji link</button>
+    <div id='s' class='subtext' style='margin-top:8px'></div>
+  </form>
+</main>
+
+<footer><div class='container rights'>© <span id='y'></span> Elvora. Sva prava pridržana.</div></footer>
+
+<script type='module'>
+import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
+document.getElementById('y').textContent=new Date().getFullYear()
+const sb = createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY)
+
+const form = document.getElementById('f')
+const s = document.getElementById('s')
+form.addEventListener('submit', async (e)=>{
+  e.preventDefault()
+  s.textContent = 'Šaljem…'
+  const email = document.getElementById('email').value.trim()
+  try {
+    const { error } = await sb.auth.signInWithOtp({
+      email,
+      options: { emailRedirectTo: window.location.origin }
+    })
+    if (error) throw error
+    s.textContent = 'Provjerite e-mail i kliknite na link za prijavu.'
+  } catch(err) {
+    s.textContent = 'Greška: ' + (err.message || err)
+  }
+})
+  console.log('ENV URL:', window.SUPABASE_URL);
+  console.log('ENV KEY starts:', (window.SUPABASE_ANON_KEY||'').slice(0,12));
+  form.addEventListener('submit', async (e)=>{
+    // već postoji handler; dopuni ga s konzolnim logom
+    setTimeout(()=>console.log('Supabase signInWithOtp sent...'), 0);
+  });
+</script></body></html>
+
+
+

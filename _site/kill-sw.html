@@ -1,0 +1,18 @@
+﻿<!doctype html><meta charset="utf-8"><title>Kill SW</title>
+<body style="background:#0b0f14;color:#fff;font:16px system-ui;padding:24px">
+  <h1 style="color:#19b5ff;margin:0 0 8px">Elvora · Kill Service Worker</h1>
+  <pre id="out">Running...</pre>
+  <script>
+  (async()=>{
+    try{
+      const regs = await navigator.serviceWorker.getRegistrations?.()||[];
+      for (const r of regs){ await r.unregister(); }
+      if (window.caches?.keys) { for (const k of await caches.keys()) { await caches.delete(k); } }
+      document.getElementById('out').textContent='OK: SW unregistered i cache očišćen. Napravi hard reload (Ctrl+F5).';
+    }catch(e){
+      document.getElementById('out').textContent='Error: '+e;
+    }
+  })();
+  </script>
+</body>
+

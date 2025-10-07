@@ -1,0 +1,3 @@
+﻿Contact: mailto:security@elvora.app
+Policy: https://elvora.app/legal/security
+Preferred-Languages: en,hr
