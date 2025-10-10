@@ -1,0 +1,70 @@
+﻿<!doctype html>
+<html lang="hr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Elvora — inteligentna automatizacija</title>
+  <link rel="icon" href="/favicon.ico" />
+  <!-- postojeći stilovi ako ih imamo -->
+  <link rel="stylesheet" href="/styles.css" />
+  <link rel="stylesheet" href="/hero-map.css" />
+  <!-- scriptovi za pozadinsku mrežu (postoje u repou) -->
+  <script defer src="/hero-network.js"></script>
+  <script defer src="/world-network.js"></script>
+  <style>
+    :root { --elv-blue:#19b5ff; --ink:#cfefff; --panel:rgba(0,20,32,.55); }
+    html,body{height:100%}
+    body.only-hero{margin:0;background:#08131d;color:var(--ink);overflow-x:hidden}
+    .hero{min-height:100vh;display:grid;place-items:center;position:relative;padding:6vh 16px}
+    .hero-inner{max-width:1200px;margin:auto;text-align:center}
+    .kicker{font-size:clamp(18px,2.3vw,28px);opacity:.9;line-height:1.35;margin:0 0 10px}
+    .brand{font-size:clamp(42px,6vw,72px);color:var(--elv-blue);font-weight:800;letter-spacing:.5px;margin:6px 0 18px;text-shadow:0 0 18px rgba(25,181,255,.35)}
+    .features{display:flex;flex-wrap:wrap;gap:14px;justify-content:center;margin:10px auto 22px}
+    .card{width:min(300px,92vw);padding:14px 16px;border:1px solid rgba(25,181,255,.35);border-radius:14px;background:var(--panel);backdrop-filter: blur(3px)}
+    .card h3{margin:0 0 6px;color:var(--elv-blue);font-size:18px}
+    .cta{display:inline-block;margin-top:6px;padding:10px 18px;border-radius:10px;border:1px solid rgba(25,181,255,.55);color:var(--elv-blue);text-decoration:none}
+    .cta:hover{transform:translateY(-1px)}
+    .legal{padding:22px 12px;border-top:1px solid rgba(25,181,255,.15);text-align:center}
+    .legal p{margin:6px auto;max-width:900px}
+    .copy{opacity:.85}
+    /* ukloni bilo kakav globalni top navbar na ovoj stranici */
+    header, nav.site-nav { display:none !important; }
+  </style>
+</head>
+<body class="only-hero">
+
+<main class="hero" aria-label="Elvora – početna">
+  <div class="hero-inner">
+    <h1 class="kicker">
+      Inteligentni sustav koji unapređuje, povezuje i pokreće svjetske lance opskrbe i transporta.
+    </h1>
+
+    <div class="brand">Elvora™</div>
+
+    <div class="features" aria-label="Što nudimo">
+      <article class="card">
+        <h3>Self-Healing Logistics™</h3>
+        <p>AI ispravlja nestale ili netočne zapise i smanjuje zastoje — manje iznimki i brži protok.</p>
+      </article>
+      <article class="card">
+        <h3>Shelf-Life Radar™</h3>
+        <p>Prognoza potražnje i pametno punjenje — manje otpada, više dostupnosti.</p>
+      </article>
+      <article class="card">
+        <h3>Custom Mode</h3>
+        <p>Od kafića do skladišta: sastavi rješenje od hubova i softvera, prilagođeno vašem procesu.</p>
+      </article>
+    </div>
+
+    <a class="cta" href="/hubs.html">Prikaži Elvora Hubove</a>
+  </div>
+</main>
+
+<section class="legal" aria-label="Pravna obavijest">
+  <p><strong>© 2025 Elvora. Sva prava pridržana.</strong></p>
+  <p>Povjerljivo: Zabrana otkrivanja poslovnih tajni i dijeljenja sadržaja. Svaki pokušaj neovlaštenog pristupa ili kopiranja bit će prijavljen nadležnim tijelima. Naši klijenti su naša odgovornost. Mi čuvamo vas, jer bez vas nema nas.</p>
+  <p>Svi Elvora softveri, moduli i algoritmi čine intelektualno vlasništvo i poslovnu tajnu Elvore. Zabranjeno je kopiranje, distribucija ili inženjering bez pisanog odobrenja. <a href="/legal/notice.html">Detalji</a></p>
+</section>
+
+</body>
+</html>

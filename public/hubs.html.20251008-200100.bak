@@ -1,0 +1,41 @@
+﻿<!doctype html>
+<html lang="hr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Elvora — Hubovi</title>
+  <link rel="icon" href="/favicon.ico" />
+  <link rel="stylesheet" href="/styles.css" />
+  <style>
+    :root { --elv-blue:#19b5ff; --panel:rgba(0,20,32,.55); --ink:#cfefff; }
+    body{margin:0;background:#08131d;color:var(--ink)}
+    .wrap{max-width:1200px;margin:auto;padding:28px 18px}
+    h1{color:var(--elv-blue);text-align:center;margin:10px 0 22px}
+    .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px}
+    .tile{padding:18px;border:1px solid rgba(25,181,255,.35);border-radius:16px;background:var(--panel);text-align:center;transition:.2s transform,.2s box-shadow;backdrop-filter: blur(3px)}
+    .tile:hover{transform:translateY(-6px);box-shadow:0 14px 40px rgba(25,181,255,.2)}
+    .tile h3{margin:6px 0 4px;color:var(--elv-blue)}
+    .legal{margin-top:26px;text-align:center;opacity:.9}
+    a.back{display:inline-block;margin:6px 0 18px;color:var(--elv-blue);text-decoration:none}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="back" href="/index.html">← Povratak na početnu</a>
+    <h1>Elvora — Hubovi</h1>
+
+    <div class="grid" aria-label="Popis hubova">
+      <div class="tile"><h3>Home Hub</h3><p>Kućni moduli za praćenje zaliha i hladnjaka — jednostavno “pokreni i radi”.</p></div>
+      <div class="tile"><h3>Business Hub</h3><p>Za kafiće, restorane, trgovine i skladišta — fakture, inventure, dokumenti.</p></div>
+      <div class="tile"><h3>Logistics Hub</h3><p>Ruta, vozila i pametna tovarna lista.</p></div>
+      <div class="tile"><h3>Warehouse AI Automation</h3><p>Optimizacija prostora i robota u skladištu.</p></div>
+      <div class="tile"><h3>Operations Hub</h3><p>Centralno upravljanje procesima i podacima.</p></div>
+      <div class="tile"><h3>Documents Hub</h3><p>Ugovori, nalozi i usklađenost.</p></div>
+      <div class="tile"><h3>AI Command Center</h3><p>Glavni AI mozak sustava.</p></div>
+      <div class="tile"><h3>Security & Guardian</h3><p>Zaštita od kopiranja, snimki ekrana i curenja podataka.</p></div>
+    </div>
+
+    <p class="legal">© 2025 Elvora — Sva prava pridržana. | <a href="/legal/notice.html">Pravna obavijest</a></p>
+  </div>
+</body>
+</html>

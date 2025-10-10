@@ -1,0 +1,104 @@
+﻿<!doctype html>
+<html lang="hr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Elvora™ — Intelligent Supply Chain Solutions</title>
+  <meta name="description" content="Invisible QR • Vision Core • Elvora Nexus — Android & Windows 12 Ready">
+  <style>
+    :root{
+      --bg:#0b1217;
+      --cyan:#19b5ff;
+      --cyan-dim:rgba(25,181,255,.85);
+      --text:#9fdcff;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0;
+      font-family: system-ui, -apple-system, Segoe UI, Roboto, Inter, Arial, sans-serif;
+      color:var(--text);
+      background: var(--bg) url("assets/bg-network.jpg") center/cover no-repeat fixed;
+    }
+    .overlay{           /* lagani vinjet/gradijent da tekst bude čitljiv */
+      position:fixed; inset:0;
+      background: radial-gradient(60% 60% at 50% 40%, rgba(0,20,40,.15) 0%, rgba(0,0,0,.6) 100%);
+      pointer-events:none;
+    }
+    .wrap{
+      min-height:100%;
+      display:grid;
+      place-items:center;
+      padding:56px 20px;
+      text-align:center;
+    }
+    h1{
+      margin:0 0 18px;
+      font-size:clamp(28px,4.2vw,44px);
+      letter-spacing:.8px;
+      color:var(--text);
+      text-shadow:0 0 18px rgba(25,181,255,.25);
+    }
+    .brand{
+      font-weight:800;
+      font-size:clamp(54px,9vw,92px);
+      color:var(--cyan);
+      text-shadow:0 0 22px rgba(25,181,255,.45), 0 0 60px rgba(25,181,255,.25);
+      margin:6px 0 18px;
+    }
+    .punch{
+      margin:0 0 26px;
+      opacity:.9;
+      font-size:clamp(14px,2.2vw,16px);
+    }
+    .cards{
+      display:flex; gap:16px; flex-wrap:wrap;
+      justify-content:center; margin:8px 0 26px;
+    }
+    .card{
+      border:1px solid rgba(25,181,255,.28);
+      background:rgba(8,20,28,.55);
+      border-radius:14px;
+      padding:14px 18px;
+      width:min(320px,90vw);
+      backdrop-filter: blur(4px);
+      box-shadow:0 8px 24px rgba(0,0,0,.25);
+    }
+    .card b{color:var(--cyan)}
+    .cta{
+      display:inline-block;
+      padding:12px 18px;
+      border-radius:12px;
+      background:linear-gradient(180deg, var(--cyan), #0fb4ff);
+      color:#001018; font-weight:700; text-decoration:none;
+      box-shadow:0 10px 26px rgba(25,181,255,.35), inset 0 0 10px rgba(255,255,255,.35);
+      transition: transform .12s ease, box-shadow .12s ease;
+    }
+    .cta:hover{ transform: translateY(-1px); box-shadow:0 14px 34px rgba(25,181,255,.45), inset 0 0 12px rgba(255,255,255,.4)}
+    footer{
+      position:fixed; left:0; right:0; bottom:0;
+      padding:10px 14px; text-align:center;
+      font-size:12px; opacity:.65; color:var(--text);
+    }
+  </style>
+</head>
+<body>
+  <div class="overlay"></div>
+  <main class="wrap">
+    <section>
+      <h1>INTELIGENTNI SUSTAV OPSKRBNIH LANACA</h1>
+      <div class="brand">Elvora™</div>
+      <p class="punch">INVISIBLE QR • VISION CORE • ELVORA NEXUS — ANDROID & WINDOWS 12 READY</p>
+
+      <div class="cards">
+        <div class="card"><b>Self-Healing Logistics™</b><br>AI ispravlja nedosljedne zapise i ubrzava protok.</div>
+        <div class="card"><b>Shelf-Life Radar™</b><br>Pametno punjenje i prognoza potražnje — manje otpada.</div>
+        <div class="card"><b>Custom Mode</b><br>Rješenja skrojena za vaše procese — od kafića do skladišta.</div>
+      </div>
+
+      <a class="cta" href="hubs.html">Prikaži Elvora Hubove</a>
+    </section>
+  </main>
+  <footer>© 2025 Elvora. Sva prava pridržana.</footer>
+</body>
+</html>

@@ -1,0 +1,99 @@
+﻿:root{
+  --elv-blue:#19b5ff;
+  --elv-dark:#0b0f14;
+  --elv-white:#ffffff;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%}
+body{
+  background:var(--elv-dark);
+  color:var(--elv-white);
+  font-family:Segoe UI,Roboto,Helvetica,Arial,sans-serif;
+  overflow:hidden;
+}
+
+/* Pozadina mreže svijeta */
+.bg{
+  position:fixed;
+  inset:-5%;
+  background:url("/assets/bg-network.jpg") center/cover no-repeat;
+  z-index:-2;
+  animation:drift 40s ease-in-out infinite alternate;
+}
+@keyframes drift{
+  from{transform:translate3d(-1.5%,-1.2%,0) scale(1.05)}
+  to{transform:translate3d(1.8%,1.6%,0) scale(1.05)}
+}
+
+/* Glavni sadržaj */
+.wrapper{
+  min-height:100svh;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  justify-content:center;
+  text-align:center;
+  padding:5rem 1rem 4rem;
+  position:relative;
+  z-index:1;
+}
+
+/* Gornji tekst */
+.top-text{
+  position:absolute;
+  top:5%;
+  left:50%;
+  transform:translateX(-50%);
+  width:min(95%,1100px);
+  font-size:1.2rem;
+  line-height:1.6;
+  color:var(--elv-blue);
+  text-shadow:0 0 14px rgba(25,181,255,.35);
+}
+
+/* Naslov */
+h1{
+  font-size:clamp(2.8rem,4vw+1rem,5.2rem);
+  color:var(--elv-blue);
+  text-shadow:0 0 25px rgba(25,181,255,.4),0 0 70px rgba(25,181,255,.3);
+  animation:glow 3s ease-in-out infinite alternate;
+  margin-bottom:2rem;
+}
+@keyframes glow{
+  from{text-shadow:0 0 20px rgba(25,181,255,.25)}
+  to{text-shadow:0 0 50px rgba(25,181,255,.7)}
+}
+
+/* Gumb */
+.btn{
+  display:inline-block;
+  background:rgba(25,181,255,.15);
+  color:var(--elv-blue);
+  border:1px solid rgba(25,181,255,.6);
+  backdrop-filter:blur(8px);
+  font-weight:700;
+  letter-spacing:0.3px;
+  padding:1rem 1.8rem;
+  border-radius:12px;
+  text-decoration:none;
+  transition:0.25s ease;
+  box-shadow:0 0 12px rgba(25,181,255,.25);
+}
+.btn:hover{
+  background:var(--elv-blue);
+  color:var(--elv-dark);
+  box-shadow:0 0 20px rgba(25,181,255,.5);
+  transform:translateY(-2px);
+}
+
+/* Footer */
+.footer{
+  position:fixed;
+  left:0;right:0;bottom:0;
+  z-index:1;
+  font-size:.85rem;
+  color:#9fb0c6;
+  background:rgba(11,15,20,.72);
+  padding:.6rem 1rem;
+  text-align:center;
+}
