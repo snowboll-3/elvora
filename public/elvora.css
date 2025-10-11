@@ -1,24 +1,27 @@
-﻿/* ELVORA GLOBAL STYLE FIX v4 */
-:root{--elv-blue:#19b5ff;--elv-dark:#0b0f14;--elv-white:#ffffff}
+﻿:root{--elv-blue:#19b5ff;--elv-dark:#0b0f14;--elv-white:#ffffff}
 *{box-sizing:border-box} html,body{height:100%}
 body{
-  margin:0; color:var(--elv-white);
-  background:var(--elv-dark) no-repeat center/cover fixed;
-  background-image:url('/assets/bg-network.jpg'); /* preko cijelog ekrana */
-  font-family: Segoe UI, Roboto, Helvetica, Arial, sans-serif; overflow-x:hidden;
+  margin:0;color:var(--elv-white);
+  background:var(--elv-dark) no-repeat center / cover fixed;
+  background-image:url("/assets/bg-network.jpg");
+  font-family:Segoe UI,Roboto,Helvetica,Arial,sans-serif
 }
-h1,h2,h3,.brand,.top-text strong{color:var(--elv-blue)}
-.btn{display:inline-block;padding:10px 18px;border-radius:12px;
-     color:#eaffff;text-decoration:none;background:rgba(0,0,0,.22);
-     border:1px solid rgba(25,181,255,.5);backdrop-filter:blur(6px);
-     transition:transform .15s ease,border-color .15s ease}
-.btn:hover{transform:translateY(-1px);border-color:var(--elv-blue)}
-/* kontejner da se ne sudara s footerom */
-.main, .wrapper { min-height: 100svh; padding: 24px 16px 96px; }
-/* footer */
+.main{min-height:100svh;display:grid;place-items:center;padding:24px 16px 96px}
+.hero{max-width:960px;text-align:center}
+h1{margin:.2rem 0 1rem;color:var(--elv-blue);font-size:clamp(40px,9vw,84px);
+   text-shadow:0 0 22px rgba(25,181,255,.45)}
+p.lead{font-size:clamp(16px,2.4vw,20px);margin:.25rem 0 1rem}
+a.btn{display:inline-block;padding:12px 20px;border-radius:12px;
+  color:#eaffff;text-decoration:none;background:rgba(0,0,0,.25);
+  border:1px solid rgba(25,181,255,.5);backdrop-filter:blur(6px)}
+a.btn:hover{transform:translateY(-1px);border-color:var(--elv-blue)}
 footer{
-  position:fixed; left:0; right:0; bottom:0;
-  padding:.6rem 1rem; text-align:center; font-size:.85rem; line-height:1.45;
-  color:#9fb0c6; background:rgba(11,15,20,.82); border-top:1px solid rgba(25,181,255,.25)
+  position:fixed;left:0;right:0;bottom:0;padding:.6rem 1rem;text-align:center;
+  font-size:.9rem;line-height:1.5;color:#9fb0c6;background:rgba(11,15,20,.82);
+  border-top:1px solid rgba(25,181,255,.25)
 }
-/* END FIX */
+/* fallback ako nema slike */
+@media (prefers-reduced-data: reduce){
+  body{background-image:none;background:
+    radial-gradient(ellipse at 50% 40%, #10202b 0, #0b0f14 60%)}
+}
