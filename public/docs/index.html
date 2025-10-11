@@ -1,0 +1,45 @@
+﻿<!doctype html>
+<html lang="hr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="robots" content="noindex,nofollow">
+  <title>Elvora — Pomoć & Vodiči</title>
+  <style>
+    :root{--elv:#19b5ff;--bg:#0b0f14;--ink:#d8f6ff}
+    html,body{height:100%}
+    body{margin:0;background:radial-gradient(ellipse at 50% 38%, #121c24 0, #0b0f14 60%);color:var(--ink);
+      font-family:Inter,Segoe UI,Roboto,Arial,sans-serif;display:grid;place-items:center}
+    .wrap{width:min(960px,92vw);padding:28px 18px;text-align:center}
+    h1{margin:0 0 8px;font-size:clamp(28px,6vw,48px);color:var(--elv);text-shadow:0 0 18px rgba(25,181,255,.4)}
+    p.lead{opacity:.9;margin:0 0 18px}
+    .grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));margin-top:16px}
+    a.card{display:block;text-decoration:none;color:#eaffff;border:1px solid rgba(25,181,255,.35);
+      background:rgba(0,0,0,.18);padding:16px;border-radius:14px;backdrop-filter:blur(4px);
+      transition:transform .15s ease,border-color .15s ease,box-shadow .15s ease}
+    a.card:hover{transform:translateY(-4px);border-color:var(--elv);box-shadow:0 0 18px rgba(25,181,255,.18)}
+    .back{margin-top:18px}
+    .btn{display:inline-block;padding:10px 16px;border-radius:12px;border:1px solid rgba(25,181,255,.5);
+      color:#eaffff;text-decoration:none}
+    footer{margin-top:22px;opacity:.8;font-size:12px}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1>Pomoć &amp; Vodiči</h1>
+    <p class="lead">Službeni, kratki priručnici za rad u Elvora sustavu.</p>
+
+    <section class="grid">
+      <a class="card" href="/docs/hr/Elvora_Logistics_Flow_v2_User_Guide_HR.pdf">📄 Logistics Flow — Korisnički vodič (HR)</a>
+      <a class="card" href="/docs/en/Elvora_Logistics_Flow_v2_User_Guide_EN.pdf">📄 Logistics Flow — User Guide (EN)</a>
+    </section>
+
+    <div class="back">
+      <a class="btn" href="/index.html">⬅ Natrag na početnu</a>
+    </div>
+
+    <footer>© 2025 Elvora. Sva prava pridržana. Svi softveri i nazivi su vlasništvo Elvora grupe. Zabranjeno je svako
+      kopiranje, distribucija, dekompilacija i reverzni inženjering.</footer>
+  </main>
+</body>
+</html>
