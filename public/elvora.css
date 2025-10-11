@@ -1,27 +1,48 @@
-﻿:root{--elv-blue:#19b5ff;--elv-dark:#0b0f14;--elv-white:#ffffff}
+﻿:root{--elv-blue:#19b5ff;--elv-dark:#0b0f14;--elv-ink:#d8f6ff}
 *{box-sizing:border-box} html,body{height:100%}
+
 body{
-  margin:0;color:var(--elv-white);
-  background:var(--elv-dark) no-repeat center / cover fixed;
-  background-image:url("/assets/bg-network.jpg");
-  font-family:Segoe UI,Roboto,Helvetica,Arial,sans-serif
+  margin:0; color:var(--elv-ink); background:var(--elv-dark);
+  font-family:Segoe UI,Roboto,Helvetica,Arial,sans-serif;
 }
-.main{min-height:100svh;display:grid;place-items:center;padding:24px 16px 96px}
-.hero{max-width:960px;text-align:center}
-h1{margin:.2rem 0 1rem;color:var(--elv-blue);font-size:clamp(40px,9vw,84px);
-   text-shadow:0 0 22px rgba(25,181,255,.45)}
-p.lead{font-size:clamp(16px,2.4vw,20px);margin:.25rem 0 1rem}
-a.btn{display:inline-block;padding:12px 20px;border-radius:12px;
-  color:#eaffff;text-decoration:none;background:rgba(0,0,0,.25);
-  border:1px solid rgba(25,181,255,.5);backdrop-filter:blur(6px)}
-a.btn:hover{transform:translateY(-1px);border-color:var(--elv-blue)}
+
+/* Pozadina PREKO CIJELOG ZASLONA bez dodatnog HTML-a */
+body::before{
+  content:""; position:fixed; inset:0; z-index:-1;
+  background-image:url("/assets/bg-network.png");
+  background-position:center; background-repeat:no-repeat;
+  background-size:cover; image-rendering:auto; /* čisto */
+}
+
+/* Glavni raspored */
+.main{min-height:100svh; display:grid; place-items:center; padding:24px 16px 96px}
+.hero{max-width:980px; text-align:center}
+
+/* Elvora plava tipografija */
+h1{margin:.2rem 0 .8rem; color:var(--elv-blue); font-weight:900;
+   font-size:clamp(40px,9vw,84px); text-shadow:0 0 22px rgba(25,181,255,.35)}
+p.lead, .hero p, .hero strong, .hero a{ color:var(--elv-blue) }
+p.lead{font-size:clamp(16px,2.4vw,20px); margin:.25rem 0 1rem}
+
+/* Gumb */
+a.btn{
+  display:inline-block; padding:12px 20px; border-radius:12px;
+  color:#eaffff; text-decoration:none; letter-spacing:.02em;
+  background:rgba(0,0,0,.28); border:1px solid rgba(25,181,255,.55);
+  backdrop-filter:blur(6px); box-shadow:0 0 22px rgba(25,181,255,.16) inset;
+}
+a.btn:hover{ transform:translateY(-1px); border-color:var(--elv-blue) }
+
+/* Footer (jedan red, bez preklapanja) */
 footer{
-  position:fixed;left:0;right:0;bottom:0;padding:.6rem 1rem;text-align:center;
-  font-size:.9rem;line-height:1.5;color:#9fb0c6;background:rgba(11,15,20,.82);
+  position:fixed; left:0; right:0; bottom:0; padding:.55rem 1rem;
+  text-align:center; font-size:.9rem; line-height:1.45;
+  color:#9fb0c6; background:rgba(11,15,20,.82);
   border-top:1px solid rgba(25,181,255,.25)
 }
-/* fallback ako nema slike */
+
+/* Ako je štednja podataka, makni sliku i prikaži gradijent */
 @media (prefers-reduced-data: reduce){
-  body{background-image:none;background:
-    radial-gradient(ellipse at 50% 40%, #10202b 0, #0b0f14 60%)}
+  body::before{ background-image:none }
+  body{ background:radial-gradient(ellipse at 50% 40%, #10202b 0, #0b0f14 60%) }
 }
