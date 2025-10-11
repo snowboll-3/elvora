@@ -1,4 +1,4 @@
-﻿/* ELVORA GLOBAL STYLE FIX v3 */
+﻿/* ELVORA GLOBAL STYLE FIX v4 */
 :root{--elv-blue:#19b5ff;--elv-dark:#0b0f14;--elv-white:#ffffff}
 *{box-sizing:border-box} html,body{height:100%}
 body{
@@ -13,6 +13,12 @@ h1,h2,h3,.brand,.top-text strong{color:var(--elv-blue)}
      border:1px solid rgba(25,181,255,.5);backdrop-filter:blur(6px);
      transition:transform .15s ease,border-color .15s ease}
 .btn:hover{transform:translateY(-1px);border-color:var(--elv-blue)}
-footer{position:fixed;left:0;right:0;bottom:0;padding:.6rem 1rem;
-       text-align:center;font-size:.85rem;color:#9fb0c6;background:rgba(11,15,20,.72)}
-/* END FIX — ELVORA GLOBAL STYLE FIX v3 */
+/* kontejner da se ne sudara s footerom */
+.main, .wrapper { min-height: 100svh; padding: 24px 16px 96px; }
+/* footer */
+footer{
+  position:fixed; left:0; right:0; bottom:0;
+  padding:.6rem 1rem; text-align:center; font-size:.85rem; line-height:1.45;
+  color:#9fb0c6; background:rgba(11,15,20,.82); border-top:1px solid rgba(25,181,255,.25)
+}
+/* END FIX */
