@@ -97,3 +97,7 @@ footer{
 /* === /Hubs page polish === */
 /* === Home cleanup (scoped) === */
 .page-home h1{ display:none !important; }
+
+/* Home cleanup */
+.page-home h1{display:none!important;}
+
