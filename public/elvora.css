@@ -95,3 +95,5 @@ footer{
   box-shadow:0 10px 26px rgba(25,181,255,.28);
 }
 /* === /Hubs page polish === */
+/* === Home cleanup (scoped) === */
+.page-home h1{ display:none !important; }
