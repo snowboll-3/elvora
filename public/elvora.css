@@ -46,3 +46,52 @@ footer{
   body::before{ background-image:none }
   body{ background:radial-gradient(ellipse at 50% 40%, #10202b 0, #0b0f14 60%) }
 }
+/* === Hubs page polish (scoped) === */
+.page-hubs{
+  color:#d8f6ff;
+  background: #0b0f14 url("assets/bg-network.png") center/cover no-repeat fixed;
+  font-family: Inter, "Segoe UI", Roboto, Arial, sans-serif;
+}
+.page-hubs .hero{
+  max-width:min(1200px,94vw);
+  margin:6vh auto 4vh;
+  text-align:center;
+  background:rgba(11,15,20,.65);
+  border:1px solid rgba(25,181,255,.25);
+  border-radius:16px;
+  padding:24px 18px;
+  box-shadow:inset 0 0 14px rgba(25,181,255,.12);
+  backdrop-filter: blur(6px);
+}
+.page-hubs h1{
+  margin:0 0 6px;
+  color:#19b5ff;
+  font-weight:900;
+  font-size:clamp(34px,6vw,64px);
+  text-shadow:0 0 22px rgba(25,181,255,.35);
+}
+.page-hubs .lead{
+  margin:0 0 16px;
+  font-size:clamp(14px,2.6vw,18px);
+  opacity:.95;
+}
+.page-hubs .btn{
+  display:inline-block;
+  padding:12px 22px;
+  border-radius:12px;
+  text-decoration:none;
+  font-weight:700;
+  letter-spacing:.3px;
+  color:#19b5ff;
+  border:1px solid rgba(25,181,255,.55);
+  background:rgba(25,181,255,.12);
+  backdrop-filter: blur(8px);
+  transition:transform .2s ease, box-shadow .2s ease, border-color .2s ease;
+  box-shadow:0 6px 18px rgba(25,181,255,.18);
+}
+.page-hubs .btn:hover{
+  transform: translateY(-3px);
+  border-color:#19b5ff;
+  box-shadow:0 10px 26px rgba(25,181,255,.28);
+}
+/* === /Hubs page polish === */
