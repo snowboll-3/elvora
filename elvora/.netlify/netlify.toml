@@ -1,0 +1,31 @@
+functionsDirectory = "C:\\Users\\Mrcina\\elvora\\elvora\\netlify\\functions"
+functionsDirectoryOrigin = "ui"
+plugins = []
+headers = []
+redirects = []
+
+[functions]
+
+[functions."*"]
+
+[build]
+publish = "C:\\Users\\Mrcina\\elvora\\elvora\\public"
+publishOrigin = "ui"
+commandOrigin = "ui"
+base = "C:\\Users\\Mrcina\\elvora\\elvora"
+command = "netlify login"
+functions = "C:\\Users\\Mrcina\\elvora\\elvora\\netlify\\functions"
+
+[build.environment]
+
+[build.processing]
+
+[build.processing.css]
+
+[build.processing.html]
+
+[build.processing.images]
+
+[build.processing.js]
+
+[build.services]
