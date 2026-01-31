@@ -1,0 +1,43 @@
+﻿<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Elvora Vision Core • Sandbox</title>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap" rel="stylesheet">
+<style>
+  :root { --bg:#0b1117; --card:#121a22; --text:#cfeaff; --accent:#1ec8ff; }
+  *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font:16px/1.5 Inter,system-ui}
+  .wrap{max-width:1100px;margin:48px auto;padding:0 20px}
+  h1{font-size:28px;margin:0 0 16px}
+  .hint{opacity:.8;margin-bottom:24px}
+  .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:16px}
+  .btn{background:var(--card);border:1px solid #203040;border-radius:12px;padding:14px 16px;cursor:pointer}
+  .btn:hover{border-color:var(--accent)}
+  .btn b{color:var(--accent)}
+  a.home{display:inline-block;margin-top:28px;color:var(--accent);text-decoration:none}
+</style>
+</head>
+<body>
+  <main class="wrap">
+    <h1>Elvora Vision Core — Sandbox</h1>
+    <p class="hint">Učitaj slike dokumenata i testiraj OCR validaciju (CMR, VGM, Port/Terminal, SEAL).</p>
+    <section class="grid">
+      <label class="btn"><b>CMR</b><br><input id="cmr" type="file" accept="image/*,.pdf" hidden>Odaberi datoteke</label>
+      <label class="btn"><b>VGM</b><br><input id="vgm" type="file" accept="image/*,.pdf" hidden>Odaberi datoteke</label>
+      <label class="btn"><b>Port/Terminal</b><br><input id="port" type="file" accept="image/*,.pdf" hidden>Odaberi datoteke</label>
+      <label class="btn"><b>SEAL</b><br><input id="seal" type="file" accept="image/*,.pdf" hidden>Odaberi datoteke</label>
+    </section>
+    <a class="home" href="/index.html">← Natrag na početnu</a>
+  </main>
+<script>
+  // Minimalni “echo” parser – samo pokaže koliko je datoteka odabrano (placeholder za pravi OCR)
+  ["cmr","vgm","port","seal"].forEach(id=>{
+    const input=document.getElementById(id);
+    input.parentElement.addEventListener('click',()=>input.click());
+    input.addEventListener('change',()=>alert(id.toUpperCase()+": "+input.files.length+" datoteka"));
+  });
+</script>
+</body>
+</html>
