@@ -1,0 +1,291 @@
+﻿<!doctype html>
+<html lang="hr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Elvora — Servisi</title>
+
+  <link rel="icon" href="logo.png">
+  <link rel="manifest" href="../manifest.json">
+  <link rel="stylesheet" href="styles.css">
+
+  <script defer src="scripts/i18n.js"></script>
+
+  <style>
+    .enterprise-security { margin-top: 36px; }
+    .enterprise-security .muted { opacity: .9; }
+    .security-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 16px;
+      margin-top: 14px;
+    }
+    .security-card {
+      border: 1px solid rgba(159,176,198,.22);
+      border-radius: 12px;
+      padding: 18px;
+      background: rgba(11,15,20,.55);
+    }
+    .security-card h3 { margin: 0 0 8px; }
+    .security-badges {
+      margin-top: 10px;
+      font-size: .85rem;
+      color: #9fb0c6;
+    }
+    .security-actions { margin-top: 14px; display: flex; gap: 10px; flex-wrap: wrap; }
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 14px;
+      border-radius: 999px;
+      border: 1px solid rgba(25,181,255,.65);
+      background: transparent;
+      color: #19b5ff;
+      cursor: pointer;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: .95rem;
+    }
+    .btn:hover { background: rgba(25,181,255,.10); }
+    .btn-primary {
+      background: #19b5ff;
+      color: #020308;
+      border-color: #19b5ff;
+    }
+    .btn-primary:hover { background: #3bc3ff; border-color: #3bc3ff; }
+
+    .request-block { margin-top: 26px; border-top: 1px solid rgba(159,176,198,.22); padding-top: 22px; max-width: 560px; }
+    .request-block label { display:block; font-size:.82rem; color:#9fb0c6; margin: 10px 0 6px; }
+    .request-block input, .request-block select, .request-block textarea {
+      width: 100%;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1px solid rgba(159,176,198,.25);
+      background: rgba(11,15,20,.85);
+      color: #fff;
+      outline: none;
+    }
+    .request-block textarea { min-height: 96px; resize: vertical; }
+    .hint { font-size: .78rem; color: #9fb0c6; margin-top: 10px; }
+  </style>
+</head>
+
+<body>
+<header>
+  <a href="../index.html" aria-label="Home">
+    <img src="logo.png" alt="Elvora" class="logo">
+  </a>
+
+  <nav>
+    <a href="../index.html">Početna</a>
+    <a href="services.html" aria-current="page">Servisi</a>
+  </nav>
+
+  <div style="margin-left:auto">
+    <select id="lang">
+      <option value="hr">HR</option>
+      <option value="en">EN</option>
+    </select>
+  </div>
+</header>
+
+<main>
+
+  <section class="hero">
+    <h1>Elvora Servisi</h1>
+    <p class="lead">
+      Jedna platforma. Više poslovnih servisa. Sve povezano, sigurno i spremno za stvarni svijet.
+    </p>
+  </section>
+
+  <section class="about">
+    <h2>Piramida Elvora sustava</h2>
+    <img src="assets/hero/piramida-servisi.webp"
+         alt="Piramida Elvora sustava"
+         style="max-width:420px;margin:24px auto;display:block;">
+    <p>
+      Elvora je izgrađena kao modularna piramida servisa. Svaki sloj ima svoju ulogu,
+      a zajedno čine stabilan, skalabilan i profesionalan poslovni sustav.
+    </p>
+    <p class="muted">AI pomaže. Čovjek odlučuje.</p>
+  </section>
+
+  <section class="ai-core">
+    <h2>AI jezgra – robot Elvore</h2>
+    <img src="assets/hero/robot.webp"
+         alt="AI Core Elvora – Nexus / Sentinel"
+         style="max-width:380px;margin:24px auto;display:block;">
+    <p>
+      Robot predstavlja inteligentni sloj Elvore — sustav koji u pozadini nadzire, štiti i optimizira rad aplikacije.
+    </p>
+    <p>
+      Njegova uloga nije zamijeniti čovjeka, već osigurati stabilnost, sigurnost i pouzdan rad u svakodnevnim procesima.
+    </p>
+  </section>
+
+  <section class="services">
+    <h3>Poslovni servisi</h3>
+    <ul>
+      <li><strong>Poslovanje</strong> — upravljanje poslovanjem, partnerima i korisnicima</li>
+      <li><strong>Inventar</strong> — inventura i stanje robe u stvarnom vremenu</li>
+      <li><strong>Logistika</strong> — planiranje, praćenje i kontrola transporta</li>
+      <li><strong>Operacije</strong> — operativni procesi i evidencije</li>
+      <li><strong>Naplata</strong> — naplata i kontrola transakcija</li>
+      <li><strong>Postavke</strong> — postavke i prilagodbe sustava</li>
+    </ul>
+  </section>
+
+  <section class="logistics">
+    <h2>Transportni modovi — Logistics</h2>
+    <p>
+      Elvora podržava više oblika prijevoza i prilagođava se stvarnim logističkim uvjetima na terenu.
+    </p>
+    <ul>
+      <li>Cestovni transport</li>
+      <li>Pomorski transport</li>
+      <li>Željeznički transport</li>
+      <li>Zračni transport</li>
+    </ul>
+    <p class="muted">Jedinstvena kontrola — bez obzira na vrstu prijevoza.</p>
+  </section>
+
+  <section class="enterprise-security" id="enterprise-security">
+    <h2>Advanced / Enterprise Security</h2>
+    <p class="muted">
+      Specijalizirani sigurnosni servisi dostupni su isključivo na upit, uz provjeru klijenta i vođenu instalaciju.
+    </p>
+
+    <div class="security-grid">
+      <div class="security-card">
+        <h3>Invisible Code / Secure Image</h3>
+        <p>Diskretna zaštita autentičnosti kroz kontrolirani sustav verifikacije.</p>
+        <div class="security-badges">Isključivo na upit · Provjera klijenta · Vođena instalacija · Audit</div>
+        <div class="security-actions"><a class="btn" href="#request">Zatraži pristup</a></div>
+      </div>
+
+      <div class="security-card">
+        <h3>Sentinel – Anti-Theft</h3>
+        <p>Sustav za detekciju incidenta, praćenje i forenzičku evidenciju imovine visoke vrijednosti.</p>
+        <div class="security-badges">Isključivo na upit · Provjera klijenta · Vođena instalacija · Audit</div>
+        <div class="security-actions"><a class="btn" href="#request">Zatraži pristup</a></div>
+      </div>
+
+      <div class="security-card">
+        <h3>Elite Protection</h3>
+        <p>Integrirani paket: autentičnost + praćenje + incident recovery u jedinstvenom sustavu.</p>
+        <div class="security-badges">Isključivo na upit · Provjera klijenta · Vođena instalacija · NDA</div>
+        <div class="security-actions"><a class="btn btn-primary" href="#request">Zatraži pristup</a></div>
+      </div>
+    </div>
+
+    <div class="request-block" id="request">
+      <h3>Zatraži pristup</h3>
+      <p class="muted">
+        Prije aktivacije provodi se provjera kupca i namjene servisa. Instalaciju i inicijalno postavljanje vodi isključivo Elvora.
+      </p>
+
+      <form id="requestForm">
+        <label for="orgName">Organizacija (naziv firme)</label>
+        <input id="orgName" name="orgName" type="text" placeholder="Upišite naziv organizacije" required>
+
+        <label for="email">Kontakt email</label>
+        <input id="email" name="email" type="email" placeholder="npr. ime@firma.com" required>
+
+        <label for="serviceKey">Servis</label>
+        <select id="serviceKey" name="serviceKey" required>
+          <option value="invisible_code">Invisible Code / Secure Image</option>
+          <option value="sentinel">Sentinel – Anti-Theft</option>
+          <option value="elite_protection">Elite Protection</option>
+        </select>
+
+        <label for="message">Poruka (opcionalno)</label>
+        <textarea id="message" name="message" placeholder="Kratki opis namjene ili konteksta..."></textarea>
+
+        <div style="margin-top:12px">
+          <button class="btn btn-primary" type="submit">Pošalji zahtjev</button>
+        </div>
+
+        <div class="hint" id="requestHint">
+          Slanjem zahtjeva potvrđujete da razumijete da se servis aktivira isključivo nakon provjere i odobrenja Elvora tima.
+        </div>
+      </form>
+    </div>
+  </section>
+
+  <section class="contact">
+    <h2>Kontakt</h2>
+    <p>
+      Imate pitanje, trebate prilagodbu ili specifičan servis? Javite nam se — Elvora se prilagođava stvarnim potrebama poslovanja.
+    </p>
+    <p>📧 <strong>info@elvora.app</strong></p>
+  </section>
+
+</main>
+
+<footer>
+  <p class="muted">
+    © <span id="year"></span> Elvora. Sva prava pridržana.
+    Zabranjeno neovlašteno kopiranje, redistribucija i korištenje bez valjane licence.
+  </p>
+  <script>document.getElementById("year").textContent=new Date().getFullYear();</script>
+</footer>
+
+<script>
+  // === UPIŠI SVOJE: Supabase -> Settings -> API ===
+  const SUPABASE_URL = "PASTE_YOUR_SUPABASE_URL_HERE";
+  const SUPABASE_ANON_KEY = "PASTE_YOUR_SUPABASE_ANON_KEY_HERE";
+
+  const form = document.getElementById('requestForm');
+  const hint = document.getElementById('requestHint');
+
+  form?.addEventListener('submit', async function(e){
+    e.preventDefault();
+
+    const org_name = document.getElementById('orgName').value.trim();
+    const requester_email = document.getElementById('email').value.trim();
+    const service_key = document.getElementById('serviceKey').value;
+    const message = document.getElementById('message').value.trim();
+
+    if (!SUPABASE_URL || SUPABASE_URL.includes("PASTE_") || !SUPABASE_ANON_KEY || SUPABASE_ANON_KEY.includes("PASTE_")) {
+      alert("Supabase URL/ANON KEY nisu upisani u services.html");
+      return;
+    }
+
+    const payload = {
+      org_name,
+      requester_email,
+      service_key,
+      message: message || null,
+      status: "pending",
+      org_id: null
+    };
+
+    try {
+      const res = await fetch(`${SUPABASE_URL}/rest/v1/service_requests`, {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_ANON_KEY,
+          "Authorization": `Bearer ${SUPABASE_ANON_KEY}`,
+          "Prefer": "return=minimal"
+        },
+        body: JSON.stringify(payload)
+      });
+
+      if (!res.ok) {
+        const txt = await res.text();
+        throw new Error(txt || `HTTP ${res.status}`);
+      }
+
+      hint.textContent = "Zahtjev je zaprimljen. Elvora tim će vas kontaktirati.";
+      form.reset();
+    } catch (err) {
+      console.error(err);
+      alert("Greška pri slanju zahtjeva. Provjeri Supabase URL/KEY i RLS policy.");
+    }
+  });
+</script>
+
+</body>
+</html>

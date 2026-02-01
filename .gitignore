@@ -25,3 +25,17 @@ public/**/*.bak*
 
 # local builds / exports / backups
 website/
+# audits
+_audit/
+
+# backups / noise
+**/*.bak*
+**/backup*/
+**/backups*/
+**/.netlify/
+**/node_modules/
+**/dist/
+**/build/
+# local check / junk
+elvora.check.txt
+index-flow.html.html

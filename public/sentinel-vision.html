@@ -1,0 +1,47 @@
+﻿<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8" />
+<title>Elvora Sentinel Vision</title>
+<style>
+body{margin:0;background:#0b0f14;color:#9fb0c6;font-family:system-ui}
+.card{margin:40vh auto 0;transform:translateY(-50%);width:720px;
+border:1px solid #19b5ff;border-radius:14px;padding:16px}
+button{padding:10px 16px;border-radius:10px;margin-right:8px}
+</style>
+</head>
+<body>
+
+<div class="card">
+<h3 id="type">INCIDENT</h3>
+<p>ID: <b id="id">—</b></p>
+<button id="ack">ACK</button>
+<span id="log"></span>
+</div>
+
+<script>
+const SSE_URL = "http://localhost:3035/api/incidents/stream";
+let currentId = null;
+
+const es = new EventSource(SSE_URL);
+es.addEventListener("incident", ev => {
+  const x = JSON.parse(ev.data);
+  currentId = x.id;
+  document.getElementById("id").textContent = x.id;
+  document.getElementById("type").textContent = x.incident_type;
+});
+
+document.getElementById("ack").onclick = async () => {
+  if(!currentId) return alert("NO ID");
+  const r = await fetch("http://localhost:3035/api/incidents/ack",{
+    method:"POST",
+    headers:{"Content-Type":"application/json"},
+    body:JSON.stringify({id:currentId})
+  });
+  const j = await r.json();
+  document.getElementById("log").textContent = JSON.stringify(j);
+};
+</script>
+
+</body>
+</html>
