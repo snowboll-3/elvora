@@ -1,112 +1,87 @@
-﻿<!doctype html><html lang="hr"><head>
-<meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Elvora — Komunikacija</title>
-<link rel="stylesheet" href="/shared/elvora.css">
-<script defer src="/shared/elvora.js"></script>
-<style>
-  .comm-wrap{max-width:1100px;margin:24px auto;padding:0 12px}
-  .bar{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:10px}
-  .chat{display:grid;grid-template-columns:300px 1fr;gap:12px}
-  .card{padding:12px}
-  .msg{background:#101620;border:1px solid #1f2a36;border-radius:12px;padding:10px;margin:8px 0}
-  .msg.me{border-color:#19b5ff}
-  .msg .meta{font-size:12px;color:#9fb0c6;margin-bottom:6px}
-  .msg .text{white-space:pre-wrap}
-  .row{display:flex;gap:8px;align-items:center}
-  .pill{padding:4px 8px;border-radius:999px;background:#0f1722;border:1px solid #223141}
-  .recips span{margin-right:4px}
-  textarea{width:100%;min-height:56px}
-</style>
-</head><body>
-<div class="comm-wrap">
-  <div class="bar">
-    <h1 style="margin:0;color:#19b5ff">Komunikacija</h1>
-    <span class="note">tekst ili glas • automatski prijevod • ciljani @primatelj</span>
-    <span style="flex:1"></span>
-    <label class="pill">Ja sam:
-      <select id="meRole"><option>Radnik</option><option>Voditelj</option><option>Šef skladišta</option></select>
-    </label>
-    <label class="pill">Jezik:
-      <select id="meLang"><option value="hr">HR</option><option value="en">EN</option><option value="de">DE</option><option value="it">IT</option><option value="es">ES</option><option value="fr">FR</option></select>
-    </label>
-  </div>
+﻿<!doctype html>
+<html lang="hr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Elvora — Workforce Communication</title>
 
-  <div class="chat">
-    <div class="card">
-      <h3>Osoblje</h3>
-      <div id="users"></div>
-      <hr>
-      <h3>Primatelji</h3>
-      <div id="recips" class="recips"></div>
-      <button class="btn" id="clear">Očisti odabir</button>
-      <hr>
-      <div class="alert note">Primjer: “@Marko — paletu punu mlijeka premjesti na policu A3.”</div>
-    </div>
+  <link rel="stylesheet" href="/shared/elvora.css">
+  <script defer src="/shared/elvora.js"></script>
 
-    <div class="card">
-      <div id="list"></div>
-      <hr>
-      <div class="row"><textarea id="txt" placeholder="Upiši poruku… (ili Glas→Tekst)"></textarea></div>
-      <div class="row" style="margin-top:6px">
-        <button class="btn primary" id="send">Pošalji</button>
-        <button class="btn" id="speak">Glas→Tekst</button>
-        <button class="btn" id="listen">Pročitaj (TTS)</button>
-        <label class="pill"><input type="checkbox" id="autoTranslate" checked> Auto-prijevod</label>
+  <link rel="stylesheet" href="./comm.css">
+  <script defer src="./comm.js"></script>
+</head>
+
+<body>
+  <div class="comm-shell">
+    <header class="comm-top">
+      <div class="brand">
+        <div class="title">Komunikacija</div>
+        <div class="sub">tekst • glas • slika • prijevod po radniku</div>
       </div>
-    </div>
+
+      <div class="top-actions">
+        <span class="badge" id="roleBadge">role</span>
+        <select id="rolePick" class="select">
+          <option value="worker">Radnik</option>
+          <option value="manager">Voditelj</option>
+        </select>
+        <button class="btn" id="openWorkerLink">Link radnik</button>
+        <button class="btn" id="openManagerLink">Link voditelj</button>
+      </div>
+    </header>
+
+    <main class="comm-main">
+      <aside class="roster manager-only">
+        <div class="panel">
+          <div class="panel-title">Radnici</div>
+
+          <div class="add-worker">
+            <input id="wName" class="input" placeholder="Ime (npr. Ramesh)" />
+            <input id="wLang" class="input" placeholder="Jezik (npr. ne-NP, fil, en-US...)" />
+            <button class="btn primary" id="addWorkerBtn">Dodaj</button>
+          </div>
+
+          <div class="hint">
+            Primjeri: <code>hr-HR</code>, <code>en-US</code>, <code>ne-NP</code>, <code>fil</code>, <code>de-DE</code>
+          </div>
+
+          <div id="workerList" class="worker-list"></div>
+        </div>
+      </aside>
+
+      <section class="chat">
+        <div class="chat-head">
+          <div>
+            <div class="chat-title" id="chatTitle">Odaberi radnika</div>
+            <div class="chat-sub" id="chatSub">Poruke se prevode na jezik radnika.</div>
+          </div>
+          <div class="chat-tools">
+            <button class="chip" id="btnSTT">🎙️ STT</button>
+            <button class="chip" id="btnTTS">🔊 TTS zadnje</button>
+            <label class="chip file">
+              📷 Slika <input id="imgPick" type="file" accept="image/*"/>
+            </label>
+          </div>
+        </div>
+
+        <div id="msgList" class="msg-list"></div>
+
+        <div class="composer">
+          <textarea id="msgText" class="textarea" placeholder="Napiši poruku… (Ctrl+Enter šalje)"></textarea>
+          <div class="composer-actions">
+            <button class="btn" id="btnAck">✅ Razumio</button>
+            <button class="btn" id="btnHelp">❓ Ne razumijem</button>
+            <button class="btn primary" id="btnSend">Pošalji</button>
+          </div>
+        </div>
+
+        <footer class="comm-foot">
+          <span>© 2026 Elvora</span>
+          <span class="muted">Elvora UX (nije kopija Messengera/Vibera). Role-based prikaz.</span>
+        </footer>
+      </section>
+    </main>
   </div>
-
-  <footer>© 2025 Elvora</footer>
-</div>
-
-<script>
-const STAFF=[{id:"u1",name:"Marko",role:"Radnik",lang:"hr"},{id:"u2",name:"Ana",role:"Voditelj",lang:"hr"},{id:"u3",name:"Ivan",role:"Šef skladišta",lang:"hr"},{id:"u4",name:"Julia",role:"Radnik",lang:"en"},{id:"u5",name:"Luca",role:"Radnik",lang:"it"}];
-const LS_KEY="elvora.comm.msgs.v1",LS_ME="elvora.comm.me.v1",LS_REC="elvora.comm.recips.v1";
-const meRoleEl=document.getElementById('meRole'), meLangEl=document.getElementById('meLang'), usersEl=document.getElementById('users'), recipsEl=document.getElementById('recips'), listEl=document.getElementById('list'), txtEl=document.getElementById('txt');
-
-let me = ElvoraStore.get(LS_ME,{id:"me",name:"Ja",role:"Radnik",lang:"hr"});
-meRoleEl.value=me.role; meLangEl.value=me.lang;
-meRoleEl.onchange=()=>{me.role=meRoleEl.value; saveMe();}; meLangEl.onchange=()=>{me.lang=meLangEl.value; saveMe();};
-
-let recips = ElvoraStore.get(LS_REC,["u2","u3"]);
-let msgs   = ElvoraStore.get(LS_KEY,[]);
-
-function saveMe(){ ElvoraStore.set(LS_ME,me); ElvoraToast("Spremljeno: "+me.role+" / "+me.lang); }
-function saveRec(){ ElvoraStore.set(LS_REC,recips); renderRecips(); }
-function saveMsgs(){ ElvoraStore.set(LS_KEY,msgs); renderMsgs(); }
-
-function renderUsers(){
-  usersEl.innerHTML = STAFF.map(u=>`<label class="row"><input type="checkbox" data-id="${u.id}" ${recips.includes(u.id)?"checked":""}><span class="pill"><b>${u.name}</b> — ${u.role} • ${u.lang.toUpperCase()}</span></label>`).join("");
-  usersEl.querySelectorAll('input[type=checkbox]').forEach(ch=>{
-    ch.onchange=()=>{ const id=ch.dataset.id; if(ch.checked){ if(!recips.includes(id)) recips.push(id);} else { recips=recips.filter(x=>x!==id);} saveRec(); };
-  });
-}
-function renderRecips(){
-  recipsEl.innerHTML = recips.map(id=>{const u=STAFF.find(x=>x.id===id); if(!u) return ""; return `<span class="pill">${u.name} • ${u.lang.toUpperCase()}</span>`;}).join("") || "<span class='note'>Nema odabranih primatelja.</span>";
-}
-function translateStub(text,from,to){ return text; } // DEMO — vraća isti tekst
-function speak(text,lang){ try{ const u=new SpeechSynthesisUtterance(text); u.lang=(lang||"hr-HR"); speechSynthesis.speak(u);}catch{} }
-function sttStart(){ const R=window.SpeechRecognition||window.webkitSpeechRecognition; if(!R) return ElvoraToast("STT nije podržan."); const rec=new R(); rec.lang=me.lang||"hr"; rec.onresult=e=>{txtEl.value=e.results[0][0].transcript;}; rec.onerror=e=>ElvoraToast("STT greška: "+e.error); rec.start(); }
-function renderMsgs(){
-  listEl.innerHTML = msgs.map(m=>{
-    const mine=m.from.name==="Ja"; const meta=`${m.time} — ${m.from.role} (${m.from.lang.toUpperCase()}) → ${m.to.map(x=>x.name).join(", ")}`;
-    return `<div class="msg ${mine?"me":""}"><div class="meta">${meta}</div><div class="text">${m.textTranslated||m.text}</div><div class="row" style="margin-top:6px;"><button class="btn" onclick="window.playMsg('${m.id}')">Pročitaj (TTS)</button></div></div>`;
-  }).join("") || "<div class='note'>Još nema poruka.</div>";
-  window.playMsg=(id)=>{const m=msgs.find(x=>x.id===id); if(!m) return; speak(m.textTranslated||m.text,(me.lang==='hr'?'hr-HR':(me.lang==='en'?'en-US':undefined)));};
-}
-document.getElementById('clear').onclick=()=>{recips=[]; saveRec();};
-document.getElementById('send').onclick=()=>{
-  const text=txtEl.value.trim(); if(!text) return ElvoraToast("Poruka je prazna.");
-  const toUsers=recips.map(id=>STAFF.find(x=>x.id===id)).filter(Boolean);
-  if(!toUsers.length) return ElvoraToast("Odaberi barem jednog primatelja.");
-  const t=new Date();
-  const payload={id:'m'+Math.random().toString(36).slice(2,9),from:{id:me.id,name:"Ja",role:me.role,lang:me.lang},to:toUsers,text,textTranslated:document.getElementById('autoTranslate').checked?translateStub(text,me.lang,toUsers[0]?.lang||"hr"):null,time:t.toLocaleString()};
-  msgs.push(payload); saveMsgs(); txtEl.value="";
-};
-document.getElementById('speak').onclick=sttStart;
-document.getElementById('listen').onclick=()=>{const txt=txtEl.value.trim(); if(!txt) return; speak(txt,(me.lang==='hr'?'hr-HR':(me.lang==='en'?'en-US':undefined)));};
-renderUsers(); renderRecips(); renderMsgs();
-addEventListener("elvora:scan",(e)=>{ const code=e.detail.code; txtEl.value=`@${(STAFF[0]||{name:"Radnik"}).name} — paleta ${code} treba na policu A3.`; ElvoraToast("Kod ubačen u poruku."); });
-</script>
-</body></html>
-
+</body>
+</html>
