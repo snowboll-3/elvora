@@ -43,3 +43,10 @@
 body[data-role="manager"] .manager-only{display:block}
 body[data-role="worker"] .comm-main{grid-template-columns:1fr}
 body[data-role="worker"] .roster{display:none !important}
+
+/* === Elvora Workforce Comm • role-based CSS hardening === */
+:root[data-role="worker"] .manager-only,
+:root[data-role="worker"] .leader-only,
+:root[data-role="worker"] [data-manager-only="1"]{
+  display:none !important;
+}

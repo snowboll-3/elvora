@@ -212,3 +212,50 @@ function render(){ renderWorkers(); renderThread(); }
   wire();
   render();
 })();
+
+
+/* === Elvora Workforce Comm • Role Guard (prod hardening) === */
+(function(){
+  const qs = new URLSearchParams(location.search);
+  const urlRole = (qs.get("role")||"").toLowerCase();
+  const saved = (localStorage.getItem("elvora_role")||"").toLowerCase();
+
+  // worker | leader | manager  (leader/manager = voditeljski prikaz)
+  let role = urlRole || saved || "worker";
+  if (!["worker","leader","manager"].includes(role)) role = "worker";
+  localStorage.setItem("elvora_role", role);
+  document.documentElement.dataset.role = role;
+
+  // helper: hide by text (robust, ne ovisi o HTML strukturi)
+  function hideButtonsByText(rx){
+    const btns = Array.from(document.querySelectorAll("button,a"));
+    btns.forEach(b=>{
+      const t = (b.textContent||"").trim();
+      if (rx.test(t)) b.style.display = "none";
+    });
+  }
+
+  function apply(){
+    if (role === "worker") {
+      // sakrij role switch / linkove / voditeljske kontrole
+      hideButtonsByText(/link\s*voditelj|link\s*radnik|voditelj|manager|leader/i);
+
+      // sakrij select/dropdown role (ako postoji)
+      Array.from(document.querySelectorAll("select")).forEach(s=>{
+        const t = ((s.id||"") + " " + (s.name||"") + " " + (s.className||"")).toLowerCase();
+        if (t.includes("role") || t.includes("voditelj") || t.includes("leader") || t.includes("manager")) {
+          s.style.display = "none";
+        }
+      });
+
+      // sakrij sve elemente koji su označeni kao manager-only (ako ih ima)
+      document.querySelectorAll("[data-manager-only='1'], .manager-only, .leader-only").forEach(el=>{
+        el.style.display = "none";
+      });
+    }
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", apply, {once:true});
+  } else apply();
+})();
