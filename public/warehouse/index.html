@@ -1,5 +1,74 @@
-﻿<!doctype html><html lang='hr'><meta charset='utf-8'><title>Elvora — Skladište</title>
-<h1>Skladište</h1>
-<p>Pregled naloga, rampe, raspored utovara i statusi.</p>
-<p><a href='/hubs/'>← Natrag na Hubove</a></p>
+﻿<!doctype html>
+<html lang="hr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Elvora — Skladište (Rampe & Dolasci)</title>
+  <style>
+    :root{--bg:#0b0f14;--card:#101826;--ink:#e6eef7;--mut:#9fb0c6;--el:#19b5ff;--ok:#39d98a;--warn:#f0c24b;--bad:#ff5d5d;}
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,Segoe UI,Inter,Roboto}
+    a{color:var(--el);text-decoration:none}
+    .wrap{max-width:1100px;margin:32px auto;padding:0 16px}
+    h1{margin:0;color:var(--el)}
+    .sub{color:var(--mut);margin:6px 0 0}
+    .grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin-top:16px}
+    .card{background:var(--card);border:1px solid #1c2c40;border-radius:14px;padding:14px}
+    .btn{display:inline-block;border:1px solid #1c2c40;border-radius:12px;padding:10px 12px;background:#0f1722;color:var(--ink);cursor:pointer;margin:4px 6px 0 0}
+    .btn.primary{border-color:#19b5ff55}
+    .btn.ok{border-color:#39d98a55}
+    .btn.bad{border-color:#ff5d5d55}
+    .pill{display:inline-block;padding:4px 10px;border:1px solid #1c2c40;border-radius:999px;color:var(--mut);margin-right:6px;margin-top:6px}
+    .box{border:1px dashed #24374d;border-radius:12px;padding:12px;background:#0f1722}
+    .mini{font-size:13px;color:var(--mut)}
+    footer{margin-top:18px;color:var(--mut);font-size:13px}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <h1>Skladište — Rampe & dolasci</h1>
+    <p class="sub">Brze radnje: dodijeli rampu, navigiraj vozača, prijavi rani/pozni dolazak, zatraži slot, SOS pomoć.</p>
+    <div>
+      <span class="pill">assignDock</span><span class="pill">guideRamp</span><span class="pill">reportEarly</span><span class="pill">reqSlot</span><span class="pill">helpSOS</span>
+    </div>
 
+    <section class="grid">
+      <div class="card">
+        <h3 style="margin:0 0 8px">Brze radnje (demo)</h3>
+        <div class="mini">Ovo je prezentacija weba. Prava logika i i18n su u <code>/public/app/logistics.html</code>.</div>
+        <div style="margin-top:10px">
+          <button class="btn primary" id="assign">Dodijeli rampu (rampa 8)</button>
+          <button class="btn ok" id="guide">Navigiraj do rampe</button>
+          <button class="btn" id="early">Dolazim ranije</button>
+          <button class="btn" id="slot">Tražim slot</button>
+          <button class="btn bad" id="sos">SOS / pomoć</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin:0 0 8px">Status</h3>
+        <div id="status" class="box mini">Spremno. Odaberi radnju.</div>
+        <div class="mini" style="margin-top:10px">
+          Primjer: “TRUCK-42 kasni 25 min → dodijeljena <b>rampa 8</b> → navigacija aktivna → potvrda dolaska”.
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <a href="/hubs/">← Natrag na module</a> · © <span id="y"></span> Elvora
+    </footer>
+  </main>
+
+<script>
+  document.getElementById('y').textContent = new Date().getFullYear();
+  const s = document.getElementById('status');
+  const truck = "TRUCK-42";
+  function set(txt){ s.innerHTML = txt; }
+
+  document.getElementById('assign').onclick = ()=> set(`✅ ${truck}: dodijeljena <b>rampa 8</b>. Obavijest poslana voditelju.`);
+  document.getElementById('guide').onclick  = ()=> set(`🧭 Navigacija aktivna: vodi ${truck} do <b>rampe 8</b> (ulaz B → zona 3).`);
+  document.getElementById('early').onclick  = ()=> set(`⏱ ${truck}: prijavljen raniji dolazak. Provjera slobodnih rampi…`);
+  document.getElementById('slot').onclick   = ()=> set(`📦 ${truck}: zatražen slot za istovar. Predloženi termin: 14:30.`);
+  document.getElementById('sos').onclick    = ()=> set(`🚨 SOS: ${truck} prijavio problem. Aktivirana pomoć + obavijest skladištu.`);
+</script>
+</body>
+</html>

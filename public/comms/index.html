@@ -1,5 +1,140 @@
-﻿<!doctype html><html lang='hr'><meta charset='utf-8'><title>Elvora — Komunikacija</title>
-<h1>Komunikacija (Voditelj ↔ Vozač viličara)</h1>
-<p>Glasovne, tekstualne i slikovne upute. Potvrde preuzimanja/isporuke.</p>
-<p><a href='/hubs/'>← Natrag na Hubove</a></p>
+﻿<!doctype html>
+<html lang="hr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Elvora — Komunikacija (Voditelj ↔ Vozač)</title>
+  <style>
+    :root{--bg:#0b0f14;--card:#101826;--ink:#e6eef7;--mut:#9fb0c6;--el:#19b5ff;--ok:#39d98a;--warn:#f0c24b;--bad:#ff5d5d;}
+    *{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.5 system-ui,Segoe UI,Inter,Roboto}
+    a{color:var(--el);text-decoration:none}
+    .wrap{max-width:1100px;margin:32px auto;padding:0 16px}
+    .hero{display:flex;gap:16px;flex-wrap:wrap;align-items:flex-start}
+    .hero h1{margin:0;color:var(--el)}
+    .sub{color:var(--mut);margin:6px 0 0}
+    .grid{display:grid;gap:12px;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));margin-top:16px}
+    .card{background:var(--card);border:1px solid #1c2c40;border-radius:14px;padding:14px}
+    .tag{display:inline-block;padding:4px 10px;border:1px solid #1c2c40;border-radius:999px;color:var(--mut);margin-right:6px;margin-top:6px}
+    .btn{display:inline-block;border:1px solid #1c2c40;border-radius:12px;padding:10px 12px;background:#0f1722;color:var(--ink);cursor:pointer}
+    .btn.primary{border-color:#19b5ff55}
+    .row{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+    textarea{width:100%;min-height:62px;border-radius:12px;border:1px solid #1c2c40;background:#0f1722;color:var(--ink);padding:10px}
+    .mini{font-size:13px;color:var(--mut)}
+    .msg{background:#0f1722;border:1px solid #1c2c40;border-radius:12px;padding:10px;margin:8px 0}
+    .msg .meta{font-size:12px;color:var(--mut);margin-bottom:6px}
+    footer{margin-top:18px;color:var(--mut);font-size:13px}
+    code{color:#cfeaff}
+  </style>
+</head>
+<body>
+  <main class="wrap">
+    <div class="hero">
+      <div style="flex:1;min-width:280px">
+        <h1>Komunikacija (Voditelj ↔ Vozač / Viličar)</h1>
+        <p class="sub">Kasniš ili dolaziš ranije? Elvora dodjeljuje rampu (npr. <b>rampa 8</b>), šalje upute i aktivira pomoć po potrebi.</p>
+        <div class="row">
+          <span class="tag">Tekst</span><span class="tag">Glas → Tekst</span><span class="tag">TTS</span><span class="tag">Auto-prijevod</span><span class="tag">QR / Barcode u poruci</span>
+        </div>
+      </div>
+      <div class="card" style="min-width:280px;max-width:420px">
+        <b>Scenarij (primjer)</b>
+        <div class="mini" style="margin-top:6px">
+          Vozač: “Kasnim 25 min.” → Voditelj: “Imamo mjesta, <b>rampa 8</b>. Navigacija te vodi.”<br/>
+          Problem: “Pukla guma / kvar / zastoje” → <b>SOS</b> poziv pomoći + obavijest skladištu.
+        </div>
+      </div>
+    </div>
 
+    <section class="grid">
+      <div class="card">
+        <h3 style="margin:0 0 6px">Brza poruka</h3>
+        <div class="mini">Upiši poruku, odaberi primatelja, pošalji. (Demo — lokalno u pregledniku)</div>
+        <div class="row" style="margin-top:10px">
+          <label class="tag">Ja sam:
+            <select id="meRole" style="margin-left:6px;background:#0f1722;color:#e6eef7;border:1px solid #1c2c40;border-radius:10px;padding:6px">
+              <option>Radnik</option><option>Voditelj</option><option>Šef skladišta</option><option>Vozač</option>
+            </select>
+          </label>
+          <label class="tag">Jezik:
+            <select id="meLang" style="margin-left:6px;background:#0f1722;color:#e6eef7;border:1px solid #1c2c40;border-radius:10px;padding:6px">
+              <option value="hr">HR</option><option value="en">EN</option><option value="de">DE</option><option value="it">IT</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="row" style="margin-top:10px">
+          <span class="tag"><input type="checkbox" class="rec" value="Voditelj" checked> Voditelj</span>
+          <span class="tag"><input type="checkbox" class="rec" value="Šef skladišta" checked> Šef skladišta</span>
+          <span class="tag"><input type="checkbox" class="rec" value="Radnik"> Radnik</span>
+        </div>
+
+        <textarea id="txt" placeholder="Primjer: @Voditelj — kasnim 25 min. / dolazim ranije / treba pomoć…"></textarea>
+
+        <div class="row" style="margin-top:8px">
+          <button class="btn primary" id="send">Pošalji</button>
+          <button class="btn" id="fillRamp">Rampa 8</button>
+          <button class="btn" id="fillSOS">SOS</button>
+          <span class="mini">STT/TTS možeš dodati kasnije (u app već radi).</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3 style="margin:0 0 6px">Poruke</h3>
+        <div id="list" class="mini">Još nema poruka.</div>
+        <div class="mini" style="margin-top:10px">
+          <b>Napomena:</b> Ovo je prezentacijska web stranica. Prava komunikacija u aplikaciji uključuje role, prijevod, STT/TTS i QR hook.
+        </div>
+      </div>
+    </section>
+
+    <footer>
+      <a href="/hubs/">← Natrag na module</a> · © <span id="y"></span> Elvora
+    </footer>
+  </main>
+
+<script>
+  document.getElementById('y').textContent = new Date().getFullYear();
+
+  const LS = "elvora.web.comms.demo.v1";
+  const list = document.getElementById('list');
+  const txt  = document.getElementById('txt');
+
+  function getRecips(){
+    return [...document.querySelectorAll('.rec:checked')].map(x=>x.value);
+  }
+  function load(){ try{ return JSON.parse(localStorage.getItem(LS)||"[]"); }catch{ return []; } }
+  function save(arr){ localStorage.setItem(LS, JSON.stringify(arr)); render(arr); }
+
+  function render(arr){
+    if(!arr.length){ list.innerHTML = "<div class='mini'>Još nema poruka.</div>"; return; }
+    list.innerHTML = arr.slice().reverse().map(m=>{
+      return `<div class="msg"><div class="meta">${m.time} — ${m.role}/${m.lang.toUpperCase()} → ${m.to.join(", ")}</div><div>${m.text}</div></div>`;
+    }).join("");
+  }
+
+  document.getElementById('send').onclick = ()=>{
+    const t = txt.value.trim();
+    if(!t) return;
+    const to = getRecips();
+    if(!to.length) return alert("Odaberi primatelja.");
+    const role = document.getElementById('meRole').value;
+    const lang = document.getElementById('meLang').value;
+    const arr = load();
+    arr.push({time:new Date().toLocaleString(), role, lang, to, text:t});
+    txt.value="";
+    save(arr);
+  };
+
+  document.getElementById('fillRamp').onclick = ()=>{
+    txt.value = "@Voditelj — dolazim ranije. Možete mi dodijeliti rampu? (npr. rampa 8)";
+    txt.focus();
+  };
+  document.getElementById('fillSOS').onclick = ()=>{
+    txt.value = "@Šef skladišta — PROBLEM: kvar/nezgoda. Trebam pomoć (SOS). Lokacija: …";
+    txt.focus();
+  };
+
+  render(load());
+</script>
+</body>
+</html>
