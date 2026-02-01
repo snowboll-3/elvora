@@ -196,3 +196,55 @@ footer{position:fixed;left:0;right:0;bottom:0;font-size:.85rem;color:#9fb0c6;pad
   .ev-hero__inner{ grid-template-columns: 1fr; }
   .ev-hero h1{ font-size: 34px; }
 }
+
+.ev-nav a[aria-current="page"]{
+  color:#fff;
+  background: rgba(25,181,255,.14);
+  outline: 1px solid rgba(25,181,255,.28);
+}
+
+/* ===== Products Mini Hero ===== */
+.ev-minihero{
+  border-bottom: 1px solid rgba(159,176,198,.18);
+  background:
+    radial-gradient(900px 400px at 25% 10%, rgba(25,181,255,.18), transparent 60%),
+    linear-gradient(180deg, rgba(11,15,20,.55), rgba(11,15,20,.25));
+}
+.ev-minihero__inner{
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 26px 16px 18px;
+}
+.ev-minihero h1{
+  margin: 0 0 8px;
+  color:#fff;
+  font-size: 26px;
+}
+.ev-minihero p{
+  margin: 0 0 12px;
+  color: rgba(159,176,198,.98);
+  max-width: 70ch;
+}
+
+/* ===== Products Mini Hero ===== */
+.ev-minihero{
+  border-bottom: 1px solid rgba(159,176,198,.18);
+  background:
+    radial-gradient(900px 400px at 25% 10%, rgba(25,181,255,.18), transparent 60%),
+    linear-gradient(180deg, rgba(11,15,20,.55), rgba(11,15,20,.25));
+}
+.ev-minihero__inner{
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 26px 16px 18px;
+}
+.ev-minihero h1{
+  margin: 0 0 8px;
+  color:#fff;
+  font-size: 26px;
+}
+.ev-minihero p{
+  margin: 0 0 12px;
+  color: rgba(159,176,198,.98);
+  max-width: 70ch;
+}
