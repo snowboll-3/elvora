@@ -96,3 +96,103 @@ footer{position:fixed;left:0;right:0;bottom:0;font-size:.85rem;color:#9fb0c6;pad
   color: rgba(240,194,75,.95);
   font-weight: 700;
 }
+
+/* ===== Elvora Hero (Index) ===== */
+.ev-hero{
+  position: relative;
+  background: center/cover no-repeat;
+  border-bottom: 1px solid rgba(159,176,198,.18);
+}
+.ev-hero__overlay{
+  position:absolute; inset:0;
+  background:
+    radial-gradient(1200px 500px at 20% 10%, rgba(25,181,255,.25), transparent 60%),
+    linear-gradient(180deg, rgba(11,15,20,.15), rgba(11,15,20,.92));
+}
+.ev-hero__inner{
+  position:relative;
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 56px 16px 34px;
+  display:grid;
+  grid-template-columns: 1.15fr .85fr;
+  gap: 22px;
+}
+.ev-badge{
+  display:inline-block;
+  color: rgba(255,255,255,.92);
+  background: rgba(25,181,255,.10);
+  border: 1px solid rgba(25,181,255,.22);
+  padding: 8px 12px;
+  border-radius: 999px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: .02em;
+  margin-bottom: 14px;
+}
+.ev-hero h1{
+  color:#fff;
+  font-size: 42px;
+  line-height: 1.12;
+  margin: 0 0 12px;
+}
+.ev-hero p{
+  color: rgba(159,176,198,.98);
+  font-size: 16px;
+  line-height: 1.6;
+  margin: 0 0 18px;
+  max-width: 58ch;
+}
+.ev-cta{ display:flex; gap:12px; flex-wrap:wrap; margin: 16px 0 14px; }
+.ev-btn{
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  padding: 11px 14px;
+  border-radius: 12px;
+  font-weight: 800;
+  text-decoration:none;
+  font-size: 13px;
+}
+.ev-btn--primary{
+  color: #001018;
+  background: var(--ev-blue);
+  box-shadow: 0 10px 24px rgba(25,181,255,.25);
+}
+.ev-btn--primary:hover{ filter: brightness(1.05); }
+.ev-btn--ghost{
+  color:#fff;
+  background: rgba(255,255,255,.06);
+  outline: 1px solid rgba(159,176,198,.25);
+}
+.ev-btn--ghost:hover{ background: rgba(25,181,255,.10); outline-color: rgba(25,181,255,.22); }
+
+.ev-mini{ margin-top: 10px; display:flex; gap: 14px; flex-wrap:wrap; }
+.ev-mini__item{ color: rgba(159,176,198,.95); font-size: 12px; font-weight: 700; }
+.ev-mini__dot{
+  display:inline-block; width:8px; height:8px; border-radius:50%;
+  background: var(--ev-accent);
+  box-shadow: 0 0 18px rgba(57,217,138,.45);
+  margin-right: 8px;
+}
+
+.ev-hero__right{ display:flex; flex-direction:column; gap: 12px; }
+.ev-card{
+  background: rgba(11,15,20,.55);
+  border: 1px solid rgba(159,176,198,.18);
+  border-radius: 16px;
+  overflow:hidden;
+}
+.ev-card img{ width:100%; display:block; height:auto; }
+.ev-card__cap{
+  padding: 10px 12px;
+  color: rgba(159,176,198,.98);
+  font-size: 12px;
+  font-weight: 700;
+}
+.ev-card--small img{ max-height: 220px; object-fit: cover; }
+
+@media (max-width: 920px){
+  .ev-hero__inner{ grid-template-columns: 1fr; }
+  .ev-hero h1{ font-size: 34px; }
+}
