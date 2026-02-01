@@ -226,11 +226,7 @@ function render(){ renderWorkers(); renderThread(); }
   localStorage.setItem("elvora_role", role);
   document.documentElement.dataset.role = role;
 
-  
-  // sync role across app (leader => manager)
-  const role2 = (role === "leader") ? "manager" : role;
-  document.body.dataset.role = role2;
-  try { localStorage.setItem(LS.role, role2); } catch(e){}// helper: hide by text (robust, ne ovisi o HTML strukturi)
+  // helper: hide by text (robust, ne ovisi o HTML strukturi)
   function hideButtonsByText(rx){
     const btns = Array.from(document.querySelectorAll("button,a"));
     btns.forEach(b=>{
@@ -262,18 +258,4 @@ function render(){ renderWorkers(); renderThread(); }
   if (document.readyState === "loading") {
     document.addEventListener("DOMContentLoaded", apply, {once:true});
   } else apply();
-})();
-
-
-;(() => {
-  const role = document.documentElement.dataset.role;
-  if (role === 'worker') {
-    document.querySelectorAll(
-      '.manager-only, .leader-only, [data-manager-only]'
-    ).forEach(el => el.remove());
-
-    // fallback – ako je layout dvokolonski
-    const wl = document.getElementById('workerList');
-    if (wl) wl.remove();
-  }
 })();

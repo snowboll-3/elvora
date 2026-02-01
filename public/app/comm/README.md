@@ -18,3 +18,6 @@ window.ElvoraTranslate(text, fromLang, toLang)
 
 ## Storage
 Workers and messages are stored in localStorage (demo/offline-ready).
+
+## Elvora Workforce Communication Module
+Reusable internal role-based communication system.

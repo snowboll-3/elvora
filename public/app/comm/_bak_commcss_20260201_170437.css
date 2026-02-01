@@ -50,39 +50,3 @@ body[data-role="worker"] .roster{display:none !important}
 :root[data-role="worker"] [data-manager-only="1"]{
   display:none !important;
 }
-
-/* === ELVORA_ROLE_CSS (do not remove) === */
-
-/* Worker: nema sidebar-a, nema role switch/linkova */
-html[data-role="worker"] #rolePick,
-html[data-role="worker"] #openWorkerLink,
-html[data-role="worker"] #openManagerLink,
-html[data-role="worker"] #addWorkerBtn,
-html[data-role="worker"] #workerList,
-html[data-role="worker"] .workers,
-html[data-role="worker"] .manager-only,
-html[data-role="worker"] .leader-only {
-  display: none !important;
-}
-
-/* Worker layout: chat ide full width */
-html[data-role="worker"] .chat {
-  grid-template-columns: 1fr !important;
-}
-
-/* Manager/Leader: vidi sidebar + kontrole */
-html[data-role="manager"] .workers,
-html[data-role="manager"] #workerList,
-html[data-role="manager"] #addWorkerBtn,
-html[data-role="manager"] #rolePick,
-html[data-role="manager"] #openWorkerLink,
-html[data-role="manager"] #openManagerLink {
-  display: initial;
-}
-html[data-role="manager"] .chat {
-  grid-template-columns: 320px 1fr !important;
-}
-
-/* Ako body dataset postoji (fallback) */
-body[data-role="worker"] .chat { grid-template-columns: 1fr !important; }
-body[data-role="manager"] .chat { grid-template-columns: 320px 1fr !important; }

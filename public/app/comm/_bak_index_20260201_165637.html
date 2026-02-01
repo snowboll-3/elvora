@@ -1,9 +1,9 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="hr">
 <head>
   <meta charset="utf-8"/>
   <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Elvora � Workforce Communication</title>
+  <title>Elvora — Workforce Communication</title>
 
   <link rel="stylesheet" href="/shared/elvora.css">
   <script defer src="/shared/elvora.js"></script>
@@ -17,6 +17,7 @@
     <header class="comm-top">
       <div class="brand">
         <div class="title">Komunikacija</div>
+        <div class="sub">tekst • glas • slika • prijevod po radniku</div>
       </div>
 
       <div class="top-actions">
@@ -56,10 +57,10 @@
             <div class="chat-sub" id="chatSub">Poruke se prevode na jezik radnika.</div>
           </div>
           <div class="chat-tools">
-            <button class="chip" id="btnSTT">??? STT</button>
-            <button class="chip" id="btnTTS">?? TTS zadnje</button>
+            <button class="chip" id="btnSTT">🎙️ STT</button>
+            <button class="chip" id="btnTTS">🔊 TTS zadnje</button>
             <label class="chip file">
-              ?? Slika <input id="imgPick" type="file" accept="image/*"/>
+              📷 Slika <input id="imgPick" type="file" accept="image/*"/>
             </label>
           </div>
         </div>
@@ -67,16 +68,16 @@
         <div id="msgList" class="msg-list"></div>
 
         <div class="composer">
-          <textarea id="msgText" class="textarea" placeholder="Napi�i poruku� (Ctrl+Enter �alje)"></textarea>
+          <textarea id="msgText" class="textarea" placeholder="Napiši poruku… (Ctrl+Enter šalje)"></textarea>
           <div class="composer-actions">
-            <button class="btn" id="btnAck">? Razumio</button>
-            <button class="btn" id="btnHelp">? Ne razumijem</button>
-            <button class="btn primary" id="btnSend">Po�alji</button>
+            <button class="btn" id="btnAck">✅ Razumio</button>
+            <button class="btn" id="btnHelp">❓ Ne razumijem</button>
+            <button class="btn primary" id="btnSend">Pošalji</button>
           </div>
         </div>
 
         <footer class="comm-foot">
-          <span>� 2026 Elvora</span>
+          <span>© 2026 Elvora</span>
         </footer>
       </section>
     </main>
