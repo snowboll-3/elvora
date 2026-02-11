@@ -1,41 +1,45 @@
-﻿# OS
-.DS_Store
-Thumbs.db
-
-# Node
-node_modules/
-npm-debug.log*
-yarn.lock
-pnpm-lock.yaml
-
-# Build
-dist/
-build/
+﻿# --- Elvora local exports / backups / temp ---
+_full_export_*/
+_full_export_*.zip
+_gitless_export_*/
+_gitless_export_*.zip
+_history_export_*/
+_history_export_*.zip
+_git_diffs_*/
+_deploy_proofs_*/
+_cf_upload/
+_snapshots/
+backup/
+backups/
+backup_*/
+snapshot_*/
+website/
+docs/
+*.bak
+*.bak_*
+*.tmp
 *.log
 
-# Local env
-.env
-*.local
-
-# Local Netlify folder
-.netlify
-
-public/*.bak*
-public/**/*.bak*
-
-# local builds / exports / backups
-website/
-# audits
-_audit/
-
-# backups / noise
-**/*.bak*
-**/backup*/
-**/backups*/
-**/.netlify/
+# --- Node / build ---
+node_modules/
 **/node_modules/
-**/dist/
-**/build/
-# local check / junk
-elvora.check.txt
-index-flow.html.html
+
+# --- Local tools / scripts / inventories (keep private unless explicitly needed) ---
+Deploy-Elvora.ps1
+ELVORA_SOFTWARE_INVENTAR*.csv
+ELVORA_ALL_*.csv
+ELVORA_SERVISI_*.txt
+
+# --- GPS connector (separate repo/project; don't leak) ---
+gps-connector/
+
+# --- Netlify/Cloudflare local folders ---
+.netlify/
+public/.netlify/
+**/.netlify/
+
+# --- Random accidental path globs seen in status ---
+ersMrcinaelvoraelvora-web
+
+# --- Media / large assets if accidental ---
+*.zip
