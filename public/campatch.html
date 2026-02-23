@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang='hr'>
+<head>
+<meta charset='utf-8'>
+<meta name='viewport' content='width=device-width,initial-scale=1'>
+<title>CamPatch – bookmarklet</title>
+<style>
+ body{font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif;margin:0;background:#f7f9fc;color:#111}
+ .wrap{max-width:780px;margin:24px auto;padding:0 16px}
+ .card{background:#fff;border:1px solid #e6e8ec;border-radius:14px;padding:16px;box-shadow:0 1px 3px rgba(0,0,0,.05)}
+ textarea{width:100%;height:160px;border-radius:12px;padding:12px;font-family:ui-monospace,Consolas,monospace}
+ button{border:0;border-radius:12px;padding:10px 14px;font-weight:600;cursor:pointer;background:#2b6bff;color:#fff}
+ code{background:#eef1ff;padding:2px 6px;border-radius:6px}
+ a.bm{display:inline-block;margin-top:10px}
+</style>
+</head>
+<body>
+<div class='wrap'>
+  <div class='card'>
+    <h1>CamPatch – dodaj bookmarklet</h1>
+    <ol>
+      <li>Otvorite ovu stranicu na mobitelu: <code>https://opportunity-excellent-il-random.trycloudflare.com/campatch.html</code></li>
+      <li><b>Opcija 1 (brzo):</b> Long-press na link ispod → <b>Copy link address</b> → spremi kao bookmark (⭐) → <b>Edit</b> → zalijepi u polje <b>URL/Address</b> → Naziv: <b>CamPatch</b></li>
+      <li><b>Opcija 2:</b> Tapni <b>Copy</b> → zalijepi u URL polje novog bookmarka.</li>
+    </ol>
+    <p><a id="bmLink" class="bm" href="#">➡️ CamPatch (long-press → Copy link address)</a></p>
+    <p><button id="copyBtn">Copy</button></p>
+    <textarea id="bm" readonly></textarea>
+  </div>
+</div>
+<script>
+  const BM = "javascript:(()=>{var s=document.createElement('script');s.src='https://opportunity-excellent-il-random.trycloudflare.com/camloader.js?v='+Date.now();document.head.appendChild(s);})();";
+  const ta = document.getElementById('bm'); const link = document.getElementById('bmLink'); const btn = document.getElementById('copyBtn');
+  ta.value = BM; link.setAttribute('href', BM);
+  btn.onclick = async () => { ta.select(); ta.setSelectionRange(0, 99999);
+    try { await navigator.clipboard.writeText(ta.value); btn.textContent='Copied!'; }
+    catch(e){ document.execCommand('copy'); btn.textContent='Copied!'; }
+    setTimeout(()=>btn.textContent='Copy',1200);
+  };
+</script>
+</body>
+</html>

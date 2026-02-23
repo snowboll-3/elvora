@@ -1,1 +1,1 @@
-﻿Place multilingual terms here: Elvora_Terms_Multilingual.pdf
+Place multilingual terms here: Elvora_Terms_Multilingual.pdf

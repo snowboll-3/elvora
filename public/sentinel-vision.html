@@ -1,4 +1,4 @@
-ï»¿<!doctype html>
+<!doctype html>
 <html lang="hr">
 <head>
 <meta charset="utf-8" />
@@ -12,26 +12,58 @@ button{padding:10px 16px;border-radius:10px;margin-right:8px}
 </head>
 <body>
 
-<div class="card">
+<div class="card"><div id="badge" style="display:inline-block;padding:6px 10px;border-radius:999px;font-weight:700;border:1px solid #9fb0c6;color:#9fb0c6;float:right">UNKNOWN</div><div id="banner" style="margin:10px 0 14px 0;padding:10px 12px;border-radius:12px;border:1px solid #9fb0c6;color:#9fb0c6;display:none"></div>
 <h3 id="type">INCIDENT</h3>
-<p>ID: <b id="id">â€”</b></p>
+<p>ID: <b id="id">—</b></p>
 <button id="ack">ACK</button>
 <span id="log"></span>
 </div>
 
 <script>
-const SSE_URL = "http://localhost:3035/api/incidents/stream";
+const SSE_URL = "http://127.0.0.1:3035/sse?vehicle=TRUCK_12";
 let currentId = null;
 
 const es = new EventSource(SSE_URL);
-es.addEventListener("incident", ev => {
+function setBadge(state){
+  const b = document.getElementById("badge");
+  const s = (state||"unknown").toLowerCase();
+  const map = {
+    online:   {t:"ONLINE",   c:"#19b5ff"},
+    degraded: {t:"DEGRADED", c:"#f0c24b"},
+    offline:  {t:"OFFLINE",  c:"#ff5d5d"},
+    unknown:  {t:"UNKNOWN",  c:"#9fb0c6"}
+  };
+  const m = map[s] || map.unknown;
+  b.textContent = m.t;
+  b.style.borderColor = m.c;
+  b.style.color = m.c;
+}
+
+function setBanner(inc){
+  const el = document.getElementById("banner");
+  if(!inc){ el.style.display="none"; return; }
+  const sev = (inc.severity||"medium").toLowerCase();
+  const col = sev==="high" ? "#ff5d5d" : (sev==="low" ? "#39d98a" : "#f0c24b");
+  const state = (inc.state||"open").toLowerCase();
+  if(state === "resolved"){ el.style.display="none"; return; }
+  el.style.display="block";
+  el.style.borderColor = col;
+  el.style.color = col;
+  el.textContent = `INCIDENT: ${inc.type||"unknown"} • ${sev.toUpperCase()}`;
+}
+
+es.addEventListener("status", ev => {
   const x = JSON.parse(ev.data);
-  currentId = x.id;
-  document.getElementById("id").textContent = x.id;
-  document.getElementById("type").textContent = x.incident_type;
+  setBadge(x.state);
 });
 
-document.getElementById("ack").onclick = async () => {
+es.addEventListener("incident", ev => {
+  const x = JSON.parse(ev.data);
+  currentId = x.id || null;
+  document.getElementById("id").textContent = x.id || "—";
+  document.getElementById("type").textContent = (x.type || "INCIDENT").toUpperCase();
+  setBanner(x);
+});document.getElementById("ack").onclick = async () => {
   if(!currentId) return alert("NO ID");
   const r = await fetch("http://localhost:3035/api/incidents/ack",{
     method:"POST",
@@ -45,3 +77,6 @@ document.getElementById("ack").onclick = async () => {
 
 </body>
 </html>
+
+
+

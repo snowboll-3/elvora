@@ -1,24 +1,6 @@
-﻿:root{ --elvora:#19b5ff; --bg:#0b0f14 }
-*{ box-sizing:border-box }
-html,body{ height:100% }
-body{
-  margin:0; background:var(--bg); color:var(--elvora);
-  font-family:"Segoe UI",Arial,Helvetica,sans-serif; overflow:hidden;
+﻿
+/* — Restore bg-network on home — */
+html,body{min-height:100%}
+body.elvora-home{
+  background:#0b0f14 url('assets/bg-network.jpg') center/cover no-repeat fixed;
 }
-#hero{
-  position:relative; height:100vh;
-  background: radial-gradient(ellipse at center, #0f1720 0%, #0b0f14 60%, #070a0f 100%);
-  display:flex; align-items:center; justify-content:center; text-align:center;
-}
-.overlay{ position:absolute; inset:0; background:rgba(11,15,20,.55) }
-.content{ position:relative; z-index:1; padding:1rem }
-h1{ font-size:clamp(3rem,7vw,5.2rem); margin:.4rem 0; letter-spacing:2px; text-shadow:0 0 22px rgba(25,181,255,.45) }
-h2{ font-weight:500; letter-spacing:2px; margin:0 0 .6rem }
-p{ margin:.25rem 0 }
-.small{ color:#9fb0c6 }
-.btn{
-  display:inline-block; margin-top:1.2rem; padding:.85rem 1.8rem;
-  background:var(--elvora); color:#0b0f14; text-decoration:none; font-weight:700; border-radius:6px;
-  box-shadow:0 0 20px rgba(25,181,255,.35); transition:transform .15s ease, background .15s ease;
-}
-.btn:hover{ transform:translateY(-2px); background:#3ddcff; color:#041218 }

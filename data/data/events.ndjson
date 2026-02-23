@@ -1,0 +1,2 @@
+{"v":1,"serverTs":1771602937164,"ip":"::1","ua":"Mozilla/5.0 (Windows NT; Windows NT 10.0; hr-HR) WindowsPowerShell/5.1.26100.7705","type":"test","payload":{"msg":"retention boot"},"clientHash":"demo","serverHash":"b531f6e7639ccf843a71e01a619e35d4d700fd62bc8e294437437b9b75c93dfa"}
+{"v":1,"serverTs":1771603289794,"ip":"::1","ua":"Mozilla/5.0 (Windows NT; Windows NT 10.0; hr-HR) WindowsPowerShell/5.1.26100.7705","type":"test","payload":{"msg":"key ok"},"clientHash":null,"serverHash":"1009ee1fe6ae155650e0624bde35604ec2565bf941d8ac1d33ca0c735972b253"}

@@ -1,167 +1,80 @@
-﻿<!doctype html>
+﻿<section class="hero wrap">
+  <h1>AI-vođen lanac opskrbe.</h1>
+  <p class="sub">Radite u pokretu. Imajte svijet na dlanu.</p>
+  <p class="lead">
+    Elvora povezuje skladišta, logistiku i operacije u jedan tok — sa skenerom kodova,
+    HACCP modulom i globalnim pravilima, uz <strong>Nexus / Sentinel</strong> jezgru
+    za sigurnost i usklađenost.
+  </p>
+  <div class="badges">
+    <span class="pill">Android & Windows 12 Ready</span>
+  </div>
+  <div class="cta">
+    <a class="btn primary" href="services.html">Pogledaj Elvora Servise</a>
+    <a class="btn ghost" href="contact.html">Kontakt / Demo</a>
+  </div>
+</section>
+<section class="wrap about">
+  <h2>Zašto Elvora</h2>
+  <p class="muted">
+    Elvora povezuje skladišta, markete i operacije u jedan tok: inventura kamerom (Smart Inventory),
+    HACCP evidencija s foto-dokazom, jutarnji Health Check i POS analitika koja stanje drži točnim.
+  </p>
+
+  <div class="about-grid">
+    <div>
+      <h3>Što dobivate</h3>
+      <ul class="tick">
+        <li>Smart Inventory — brojanje kamerom + rokovi + temperatura</li>
+        <li>Health Check — jutarnji status senzora, zona i sinkronizacije</li>
+        <li>POS analitika — prodaja/storna/povrati → realno stanje</li>
+        <li>Logistika — nadopuna polica po zonama i rutama</li>
+      </ul>
+    </div>
+    <div>
+      <h3>Kako radi</h3>
+      <ol class="steps">
+        <li>Skeniraj QR zonu (polica, hladnjak, zamrzivač)</li>
+        <li>Uslikaj policu → potvrdi broj (AI prijedlog)</li>
+        <li>Dodaj temperaturu / napomenu (HACCP)</li>
+        <li>Spremi — offline → auto-sync kad je mreža dostupna</li>
+      </ol>
+    </div>
+  </div>
+</section>
+<!doctype html>
 <html lang="hr">
 <head>
-  <meta charset="utf-8"/>
-  <meta name="viewport" content="width=device-width,initial-scale=1"/>
-  <title>Elvora — Ulaz</title>
- <!-- SEO i dijeljenje -->
-<link rel="canonical" href="https://elvora.app/" />
-<meta name="description" content="Elvora – inteligentna PWA platforma za logistiku, skladištenje i HACCP sustave.">
-<meta property="og:title" content="Elvora">
-<meta property="og:description" content="Poveži logistiku, HACCP i poslovne tokove u jednoj platformi.">
-<meta property="og:url" content="https://elvora.app/">
-<meta property="og:image" content="https://elvora.app/assets/bg-network.jpg">
-<meta name="twitter:card" content="summary_large_image">
- <link rel="stylesheet" href="styles.css">
-<link rel="stylesheet" href="elvora.css">
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Elvora — Početna</title>
+  <link rel="stylesheet" href="assets/elvora.css">
 </head>
-<body>
-<header class="ev-topbar">
-  <div class="ev-topbar__inner">
-    <a class="ev-brand" href="/index.html" aria-label="Elvora Home" aria-current="page">
-      <span class="ev-dot"></span>
-      <span class="ev-brand__text">ELVORA</span>
-    </a>
-    <nav class="ev-nav">
-      <a href="/products/index.html">Proizvodi</a>
-      <a href="/services.html">Servisi</a>
-      <a href="/hubs.html">Hubovi</a>
-      <a href="/settings.html">Postavke</a>
+<body class="has-net elvora-home">
+  <header class="site-nav wrap">
+    <a class="brand" href="index.html">Elvora</a>
+    <nav>
+      <a href="index.html" class="active">Home</a>
+      <a href="services.html">Servisi</a>
     </nav>
-  </div>
-</header>
-<section class="ev-hero" style="background-image:url('assets/bg-network.jpg')">
-  <div class="ev-hero__overlay"></div>
-  <div class="ev-hero__inner">
-    <div class="ev-hero__left">
-      <div class="ev-badge">AI-vođen lanac opskrbe · Offline-first PWA · QR/Barcode</div>
-      <h1>Elvora – budućnost logistike, danas.</h1>
-      <p>
-        Upravljaj skladištem, rutama i operacijama u jednom sustavu.
-        Vozač ↔ skladište live komunikacija, HACCP shortcut u Pro hubovima, i pametni workflow bez papira.
-      </p>
-      <div class="ev-cta">
-        <a class="ev-btn ev-btn--primary" href="/products/index.html">Pogledaj proizvode</a>
-        <a class="ev-btn ev-btn--ghost" href="/services.html">Servisi i mogućnosti</a>
-      </div>
+  </header>
 
-      <div class="ev-mini">
-        <div class="ev-mini__item"><span class="ev-mini__dot"></span> Business · Inventory · Logistics · Operations</div>
-        <div class="ev-mini__item"><span class="ev-mini__dot"></span> HACCP · Scan · Receipts · Settings</div>
-      </div>
-    </div>
+  <main id="app">
 
-    <div class="ev-hero__right">
-      <div class="ev-card">
-        <img src="assets/hero/industry-5.webp" alt="Industry 5.0" />
-        <div class="ev-card__cap">Roboti, dronovi i autonomna logistika — spremno za skaliranje.</div>
-      </div>
-      <div class="ev-card ev-card--small">
-        <img src="assets/hero/piramida-servisi.webp" alt="Elvora services" />
-        <div class="ev-card__cap">Modularni servisi. Jedan ekosustav.</div>
-      </div>
-    </div>
-  </div>
-</section>
-<section class="ev-visual-authority">
-  <div class="ev-visual-authority__inner">
 
-    <div class="ev-va-item">
-      <img src="/assets/hero/hero-robot-nexus.webp" alt="Elvora AI Sentinel & Nexus" />
-      <h3>Elvora AI jezgra</h3>
-      <p>Sentinel i Nexus sustavi za nadzor, sigurnost i autonomno odlučivanje.</p>
-    </div>
-
-    <div class="ev-va-item">
-      <img src="/assets/hero/piramida-servisi.webp" alt="Elvora AI jezgra – piramida servisa" />
-      <h3>Jedna jezgra · svi hubovi</h3>
-      <p>Business, Skladište, Logistika, Market, HACCP i Operacije u jednom sustavu.</p>
-    </div>
-
-    <div class="ev-va-item">
-      <img src="/assets/hero/industry-5.webp" alt="Industry 5.0" />
-      <h3>Industry 5.0</h3>
-      <p>Suradnja čovjeka i AI-a. Automatizacija bez gubitka kontrole.</p>
-    </div>
-
-  </div>
-</section>
-<section class="ev-corevalue" id="core">
-  <div class="ev-corevalue__inner">
-    <div class="ev-corevalue__head">
-      <h2>Vozač ↔ Skladište: live komunikacija i dodjela rampe</h2>
-      <p>
-        Vozač prijavi kašnjenje ili raniji dolazak. Skladištar dodijeli rampu (npr. <b>Rampa 8</b>),
-        a Elvora vodi vozača do točke uz jasne upute. U slučaju problema: <b>SOS / pomoć</b>.
-      </p>
-      <div class="ev-corevalue__cta">
-        <a class="ev-btn ev-btn--primary" href="/app/logistics.html">Otvori Logistics flow</a>
-        <a class="ev-btn ev-btn--ghost" href="/app/comm/index.html">Otvori Comms (chat)</a>
-      </div>
-    </div>
-
-    <div class="ev-corevalue__grid">
-      <figure class="ev-shot">
-        <img src="/assets/hero/industry-5.webp" alt="Industry 5.0" loading="lazy" />
-        <figcaption>Industrija 5.0 spremna: roboti, dronovi, autonomna logistika.</figcaption>
-      </figure>
-
-      <figure class="ev-shot">
-        <img src="/assets/hero/piramida-servisi.webp" alt="Modularni servisi" loading="lazy" />
-        <figcaption>Modularni hubovi i servisi — jedan ekosustav, jasna nadogradnja.</figcaption>
-      </figure>
-
-      <figure class="ev-shot">
-        <img src="/assets/bg-network.jpg" alt="Global network" loading="lazy" />
-        <figcaption>AI-vođen lanac opskrbe — sve povezano, pregledno i auditabilno.</figcaption>
-      </figure>
-    </div>
-  </div>
-</section>
-<section class="ev-visual-authority">
-  <div class="ev-visual-authority__inner">
-
-    <div class="ev-va-item">
-      <img src="/assets/hero/hero-robot-nexus.webp" alt="Elvora AI Sentinel & Nexus" />
-      <h3>Elvora AI jezgra</h3>
-      <p>Sentinel i Nexus sustavi za nadzor, sigurnost i autonomno odlučivanje.</p>
-    </div>
-
-    <div class="ev-va-item">
-      <img src="/assets/hero/piramida-servisi.webp" alt="Elvora AI jezgra – piramida servisa" />
-      <h3>Jedna jezgra · svi hubovi</h3>
-      <p>Business, Skladište, Logistika, Market, HACCP i Operacije u jednom sustavu.</p>
-    </div>
-
-    <div class="ev-va-item">
-      <img src="/assets/hero/industry-5.webp" alt="Industry 5.0" />
-      <h3>Industry 5.0</h3>
-      <p>Suradnja čovjeka i AI-a. Automatizacija bez gubitka kontrole.</p>
-    </div>
-
-  </div>
-</section>
-  <main class="main">
-    <div>
-      <h1>Elvora™</h1>
-      <p class="lead">Dobrodošli. Odaberite svoj modul i nastavite rad u sustavu.</p>
-      <p><a class="btn" href="/hubs/">Uđi u Elvora sustav</a></p>
-    </div>
+    
   </main>
-  <footer>
-    © 2025 Elvora. Sva prava pridržana.<br/>
-    Svi softveri i nazivi su vlasništvo Elvora grupe.<br/>
-    Zabranjeno je svako kopiranje, distribucija, dekompilacija i reverzni inženjering.
-  </footer>
-<footer class="ev-footer">
-  <div class="ev-footer__inner">
-    <div>© 2026 Elvora · EULA · Privatnost · Zabranjeno kopiranje i redistribucija</div>
-    <div class="ev-footer__right">Android & Windows Ready</div>
-  </div>
+
+  <footer class="site-footer">
+    © 2025 Elvora · EULA · Privatnost · Zabranjeno kopiranje i redistribucija. <strong>Svi softveri su vlasništvo Elvore.</strong>
+      <!-- ELVORA · Legal Docs (auto) -->
+    <div class="site-legal-links" style="margin-top:16px;font-size:13px;color:#9fb0c6">
+      <a href="legal/Elvora_Logistics_Fuel_HR_1_2.md" style="color:#19b5ff">Protokol: Gorivo & maziva (HR.1.2)</a> ·
+      <a href="legal/Elvora_Logistics_Orders_DN_INV_HR_1_2.md" style="color:#19b5ff">Protokol: Narudžbe / DN / INV (HR.1.2)</a>
+    </div>
 </footer>
 </body>
 </html>
-
 
 
 

@@ -1,0 +1,1 @@
+Stavite vaš logo kao logo.png (min 192x192) u /public.
