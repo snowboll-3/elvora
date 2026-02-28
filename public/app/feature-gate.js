@@ -1,7 +1,7 @@
 (async()=>{
   try{
     const res = await fetch('/features.json?t='+Date.now()).catch(()=>null);
-    const feat = res && res.ok ? await res.json() : { has_ai_receipts:false }; // default bez licence
+    const feat = res && res.ok ? (async()=>{ try{ return await res.json(); }catch(_){ return { has_ai_receipts:false }; } })() : { has_ai_receipts:false }; // default bez licence
     const has = !!feat.has_ai_receipts;
 
     // Svi elementi koji traže AI Primke

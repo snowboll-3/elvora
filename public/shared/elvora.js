@@ -1,4 +1,4 @@
-﻿/* i18n util (HR/EN) + store */
+/* i18n util (HR/EN) + store */
 window.ElvoraStore = {
   set(k,v){ localStorage.setItem(k, JSON.stringify(v)); },
   get(k,def){ try{ return JSON.parse(localStorage.getItem(k)) ?? def; }catch{ return def; } },
@@ -10,7 +10,7 @@ window.ElvoraI18n = (function(){
   async function load(){
     try{
       const res = await fetch(`/i18n/${lang}.json`);
-      dict = await res.json();
+      try{ dict = await res.json(); }catch(_){ dict = {}; }
     }catch{ dict = {}; }
   }
   function t(key, fallback){ return (dict[key] ?? fallback ?? key); }
