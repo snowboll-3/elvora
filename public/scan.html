@@ -46,7 +46,7 @@
       resultEl.textContent = "Scanned: " + decodedText + " … šaljem na server…";
 
       html5QrCode.stop().then(async () => {
-        const out = await sendToBackend(decodedText);
+        const out = null;
         if (out && out.ok) {
           resultEl.textContent = "? Spremljeno! › " + (out.data?.product?.name || "Item");
           setTimeout(() => window.location.href = "/dashboard", 1500);
