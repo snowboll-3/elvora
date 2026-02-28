@@ -1,4 +1,4 @@
-ï»¿const video = document.getElementById("video");
+const video = document.getElementById("video");
 const overlay = document.getElementById("overlay");
 const statusEl = document.getElementById("status");
 const codeEl = document.getElementById("code");
@@ -50,19 +50,19 @@ async function listCameras(){
 async function startCamera(pref=null){
   await stopCamera();
   try{
-    setStatus("PokreÄ‡em kameruâ€¦");
+    setStatus("Pokreæem kameru…");
     const constraints = pref
       ? { video:{ deviceId:{ exact: pref }}, audio:false }
       : { video:{ facingMode:{ ideal:'environment' }, width:{ ideal:1280 }, height:{ ideal:720 }}, audio:false };
     stream = await navigator.mediaDevices.getUserMedia(constraints);
     video.srcObject=stream; await video.play();
     currentDeviceId = (stream.getVideoTracks()[0]||{}).getSettings().deviceId || pref || null;
-    setStatus("Kamera pokrenuta âœ…");
+    setStatus("Kamera pokrenuta ?");
     noteEl.textContent="Ciljaj barkod u zeleni okvir.";
     await startScanning();
   }catch(e){
     setStatus(e.name+": "+e.message,false);
-    noteEl.textContent="Provjeri dopuÅ¡tenja za kameru i da nije u upotrebi drugdje.";
+    noteEl.textContent="Provjeri dopuštenja za kameru i da nije u upotrebi drugdje.";
   }
 }
 async function stopCamera(){
@@ -88,7 +88,7 @@ async function startScanning(){
     const hints = new Map();
     hints.set(DecodeHintType.POSSIBLE_FORMATS, [
       BarcodeFormat.EAN_13, BarcodeFormat.UPC_A, BarcodeFormat.EAN_8,
-      BarcodeFormat.QR_CODE, BarcodeFormat.DATA_MATRIX, BarcodeFormat.CODE_128 // â€œnoviâ€ + fallback
+      BarcodeFormat.QR_CODE, BarcodeFormat.DATA_MATRIX, BarcodeFormat.CODE_128 // “novi” + fallback
     ]);
     reader = new ZXingBrowser.BrowserMultiFormatReader(hints);
 
@@ -101,7 +101,7 @@ async function startScanning(){
           onScan(code);
         }
       }else if(err && !(err instanceof ZXingBrowser.NotFoundException)){
-        setStatus("GreÅ¡ka dekodiranja", false);
+        setStatus("Greška dekodiranja", false);
       }
     });
   }catch(e){
@@ -111,23 +111,23 @@ async function startScanning(){
 
 function onScan(code){
   codeEl.textContent=code;
-  setStatus("OÄitano âœ…");
+  setStatus("Oèitano ?");
   flash(); beep();
 
   const ts = new Date();
   whenEl.textContent = ts.toLocaleString();
 
-  // lokalni katalog (uÄenje)
+  // lokalni katalog (uèenje)
   const catalog = readCatalog();
   let name = catalog[code] || "";
   if(!name){
-    const guess = prompt("Molim unesite toÄan naziv proizvoda:", "");
+    const guess = prompt("Molim unesite toèan naziv proizvoda:", "");
     if(guess && guess.trim().length){
       name = guess.trim();
       catalog[code] = name;
       saveCatalog(catalog);
     }else{
-      name = "â€”";
+      name = "—";
     }
   }
   nameEl.textContent = name;
@@ -146,7 +146,7 @@ function onScan(code){
   saveJournal(journal);
   renderJournal();
 
-    // event â†’ Event Core (offline-first)
+    // event › Event Core (offline-first)
   ev("SCANNER", MODE.value, { code, name, qty: 1, ts: entry.ts }, { hub:"scanner", source:"camera.js" });
 
 }
@@ -165,14 +165,14 @@ function renderJournal(){
   listEl.innerHTML = rows.map(r=>`
     <div class="item">
       <div>
-        <p class="ititle">${r.name||"â€”"}</p>
-        <div class="imeta">${r.mode} Â· Kod: ${r.code} Â· KoliÄina: <span class="qty">${r.qty}</span></div>
+        <p class="ititle">${r.name||"—"}</p>
+        <div class="imeta">${r.mode} · Kod: ${r.code} · Kolièina: <span class="qty">${r.qty}</span></div>
         <div class="imeta">Vrijeme: ${new Date(r.ts).toLocaleString()}</div>
       </div>
       <div>
         <button class="btn ghost" onclick="inc('${r.id}',1)">+1</button>
-        <button class="btn ghost" onclick="inc('${r.id}',-1)">âˆ’1</button>
-        <button class="btn ghost" onclick="delItem('${r.id}')">ObriÅ¡i</button>
+        <button class="btn ghost" onclick="inc('${r.id}',-1)">-1</button>
+        <button class="btn ghost" onclick="delItem('${r.id}')">Obriši</button>
       </div>
     </div>
   `).join("");
@@ -195,15 +195,15 @@ stopBtn.addEventListener("click", stopCamera);
 switchBtn.addEventListener("click", switchCamera);
 soundBtn.addEventListener("click", ()=>{
   soundOn=!soundOn;
-  soundBtn.textContent = (soundOn?'ğŸ”Š':'ğŸ”ˆ') + " Zvuk: " + (soundOn?"ON":"OFF");
+  soundBtn.textContent = (soundOn?'??':'??') + " Zvuk: " + (soundOn?"ON":"OFF");
 });
 sendBtn.addEventListener("click", ()=>{
   const j = readJournal();
   if(!j.length){ alert("Dnevnik je prazan."); return; }
-  alert("ğŸ“¤ Poslano u Hladnjak (mock). U praksi: API za spremanje.\nStavke: "+j.length);
-  // nakon slanja moÅ¾eÅ¡ odluÄiti: oÄistiti ili ostaviti
+  alert("?? Poslano u Hladnjak (mock). U praksi: API za spremanje.\nStavke: "+j.length);
+  // nakon slanja moeš odluèiti: oèistiti ili ostaviti
 });
-clearBtn.addEventListener("click", ()=>{ saveJournal([]); renderJournal(); setStatus("Spremno"); codeEl.textContent="â€”"; nameEl.textContent="â€”"; });
+clearBtn.addEventListener("click", ()=>{ saveJournal([]); renderJournal(); setStatus("Spremno"); codeEl.textContent="—"; nameEl.textContent="—"; });
 
 document.addEventListener("visibilitychange", async ()=>{
   if(document.hidden){ await stopCamera(); }
@@ -212,7 +212,7 @@ document.addEventListener("visibilitychange", async ()=>{
 renderJournal();
 
 if (!('mediaDevices' in navigator) || !('getUserMedia' in navigator.mediaDevices)){
-  setStatus('Preglednik ne podrÅ¾ava kameru (getUserMedia).', false);
-  noteEl.textContent = 'PokuÅ¡aj s modernim preglednikom (Chrome, Edge, Safari).';
+  setStatus('Preglednik ne podrava kameru (getUserMedia).', false);
+  noteEl.textContent = 'Pokušaj s modernim preglednikom (Chrome, Edge, Safari).';
 }
 
