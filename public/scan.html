@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+Ôªø<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>AI Shelf-Life ñ Scan</title>
+  <title>AI Shelf-Life ‚Äì Scan</title>
   <script src="https://unpkg.com/html5-qrcode"></script>
   <style>
     body { font-family: system-ui, Arial, sans-serif; margin: 16px; }
@@ -20,14 +20,10 @@
 
   <script>
     async function sendToBackend(barcode) {
-      const payload = {
-        product: { name: "Scanned item", barcode: String(barcode), category: "unknown" },
-        // **PROMJENA**: storage_temp = "cold" (prolazi öemu)
-        shelf_life: { unopened_days: 0, opened_days: 0, storage_temp: "cold", adjustment_factor: 1 },
-        status: { confidence: 1, reason_codes: ["SKU_fuzzy_match"], safe_to_consume: true },
-        // **PROMJENA**: source = "LLM" (prolazi öemu)
-        metadata: { last_updated: new Date().toISOString(), source: "LLM" }
-      };
+  // V1 Pages mode: nema backenda (ƒçisto online skeniranje)
+  return { ok: true, data: { product: { name: "Item", barcode: String(barcode) } } };
+}
+;
 
       try {
         const res = await fetch("/llm-result", {
@@ -43,15 +39,13 @@
 
     function onScanSuccess(decodedText) {
       const resultEl = document.getElementById("result");
-      resultEl.textContent = "Scanned: " + decodedText + " Ö öaljem na serverÖ";
+      resultEl.textContent = "Scanned: " + decodedText + " ‚Ä¶ ≈°aljem na server‚Ä¶";
 
       html5QrCode.stop().then(async () => {
         const out = null;
         if (out && out.ok) {
-          resultEl.textContent = "? Spremljeno! õ " + (out.data?.product?.name || "Item");
-          setTimeout(() => window.location.href = "/dashboard", 1500);
-        } else {
-          resultEl.textContent = "? Greöka: " + (out?.error || "Nepoznata greöka");
+          resultEl.textContent = "Scanned: " + decodedText + " ‚úì"; if(navigator.vibrate){navigator.vibrate(80);} setTimeout(() => { html5QrCode.start({facingMode:"environment"}, { fps: 10, qrbox: 250, formatsToSupport: [ Html5QrcodeSupportedFormats.QR_CODE, Html5QrcodeSupportedFormats.EAN_13, Html5QrcodeSupportedFormats.EAN_8, Html5QrcodeSupportedFormats.UPC_A, Html5QrcodeSupportedFormats.UPC_E, Html5QrcodeSupportedFormats.CODE_128, Html5QrcodeSupportedFormats.DATA_MATRIX ] }, onScanSuccess); }, 900); } else {
+          resultEl.textContent = "? Gre≈°ka: " + (out?.error || "Nepoznata gre≈°ka");
           html5QrCode.start({facingMode:"environment"}, { fps: 10, qrbox: 250, formatsToSupport: [ Html5QrcodeSupportedFormats.QR_CODE, Html5QrcodeSupportedFormats.EAN_13, Html5QrcodeSupportedFormats.EAN_8, Html5QrcodeSupportedFormats.UPC_A, Html5QrcodeSupportedFormats.UPC_E, Html5QrcodeSupportedFormats.CODE_128, Html5QrcodeSupportedFormats.DATA_MATRIX ] }, onScanSuccess);
         }
       });
@@ -66,3 +60,4 @@
   </script>
 </body>
 </html>
+
