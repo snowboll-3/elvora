@@ -1,9 +1,9 @@
-Ôªø<!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>AI Shelf-Life ‚Äì Scan</title>
+  <title>AI Shelf-Life ñ Scan</title>
   <script src="https://unpkg.com/html5-qrcode"></script>
   <style>
     body { font-family: system-ui, Arial, sans-serif; margin: 16px; }
@@ -13,19 +13,19 @@
   </style>
 </head>
 <body>
-  <h1>üì∑ Scan Barcode</h1>
+  <h1>?? Scan Barcode</h1>
   <div id="reader"></div>
   <p id="result" class="status">Waiting for scan...</p>
-  <button id="openDashboard" onclick="window.location.href='/dashboard'">‚û°Ô∏è Otvori Dashboard</button>
+  <button id="openDashboard" onclick="window.location.href='/dashboard'">?? Otvori Dashboard</button>
 
   <script>
     async function sendToBackend(barcode) {
       const payload = {
         product: { name: "Scanned item", barcode: String(barcode), category: "unknown" },
-        // **PROMJENA**: storage_temp = "cold" (prolazi ≈°emu)
+        // **PROMJENA**: storage_temp = "cold" (prolazi öemu)
         shelf_life: { unopened_days: 0, opened_days: 0, storage_temp: "cold", adjustment_factor: 1 },
         status: { confidence: 1, reason_codes: ["SKU_fuzzy_match"], safe_to_consume: true },
-        // **PROMJENA**: source = "LLM" (prolazi ≈°emu)
+        // **PROMJENA**: source = "LLM" (prolazi öemu)
         metadata: { last_updated: new Date().toISOString(), source: "LLM" }
       };
 
@@ -35,7 +35,7 @@
           headers: { "Content-Type": "application/json" },
           body: JSON.stringify(payload)
         });
-        return await res.json();
+        return null; // Pages: no backend JSON
       } catch (e) {
         return { ok:false, error:String(e) };
       }
@@ -43,15 +43,15 @@
 
     function onScanSuccess(decodedText) {
       const resultEl = document.getElementById("result");
-      resultEl.textContent = "Scanned: " + decodedText + " ‚Ä¶ ≈°aljem na server‚Ä¶";
+      resultEl.textContent = "Scanned: " + decodedText + " Ö öaljem na serverÖ";
 
       html5QrCode.stop().then(async () => {
         const out = await sendToBackend(decodedText);
         if (out && out.ok) {
-          resultEl.textContent = "‚úÖ Spremljeno! ‚Üí " + (out.data?.product?.name || "Item");
+          resultEl.textContent = "? Spremljeno! õ " + (out.data?.product?.name || "Item");
           setTimeout(() => window.location.href = "/dashboard", 1500);
         } else {
-          resultEl.textContent = "‚ùå Gre≈°ka: " + (out?.error || "Nepoznata gre≈°ka");
+          resultEl.textContent = "? Greöka: " + (out?.error || "Nepoznata greöka");
           html5QrCode.start({facingMode:"environment"}, {fps:10, qrbox:250}, onScanSuccess);
         }
       });
