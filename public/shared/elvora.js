@@ -44,3 +44,9 @@ window.ElvoraI18n = (function(){
     document.body.appendChild(t);} t.textContent=m; clearTimeout(t._x); t._x=setTimeout(()=>t.remove(),1700); }
   window.ElvoraCamScan = camScan; window.ElvoraToast = toast;
 })();
+
+// Load Event Core
+(function(){var s=document.createElement('script');s.src='/shared/event-core.js';document.head.appendChild(s);})();
+
+// Load Event Core
+(function(){var s=document.createElement('script');s.src='/shared/event-core.js';document.head.appendChild(s);})();

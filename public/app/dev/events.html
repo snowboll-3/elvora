@@ -1,0 +1,137 @@
+﻿<!doctype html>
+<html lang="hr">
+<head>
+  <meta charset="utf-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1"/>
+  <title>Elvora • Event Inspector</title>
+  <link rel="stylesheet" href="/shared/elvora.css">
+  <script defer src="/shared/elvora.js"></script>
+  <script src="/shared/events.js"></script>
+  <style>
+    .wrap{max-width:1100px;margin:0 auto;padding:18px}
+    .row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}
+    .card{background:rgba(255,255,255,0.02);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:14px;margin-top:12px}
+    .mono{font-family:ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace}
+    table{width:100%;border-collapse:collapse}
+    th,td{padding:8px;border-bottom:1px solid rgba(255,255,255,0.08);text-align:left;vertical-align:top}
+    .muted{opacity:.75}
+    .pill{display:inline-block;padding:4px 10px;border:1px solid rgba(255,255,255,0.14);border-radius:999px}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>Event Inspector</h1>
+    <p class="muted">Debug panel (offline queue + flush). Ne šalje ništa direktno osim kroz Event Core.</p>
+
+    <div class="row">
+      <span class="pill">Queue: <b id="qLen">0</b></span>
+      <span class="pill">Online: <b id="online">?</b></span>
+      <span class="pill">Zadnje osvježenje: <b id="ts">—</b></span>
+      <button class="btn" id="btnFlush">Flush</button>
+      <button class="btn ghost" id="btnClear">Clear queue</button>
+    </div>
+
+    <div class="card">
+      <h3>Last 20 events</h3>
+      <div class="muted mono" style="margin-bottom:8px">type · action · ts · hub · source</div>
+      <table>
+        <thead>
+          <tr>
+            <th style="width:22%">Type / Action</th>
+            <th style="width:22%">Time</th>
+            <th style="width:18%">Meta</th>
+            <th>Payload</th>
+          </tr>
+        </thead>
+        <tbody id="rows"></tbody>
+      </table>
+    </div>
+      <div class="card">
+      <h3>Recently sent (last 20)</h3>
+      <div class="muted mono" style="margin-bottom:8px">type · action · ts · hub · source</div>
+      <table>
+        <thead>
+          <tr>
+            <th style="width:22%">Type / Action</th>
+            <th style="width:22%">Time</th>
+            <th style="width:18%">Meta</th>
+            <th>Payload</th>
+          </tr>
+        </thead>
+        <tbody id="sentRows"></tbody>
+      </table>
+    </div>
+</div>
+
+<script>
+(function(){
+  const $ = (id)=>document.getElementById(id);
+  const qLen = $("qLen");
+  const rows = $("rows");
+  const online = $("online");
+  const ts = $("ts");
+  const btnFlush = $("btnFlush");
+  const btnClear = $("btnClear");
+
+  function safe(v){ return (v===undefined || v===null) ? "" : String(v); }
+
+  function render(){
+    const api = window.ElvoraEvents;
+    const q = (api && typeof api.queue==="function") ? api.queue() : [];
+    qLen.textContent = q.length;
+    online.textContent = navigator.onLine ? "YES" : "NO";
+    ts.textContent = new Date().toLocaleTimeString();
+
+    const last = q.slice(0, 20); // queue is newest-first
+    rows.innerHTML = last.map(e=>{
+      const meta = e.meta || {};
+      const payload = e.payload || {};
+      return `
+        <tr>
+          <td class="mono"><b>${safe(e.type)}</b><br><span class="muted">${safe(e.action)}</span></td>
+          <td class="mono">${safe(e.ts)}</td>
+          <td class="mono muted">hub=${safe(meta.hub)}<br>src=${safe(meta.source)}</td>
+          <td class="mono muted" style="white-space:pre-wrap">${safe(JSON.stringify(payload, null, 2))}</td>
+        </tr>
+      `;
+    }).join("") || `<tr><td colspan="4" class="muted">Queue je prazna.</td></tr>`;
+
+    const sent = (api && typeof api.sent==="function") ? api.sent() : [];
+    const sentLast = sent.slice(0, 20);
+    sentRows.innerHTML = sentLast.map(e=>{
+      const meta = e.meta || {};
+      const payload = e.payload || {};
+      return `
+        <tr>
+          <td class="mono"><b>${safe(e.type)}</b><br><span class="muted">${safe(e.action)}</span></td>
+          <td class="mono">${safe(e.ts)}</td>
+          <td class="mono muted">hub=${safe(meta.hub)}<br>src=${safe(meta.source)}</td>
+          <td class="mono muted" style="white-space:pre-wrap">${safe(JSON.stringify(payload, null, 2))}</td>
+        </tr>
+      `;
+    }).join("") || `<tr><td colspan="4" class="muted">Još nema poslanih eventa.</td></tr>`;
+  }
+
+  btnFlush.onclick = async ()=>{
+    try{
+      const r = await window.ElvoraEvents.flush();
+      ElvoraToast(r && r.ok ? `Flush OK (sent ${r.sent||0})` : `Flush FAIL (${r.error||"?"})`);
+    }catch(e){
+      ElvoraToast("Flush error");
+    }
+    render();
+  };
+
+  btnClear.onclick = ()=>{
+    try{ window.ElvoraEvents.clear(); }catch{}
+    ElvoraToast("Queue cleared");
+    render();
+  };
+
+  render();
+  setInterval(render, 1000);
+})();
+</script>
+</body>
+</html>
+

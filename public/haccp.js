@@ -1,4 +1,14 @@
 ﻿(() => {
+  import("/shared/events.js").catch(()=>{}); // ensure Event Core is registered (window.ElvoraEvents)
+
+  function ev(type, action, payload, meta){
+    try{
+      if(window.ElvoraEvents && typeof window.ElvoraEvents.emit==="function"){
+        window.ElvoraEvents.emit(type, action, payload, meta);
+      }
+    }catch{}
+  }
+
   // Simple mock: zones with safe ranges (°C). Replace with live API later.
   const zones = [
     { id:"Ambient",  target:"+18°C", min: 15, max: 25 },
@@ -69,25 +79,88 @@
 
   // generate mock data stream
   const measures = [];
-  function tick(){ try{ if(window.elvoraBusy) window.elvoraBusy(true);
-    const t = new Date().toLocaleTimeString();
-    for(const z of zones){
-      // base temps
-      let base = (z.id==="Ambient") ? 21 : (z.id==="Chilled" ? 4 : -18);
-      // add a small random drift
-      const drift = (Math.random()-0.5) * (z.id==="Ambient"?2:1.2);
-      const temp = base + drift;
-      const status = colorFor(temp, z);
-      measures.push({time:t, zone:z.id, temp, status});
+
+  // emit only on status changes to avoid event spam
+  const lastStatus = new Map(); // zone -> "green|amber|red"
+
+  function tick(){
+    try{ if(window.elvoraBusy) window.elvoraBusy(true);
+
+      const iso = new Date().toISOString();
+      const t = new Date().toLocaleTimeString();
+
+      for(const z of zones){
+        // base temps
+        let base = (z.id==="Ambient") ? 21 : (z.id==="Chilled" ? 4 : -18);
+        // add a small random drift
+        const drift = (Math.random()-0.5) * (z.id==="Ambient"?2:1.2);
+        const temp = base + drift;
+        const status = colorFor(temp, z);
+
+        measures.push({time:t, zone:z.id, temp, status});
+
+        // Always log measurement to Event Core (structured journal)
+        ev("HACCP","MEASUREMENT", clean({
+          zone: z.id,
+          temp: Number(temp.toFixed(2)),
+          status,
+          spec: { min:z.min, max:z.max, target:z.target },
+          ts: iso
+        }), { hub:"haccp",
+          source: "haccp.js"
+        });
+
+        // Emit alert only when status changes into amber/red or back to green
+        const prev = lastStatus.get(z.id);
+        if(prev !== status){
+          lastStatus.set(z.id, status);
+
+          if(status==="amber"){
+            ev("HACCP","ALERT_NEAR_LIMIT", clean({
+              zone: z.id,
+              temp: Number(temp.toFixed(2)),
+              status,
+              ts: iso
+            }), { hub:"haccp",
+              source:"haccp.js"
+            });
+          } else if(status==="red"){
+            ev("HACCP","ALERT_OUT_OF_SPEC", clean({
+              zone: z.id,
+              temp: Number(temp.toFixed(2)),
+              status,
+              ts: iso
+            }), { hub:"haccp",
+              source:"haccp.js"
+            });
+          } else if(status==="green" && (prev==="amber" || prev==="red")){
+            ev("HACCP","RECOVERY_OK", clean({
+              zone: z.id,
+              from: prev,
+              temp: Number(temp.toFixed(2)),
+              ts: iso
+            }), { hub:"haccp",
+              source:"haccp.js"
+            });
+          }
+        }
+      }
+
+      // keep last 50
+      while(measures.length>50) measures.shift();
+      renderZones(measures);
+      renderMeasureTable(measures.slice().reverse());
+      renderAlerts(measures);
+
+    } finally {
+      try{ if(window.elvoraBusy) window.elvoraBusy(false); }catch(e){}
     }
-    // keep last 50
-    while(measures.length>50) measures.shift();
-    renderZones(measures);
-    renderMeasureTable(measures.slice().reverse());
-    renderAlerts(measures);
   }
 
   tick();
-  setInterval(tick, 4500); try{ if(window.elvoraBusy) window.elvoraBusy(false);}catch(e){}
+  setInterval(tick, 4500);
 })();
+
+
+
 

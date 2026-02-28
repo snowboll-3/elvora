@@ -146,18 +146,9 @@ function onScan(code){
   saveJournal(journal);
   renderJournal();
 
-  // pošalji event serveru (mock)
-  fetch("/api/events",{
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body: JSON.stringify({
-      kind: MODE.value,
-      code,
-      name,
-      qty: 1,
-      ts: entry.ts
-    })
-  }).catch(()=>{});
+    // event → Event Core (offline-first)
+  ev("SCANNER", MODE.value, { code, name, qty: 1, ts: entry.ts }, { hub:"scanner", source:"camera.js" });
+
 }
 
 function readJournal(){
@@ -224,3 +215,4 @@ if (!('mediaDevices' in navigator) || !('getUserMedia' in navigator.mediaDevices
   setStatus('Preglednik ne podržava kameru (getUserMedia).', false);
   noteEl.textContent = 'Pokušaj s modernim preglednikom (Chrome, Edge, Safari).';
 }
+

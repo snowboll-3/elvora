@@ -1,4 +1,4 @@
-﻿/* Shared skener: HID (USB kao tipkovnica) + BarcodeDetector ako postoji */
+/* Shared skener: HID (USB kao tipkovnica) + BarcodeDetector ako postoji */
 (function(){
   let buf="", lastTs=0, lastCode="", lastScan=0; const DEBOUNCE=80, DUP=2500;
   addEventListener("keydown",e=>{
@@ -18,5 +18,5 @@
   function flash(m){ let t=document.getElementById("toast"); if(!t){ t=document.createElement("div"); t.id="toast";
     t.style.cssText="position:fixed;left:50%;transform:translateX(-50%);bottom:20px;background:#0e141b;border:1px solid #1d2a36;color:#e6eef7;padding:10px 14px;border-radius:10px;z-index:9999;box-shadow:0 6px 26px rgba(0,0,0,.5)";
     document.body.appendChild(t);} t.textContent=m; clearTimeout(t._x); t._x=setTimeout(()=>t.remove(),1700); }
-  window.ElvoraCamScan = camScan;
+  // window.ElvoraCamScan removed (uses shared/elvora.js)
 })();

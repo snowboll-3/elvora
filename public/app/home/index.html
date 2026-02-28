@@ -1,5 +1,5 @@
 ﻿<!doctype html><html lang='hr'><head><meta charset='utf-8'><meta name='viewport' content='width=device-width,initial-scale=1'>
-<title>Kućanstvo — Hladnjak</title><link rel='stylesheet' href='/shared/elvora.css'><script defer src='/shared/elvora.js'></script></head>
+<title>Kućanstvo — Hladnjak</title><link rel='stylesheet' href='/shared/elvora.css'><script defer src='/shared/elvora.js'></script><script src='/shared/events.js'></script></head>
 <body><div class='wrap'>
   <h1>Kućanstvo — Hladnjak</h1>
   <div class='stage'>
@@ -17,9 +17,10 @@
 async function emptyFridge(){
   try{
     const r = await fetch('/functions/api/fridge-empty',{method:'POST'});
-    if(r.ok) ElvoraToast("Hladnjak ispražnjen."); else ElvoraToast("Greška pri pražnjenju.");
-  }catch{ ElvoraToast("Greška mreže."); }
+    if(r.ok){ ElvoraToast("Hladnjak ispražnjen."); try{ window.ElvoraEvents?.emit("HOME","FRIDGE_EMPTY_OK",{}, {hub:"home", source:"home/index.html"}); }catch{} } else { ElvoraToast("Greška pri pražnjenju."); try{ window.ElvoraEvents?.emit("HOME","FRIDGE_EMPTY_FAIL",{status:r.status},{hub:"home", source:"home/index.html"}); }catch{} }
+  }catch{ ElvoraToast("Greška mreže."); try{ window.ElvoraEvents?.emit("HOME","FRIDGE_EMPTY_NETWORK_ERROR",{}, {hub:"home", source:"home/index.html"}); }catch{} }
 }
 </script>
 </body></html>
+
 

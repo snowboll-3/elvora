@@ -1,5 +1,14 @@
-import { createClient } from "https://unpkg.com/@supabase/supabase-js@2/dist/esm/index.js";
+﻿import { createClient } from "https://unpkg.com/@supabase/supabase-js@2/dist/esm/index.js";
 
+import "/shared/events.js";
+
+function ev(type, action, payload, meta){
+  try{
+    if(window.ElvoraEvents && typeof window.ElvoraEvents.emit==="function"){
+      window.ElvoraEvents.emit(type, action, payload ?? {}, meta ?? {});
+    }
+  }catch{}
+}
 const SUPABASE_URL = window.SUPABASE_URL;
 const SUPABASE_ANON_KEY = window.SUPABASE_ANON_KEY;
 const sb = createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
@@ -29,8 +38,16 @@ btnParse.onclick = async () => {
   if (session?.access_token) headers["Authorization"] = `Bearer ${session.access_token}`;
 
   const r = await fetch(`${SUPABASE_URL}/functions/v1/receipts`, { method:"POST", headers, body: fd });
-  if (!r.ok) { msg.textContent = "Greška pri analizi primke."; return; }
+  if (!r.ok) {
+    msg.textContent = "GreĹˇka pri analizi primke.";
+    ev("RECEIPTS","PARSE_FAIL",{ status:r.status },{ hub:"receipts", source:"receipts.js" });
+    return;
+  }
   parsed = await r.json();  // { items:[{name,ean,qty,uom,lot,exp}], totals:{...}, receipt_id }
+  ev("RECEIPTS","PARSE_OK",{
+    receipt_id: parsed?.receipt_id ?? null,
+    items_count: (parsed?.items||[]).length
+  },{ hub:"receipts", source:"receipts.js" });
   render(parsed);
 };
 
@@ -50,12 +67,12 @@ function render(data){
       <td contenteditable="true">${it.exp||""}</td>`;
     tbody.appendChild(tr);
   });
-  summary.textContent = `Ukupno stavki: ${(data.items||[]).length} • Ukupna količina: ${total}`;
+  summary.textContent = `Ukupno stavki: ${(data.items||[]).length} â€˘ Ukupna koliÄŤina: ${total}`;
 }
 
 btnCommit.onclick = async () => {
   if (!parsed) return;
-  // pokupi eventualno ručno korigirane stavke iz tablice:
+  // pokupi eventualno ruÄŤno korigirane stavke iz tablice:
   const rows = Array.from(tbody.querySelectorAll("tr"));
   const items = rows.map(r=>{
     const tds = r.querySelectorAll("td");
@@ -74,6 +91,22 @@ btnCommit.onclick = async () => {
   const payload = { receipt_id: parsed.receipt_id, dest: dest.value, items, market_id };
 
   const { data, error } = await sb.functions.invoke("receipts", { body: payload, headers: {} });
-  if (error) { msg.innerHTML = `<span class="warn">Knjiženje nije uspjelo.</span>`; return; }
-  msg.innerHTML = `<span class="ok">Knjiženo (${dest.value}). Ref: ${data?.move_id||"-"}</span>`;
+  if (error) {
+    msg.innerHTML = `<span class="warn">KnjiĹľenje nije uspjelo.</span>`;
+    ev("RECEIPTS","COMMIT_FAIL",{
+      receipt_id: parsed?.receipt_id ?? null,
+      dest: dest.value
+    },{ hub:"receipts", source:"receipts.js" });
+    return;
+  }
+  msg.innerHTML = `<span class="ok">KnjiĹľeno (${dest.value}). Ref: ${data?.move_id||"-"}</span>`;
+  ev("RECEIPTS","COMMIT_OK",{
+    receipt_id: parsed?.receipt_id ?? null,
+    dest: dest.value,
+    move_id: data?.move_id ?? null,
+    items_count: items.length
+  },{ hub:"receipts", source:"receipts.js" });
 };
+
+
+
