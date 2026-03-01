@@ -86,6 +86,26 @@ hr{border:0;border-top:1px solid var(--border);margin:10px 0}
 </div>
 
 <script>
+/* ELVORA_CAMERA_CACHEFIX */
+(async ()=>{
+  try{
+    if('serviceWorker' in navigator){
+      const regs = await navigator.serviceWorker.getRegistrations();
+      for(const r of regs) try{ await r.unregister(); }catch{}
+    }
+    if(window.caches){
+      const keys = await caches.keys();
+      for(const k of keys) try{ await caches.delete(k); }catch{}
+    }
+    // jedan soft reload da povuče svježe assete nakon brisanja
+    if(!sessionStorage.getItem("elvora_cam_reloaded")){
+      sessionStorage.setItem("elvora_cam_reloaded","1");
+      location.reload();
+    }
+  }catch(e){}
+})();
+</script>
+<script>
 const video = document.getElementById("video");
 const overlay = document.getElementById("overlay");
 const ctx = overlay.getContext("2d");
@@ -210,14 +230,36 @@ async function startCamera(){
 }
 
 async function fetchProduct(ean){
-  // samo pomoćno; u V1 može ostati i bez globalne baze
+  const code = String(ean||"").trim();
+  if(!code) return "Nepoznato";
+
+  const CACHE_KEY="elvora_ean_cache_v1";
+  const cache = (()=>{ try{return JSON.parse(localStorage.getItem(CACHE_KEY)||"{}")}catch{return {}} })();
+  if(cache[code]) return cache[code];
+
+  // timeout da nikad ne visi
+  const ctrl = ("AbortController" in window) ? new AbortController() : null;
+  const kill = setTimeout(()=>{ try{ ctrl && ctrl.abort(); }catch{} }, 2500);
+
   try{
-    const r = await fetch(`https://world.openfoodfacts.org/api/v0/product/${ean}.json`, { cache:"no-store" });
-    const j = await r.json();
-    if(j && j.product){
-      return j.product.product_name || "Nepoznato";
+    const url = "https://world.openfoodfacts.org/api/v0/product/" + encodeURIComponent(code) + ".json";
+    const r = await fetch(url, { method:"GET", cache:"no-store", signal: ctrl ? ctrl.signal : undefined });
+    if(r && r.ok){
+      const j = await r.json();
+      const name =
+        (j && j.product && (j.product.product_name || j.product.product_name_hr || j.product.product_name_en)) ||
+        (j && j.product && j.product.generic_name) ||
+        "Nepoznato";
+      cache[code]=name;
+      try{ localStorage.setItem(CACHE_KEY, JSON.stringify(cache)); }catch{}
+      clearTimeout(kill);
+      return name;
     }
   }catch(e){}
+
+  clearTimeout(kill);
+  cache[code]="Nepoznato";
+  try{ localStorage.setItem(CACHE_KEY, JSON.stringify(cache)); }catch{}
   return "Nepoznato";
 }
 
@@ -246,7 +288,7 @@ async function scanLoop(){
           expiryInfo.textContent = "Odaberi rok trajanja.";
 
           const name = await fetchProduct(code);
-          nameEl.textContent = name;
+          nameEl.textContent = (name && String(name).trim()) ? name : "Nepoznato";
 
           // nakon naziva vrati pill na "SPREMNO" ako rok još nije upisan
           setPill("ok","SPREMNO");
@@ -294,3 +336,9 @@ autoStart(0);
 </script>
 </body>
 </html>
+
+
+
+
+
+
