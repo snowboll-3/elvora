@@ -1,48 +1,59 @@
 ﻿<!doctype html>
-<html lang="hr">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1" />
-  <title>Elvora • Kamera</title>
-  <link rel="stylesheet" href="/app/camera.css" />
-</head>
-<body>
-  <div id="overlay" class="overlay">
-    <header class="top">
-      <div class="brand">ELVORA</div>
-      <select id="MODE" class="mode">
-        <option value="IN">ULAZ</option>
-        <option value="OUT">IZLAZ</option>
-        <option value="CHECK">PROVJERA</option>
-      </select>
-    </header>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Camera Duo</title>
+<style>
+  /* Ukloni tuđe okvire/overlays */
+  #camx-frame,.camx-frame,.frame,.scanner-box,.overlay,.scan-border,
+  [id*="frame" i],[class*="frame" i]{display:none!important;border:0!important;outline:0!important;box-shadow:none!important}
 
-    <main class="main">
-      <video id="video" autoplay playsinline muted></video>
+  :root{--brand:#2b6bff;--bg:#0b1220;--surface:#0f172a;--txt:#e5e7eb}
+  @media (prefers-color-scheme: light){:root{--bg:#f7f9fc;--surface:#fff;--txt:#111}}
 
-      <div class="hud">
-        <div class="row"><span class="k">Status</span><span id="status" class="value ok">Spremno</span></div>
-        <div class="row"><span class="k">Kod</span><span id="code" class="value">—</span></div>
-        <div class="row"><span class="k">Naziv</span><span id="name" class="value">—</span></div>
-        <div class="row"><span class="k">Vrijeme</span><span id="when" class="value">—</span></div>
-        <div class="note" id="note">Ciljaj barkod u okvir.</div>
-      </div>
+  body{margin:0;background:var(--bg);color:var(--txt);font-family:system-ui,Segoe UI,Roboto,Arial,sans-serif}
+  .cam-wrap{width:min(92vw,420px);margin:12px auto;padding:0 10px}
+  #stage{position:relative}
+  video{
+    width:100%;height:auto;max-height:32vh;aspect-ratio:16/9;display:block;
+    background:#000;border-radius:16px;object-fit:cover
+  }
+  #startBtn{margin:10px 0;border:0;border-radius:12px;padding:12px 16px;background:var(--brand);color:#fff;font-weight:700}
+</style>
 
-      <div class="actions">
-        <button id="startBtn">Start</button>
-        <button id="stopBtn">Stop</button>
-        <button id="switchBtn">Kamera</button>
-        <button id="clearBtn">Očisti</button>
-      </div>
-    </main>
-  </div>
+<div class="cam-wrap">
+  <button id="startBtn">Start kamera</button>
+  <div id="stage"></div>
+</div>
 
-  <script src="/shared/event-core.js"></script>
-  <script src="/shared/events.js"></script>
+<script>
+  const stage = document.getElementById('stage');
 
-  <!-- ZXing browser bundle (ako ga već imaš lokalno, kasnije ga prebacimo na lokalni path) -->
-  <script src="https://unpkg.com/@zxing/browser@0.1.5/umd/index.min.js"></script>
+  function ensureSingleVideo(){
+    const vids = stage.querySelectorAll('video');
+    vids.forEach((el,i)=>{ if(i>0){ try{ el.srcObject?.getTracks().forEach(t=>t.stop()); }catch(_){}; el.remove(); }});
+    return vids[0] || null;
+  }
 
-  <script src="/app/camera.js"></script>
-</body>
-</html>
+  async function startCam(){
+    let v = ensureSingleVideo();
+    if(!v){ v=document.createElement('video'); v.autoplay=true; v.playsInline=true; v.muted=true; stage.appendChild(v); }
+    if(!v.srcObject){
+      try{
+        const s = await navigator.mediaDevices.getUserMedia({
+          video:{ facingMode:{ideal:"environment"}, width:{ideal:800}, height:{ideal:450} }, audio:false
+        });
+        v.srcObject = s; await v.play();
+
+        // Autofokus / zoom (ako podržano)
+        const track=s.getVideoTracks()[0], caps=track.getCapabilities?.()||{}, adv=[];
+        if(caps.focusMode?.includes('continuous')) adv.push({focusMode:'continuous'});
+        if(caps.zoom){ const mid=(caps.zoom.min+caps.zoom.max)/2; adv.push({zoom:Math.min(Math.max(mid,caps.zoom.min),caps.zoom.max)}); }
+        if(adv.length) try{ await track.applyConstraints({advanced:adv}); }catch(_){}
+      }catch(e){ alert("Camera error: "+(e.message||e)); }
+    }
+  }
+  document.getElementById('startBtn').addEventListener('click', startCam);
+</script>
+
+<!-- Naš čist loader (nema debug teksta) -->
+<script src="/public/cam_min.js?v=1"></script>
