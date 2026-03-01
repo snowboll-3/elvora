@@ -1,89 +1,48 @@
-﻿<!DOCTYPE html>
+﻿<!doctype html>
 <html lang="hr">
 <head>
   <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>ShelfLife – Global Barcode Scanner</title>
-  <style>
-    body{margin:0;background:#0b0f14;color:#fff;font-family:system-ui,Arial,sans-serif}
-    .wrap{max-width:900px;margin:0 auto;padding:16px}
-    video{width:100%;border:2px solid #222;border-radius:8px;background:#000}
-    .result{margin-top:16px;padding:12px;background:#111;border-radius:8px}
-    .name{font-size:18px;font-weight:bold}
-    .code{font-family:monospace;color:#9cf}
-    .time{font-size:12px;color:#aaa}
-  </style>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Elvora • Kamera</title>
+  <link rel="stylesheet" href="/app/camera.css" />
 </head>
 <body>
-  <div class="wrap">
-    <h2>🌍 ShelfLife – Global Barcode Scanner</h2>
-    <video id="video" autoplay playsinline></video>
-    <div id="output" class="result">Skenirajte barkod…</div>
+  <div id="overlay" class="overlay">
+    <header class="top">
+      <div class="brand">ELVORA</div>
+      <select id="MODE" class="mode">
+        <option value="IN">ULAZ</option>
+        <option value="OUT">IZLAZ</option>
+        <option value="CHECK">PROVJERA</option>
+      </select>
+    </header>
+
+    <main class="main">
+      <video id="video" autoplay playsinline muted></video>
+
+      <div class="hud">
+        <div class="row"><span class="k">Status</span><span id="status" class="value ok">Spremno</span></div>
+        <div class="row"><span class="k">Kod</span><span id="code" class="value">—</span></div>
+        <div class="row"><span class="k">Naziv</span><span id="name" class="value">—</span></div>
+        <div class="row"><span class="k">Vrijeme</span><span id="when" class="value">—</span></div>
+        <div class="note" id="note">Ciljaj barkod u okvir.</div>
+      </div>
+
+      <div class="actions">
+        <button id="startBtn">Start</button>
+        <button id="stopBtn">Stop</button>
+        <button id="switchBtn">Kamera</button>
+        <button id="clearBtn">Očisti</button>
+      </div>
+    </main>
   </div>
 
-<script>
-const video = document.getElementById('video');
-const out = document.getElementById('output');
+  <script src="/shared/event-core.js"></script>
+  <script src="/shared/events.js"></script>
 
-let lastCode = null;
-let lastAt = 0;
+  <!-- ZXing browser bundle (ako ga već imaš lokalno, kasnije ga prebacimo na lokalni path) -->
+  <script src="https://unpkg.com/@zxing/browser@0.1.5/umd/index.min.js"></script>
 
-async function startCam(){
-  try{
-    const stream = await navigator.mediaDevices.getUserMedia({ video:{ facingMode:'environment' }});
-    video.srcObject = stream;
-  }catch(e){
-    out.textContent = "Greška: kamera nije dostupna.";
-  }
-}
-
-async function tick(){
-  if (!('BarcodeDetector' in window)) {
-    out.textContent = "Preglednik ne podržava BarcodeDetector (koristi Chrome/Android).";
-    return;
-  }
-  try{
-    const detector = new BarcodeDetector({formats:['ean_13','ean_8','upc_a','upc_e','code_128','qr_code']});
-    const codes = await detector.detect(video);
-    if(codes.length>0){
-      const code = codes[0].rawValue;
-      const now = performance.now();
-      if(code && (code!==lastCode || now-lastAt>2000)){
-        lastCode = code; lastAt = now;
-        lookupProduct(code);
-      }
-    }
-  }catch(e){ /* ignore */ }
-  requestAnimationFrame(tick);
-}
-
-async function lookupProduct(code){
-  out.innerHTML = `<div class="code">Barkod: ${code}</div><div>Pretražujem globalnu bazu…</div>`;
-  try{
-    const res = await fetch(`https://world.openfoodfacts.org/api/v0/product/${code}.json`);
-    const data = await res.json();
-    if(data.status===1){
-      const name = data.product.product_name || "(bez naziva)";
-      const brand = data.product.brands || "";
-      const when = new Date().toLocaleString("hr-HR");
-      out.innerHTML = `
-        <div class="name">${name} ${brand?`<span style="color:#9cf">(${brand})</span>`:""}</div>
-        <div class="code">Barkod: ${code}</div>
-        <div class="time">Vrijeme skeniranja: ${when}</div>
-      `;
-    }else{
-      out.innerHTML = `<div class="name">Nepoznat proizvod (nema u globalnoj bazi)</div>
-                       <div class="code">Barkod: ${code}</div>`;
-    }
-  }catch(err){
-    out.innerHTML = `<div class="name">Greška pri dohvaćanju podataka</div>`;
-  }
-}
-
-startCam();
-tick();
-</script>
-<footer class="footer">© <span id="y"></span> Elvora • <a href="/about.html">About</a> • <a href="/legal/privacy.html">Privacy</a> • <a href="/legal/terms.html">Terms</a></footer></body>
+  <script src="/app/camera.js"></script>
+</body>
 </html>
-
-
