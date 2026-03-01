@@ -233,7 +233,7 @@ async function fetchProduct(ean){
   const code = String(ean||"").trim();
   if(!code) return "Nepoznato";
 
-  const CACHE_KEY="elvora_ean_cache_v1";
+  const CACHE_KEY="elvora_ean_cache_v2";
   const cache = (()=>{ try{return JSON.parse(localStorage.getItem(CACHE_KEY)||"{}")}catch{return {}} })();
   if(cache[code]) return cache[code];
 
@@ -336,6 +336,8 @@ autoStart(0);
 </script>
 </body>
 </html>
+
+
 
 
 
