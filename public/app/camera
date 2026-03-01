@@ -1,0 +1,48 @@
+﻿<!doctype html>
+<html lang="hr">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Elvora • Kamera</title>
+  <link rel="stylesheet" href="/app/camera.css" />
+</head>
+<body>
+  <div id="overlay" class="overlay">
+    <header class="top">
+      <div class="brand">ELVORA</div>
+      <select id="MODE" class="mode">
+        <option value="IN">ULAZ</option>
+        <option value="OUT">IZLAZ</option>
+        <option value="CHECK">PROVJERA</option>
+      </select>
+    </header>
+
+    <main class="main">
+      <video id="video" autoplay playsinline muted></video>
+
+      <div class="hud">
+        <div class="row"><span class="k">Status</span><span id="status" class="value ok">Spremno</span></div>
+        <div class="row"><span class="k">Kod</span><span id="code" class="value">—</span></div>
+        <div class="row"><span class="k">Naziv</span><span id="name" class="value">—</span></div>
+        <div class="row"><span class="k">Vrijeme</span><span id="when" class="value">—</span></div>
+        <div class="note" id="note">Ciljaj barkod u okvir.</div>
+      </div>
+
+      <div class="actions">
+        <button id="startBtn">Start</button>
+        <button id="stopBtn">Stop</button>
+        <button id="switchBtn">Kamera</button>
+        <button id="clearBtn">Očisti</button>
+      </div>
+    </main>
+  </div>
+
+  <script src="/shared/event-core.js"></script>
+  <script src="/shared/events.js"></script>
+
+  <!-- ZXing browser bundle (ako ga već imaš lokalno, kasnije ga prebacimo na lokalni path) -->
+  <script src="https://unpkg.com/@zxing/browser@0.1.5/umd/index.min.js"></script>
+
+  <script src="/app/camera.js"></script>
+</body>
+</html>
