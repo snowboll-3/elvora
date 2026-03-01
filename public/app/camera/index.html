@@ -172,9 +172,7 @@ async function scanOnce(){
         whenEl.textContent = new Date().toLocaleString("hr-HR");
         setStatus("Očitano", true);
 
-        nameEl.textContent = "Tražim naziv…";
-        const name = await fetchProduct(code);
-        nameEl.textContent = name;
+        nameEl.textContent = "Naziv…"; const name = await resolveName(code); nameEl.textContent = name;
       }
     }
   }catch(e){
@@ -248,4 +246,5 @@ document.addEventListener("visibilitychange", ()=>{
 </script>
 </body>
 </html>
+
 
