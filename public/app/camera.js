@@ -1,245 +1,172 @@
-﻿const video = document.getElementById("video");
+﻿/* ELVORA CAMERA V1 — clean-room engine */
+
+const video = document.getElementById("video");
 const overlay = document.getElementById("overlay");
-const statusEl = document.getElementById("st");
+const ctx = overlay.getContext("2d");
+
+const stEl = document.getElementById("st");
 const codeEl = document.getElementById("code");
 const nameEl = document.getElementById("name");
 const whenEl = document.getElementById("when");
-const noteEl = document.getElementById("note");
-const startBtn = document.getElementById("startBtn");
+const toastEl = document.getElementById("toast");
 
-let stream=null, reader=null, devices=[], currentDeviceId=null;
-let lastCode=null, lastAt=0, soundOn=true, audioCtx=null;
+const btnStart = document.getElementById("btnStart");
+const btnStop = document.getElementById("btnStop");
+const btnSwitch = document.getElementById("btnSwitch");
+const btnTorch = document.getElementById("btnTorch");
+const btnSound = document.getElementById("btnSound");
 
-const MODE = { value: "ADD" };
-document.querySelectorAll("input[name='mode']").forEach(r=>{
-  r.addEventListener("change", ()=>{ MODE.value = r.value; });
-});
+let stream=null, currentTrack=null, devices=[], deviceIndex=0;
+let scanning=false, lastCode=null, lastAt=0;
+let soundOn=true;
+let detector=null, zxingReader=null;
+
+const CACHE_KEY="elvora_ean_cache_v2";
+
+function setStatus(msg, type="warn"){
+  stEl.textContent=msg;
+  stEl.className="v "+(type||"warn");
+}
 
 function beep(){
-  if (!soundOn) return;
+  if(!soundOn) return;
   try{
-    audioCtx = audioCtx || new (window.AudioContext||window.webkitAudioContext)();
-    const o = audioCtx.createOscillator();
-    const g = audioCtx.createGain();
-    o.type="sine"; o.frequency.value=880; g.gain.value=0.0001;
-    o.connect(g); g.connect(audioCtx.destination);
-    const t=audioCtx.currentTime;
-    o.start(t);
-    g.gain.exponentialRampToValueAtTime(0.15,t+0.02);
-    g.gain.exponentialRampToValueAtTime(0.00001,t+0.18);
-    o.stop(t+0.2);
+    const ac=new (window.AudioContext||window.webkitAudioContext)();
+    const o=ac.createOscillator(); const g=ac.createGain();
+    o.type="sine"; o.frequency.value=900;
+    o.connect(g); g.connect(ac.destination);
+    o.start(); g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime+0.15);
+    setTimeout(()=>ac.close(),200);
     if(navigator.vibrate) navigator.vibrate(50);
   }catch{}
 }
-function flash(){ overlay.classList.remove("flash"); void overlay.offsetWidth; overlay.classList.add("flash"); }
-function setStatus(msg, ok=true){ statusEl.textContent=msg; statusEl.className= ok?'value ok':'value bad'; }
 
+function readCache(){ try{return JSON.parse(localStorage.getItem(CACHE_KEY)||"{}");}catch{return{}} }
+function writeCache(o){ try{localStorage.setItem(CACHE_KEY,JSON.stringify(o||{}));}catch{} }
 
-const EAN_CACHE_KEY="elvora_ean_cache_v1";
-function readEanCache(){ try{ return JSON.parse(localStorage.getItem(EAN_CACHE_KEY)||"{}"); }catch{ return {}; } }
-function writeEanCache(o){ try{ localStorage.setItem(EAN_CACHE_KEY, JSON.stringify(o||{})); }catch{} }
-
-async function lookupName(code){
-  const ean = String(code||"").trim();
-  if(!ean) return "—";
-
-  const cache = readEanCache();
+async function lookupName(ean){
+  const cache=readCache();
   if(cache[ean]) return cache[ean];
 
-  const ctrl = ("AbortController" in window) ? new AbortController() : null;
-  const t = setTimeout(()=>{ try{ ctrl && ctrl.abort(); }catch{} }, 2500);
-
   try{
-    const url = "https://world.openfoodfacts.org/api/v2/product/" + encodeURIComponent(ean) + ".json";
-    const r = await fetch(url, { method:"GET", cache:"no-store", signal: ctrl ? ctrl.signal : undefined });
-
-    clearTimeout(t);
-
-    if(r && r.ok){
-      const j = await r.json();
-      if(j && j.status === 1 && j.product){
-        const name =
-          j.product.product_name ||
-          j.product.product_name_hr ||
-          j.product.product_name_en ||
-          j.product.generic_name ||
-          "Nepoznato";
-
-        cache[ean]=name;
-        writeEanCache(cache);
-        return name;
-      }
+    const r=await fetch("https://world.openfoodfacts.org/api/v2/product/"+encodeURIComponent(ean)+".json",{cache:"no-store"});
+    const j=await r.json();
+    if(j.status===1 && j.product){
+      const name=j.product.product_name||j.product.product_name_en||j.product.generic_name||"—";
+      cache[ean]=name; writeCache(cache);
+      return name;
     }
-  }catch(e){
-    clearTimeout(t);
+    return "Nije u katalogu";
+  }catch{
+    return "Greška mreže";
   }
+}
 
-  cache[ean]="Nepoznato";
-  writeEanCache(cache);
-  return "Nepoznato";
-}
 async function listCameras(){
-  try{
-    const all=await navigator.mediaDevices.enumerateDevices();
-    devices=all.filter(d=>d.kind==='videoinput');
-  }catch(e){ devices=[]; }
-  return devices;
+  const all=await navigator.mediaDevices.enumerateDevices();
+  devices=all.filter(d=>d.kind==="videoinput");
+  btnSwitch.disabled = devices.length<2;
 }
-async function startCamera(pref=null){
-  await stopCamera();
+
+async function startCamera(){
   try{
-    setStatus("Pokrećem kameru…");
-    const constraints = pref
-      ? { video:{ deviceId:{ exact: pref }}, audio:false }
-      : { video:{ facingMode:{ ideal:'environment' }, width:{ ideal:1280 }, height:{ ideal:720 }}, audio:false };
-    stream = await navigator.mediaDevices.getUserMedia(constraints);
-    video.srcObject=stream; await video.play();
-    currentDeviceId = (stream.getVideoTracks()[0]||{}).getSettings().deviceId || pref || null;
-    setStatus("Kamera pokrenuta ?");
-    noteEl.textContent="Ciljaj barkod u zeleni okvir.";
-    await startScanning();
+    setStatus("Pokrećem…","warn");
+    const deviceId=devices[deviceIndex]?.deviceId;
+    const constraints=deviceId?
+      {video:{deviceId:{exact:deviceId}},audio:false}:
+      {video:{facingMode:{ideal:"environment"}},audio:false};
+
+    stream=await navigator.mediaDevices.getUserMedia(constraints);
+    video.srcObject=stream;
+    currentTrack=stream.getVideoTracks()[0];
+    await video.play();
+
+    btnStop.disabled=false;
+    btnTorch.disabled=!(currentTrack.getCapabilities?.().torch);
+    scanning=true;
+
+    initDetector();
+    loopScan();
+
+    setStatus("Spremno","ok");
   }catch(e){
-    setStatus(e.name+": "+e.message,false);
-    noteEl.textContent="Provjeri dopuštenja za kameru i da nije u upotrebi drugdje.";
+    setStatus("Kamera greška","bad");
   }
 }
+
 async function stopCamera(){
+  scanning=false;
+  if(stream){ stream.getTracks().forEach(t=>t.stop()); }
+  btnStop.disabled=true;
+  setStatus("Zaustavljeno","warn");
+}
+
+async function switchCamera(){
+  deviceIndex=(deviceIndex+1)%devices.length;
+  await stopCamera();
+  await startCamera();
+}
+
+async function toggleTorch(){
   try{
-    if(reader){ await reader.reset(); reader=null; }
-    if(video) video.pause();
-    if(stream){ stream.getTracks().forEach(t=>t.stop()); stream=null; }
-    setStatus("Kamera zaustavljena");
+    const cap=currentTrack.getCapabilities();
+    if(cap.torch){
+      const state=currentTrack.getSettings().torch||false;
+      await currentTrack.applyConstraints({advanced:[{torch:!state}]});
+    }
   }catch{}
 }
-async function switchCamera(){
-  const cams = await listCameras();
-  if(!cams.length){ setStatus("Nema dodatnih kamera",false); return; }
-  if(!currentDeviceId){ await startCamera(); return; }
-  const idx = cams.findIndex(d=>d.deviceId===currentDeviceId);
-  const next = cams[(idx+1)%cams.length];
-  await startCamera(next.deviceId);
+
+function initDetector(){
+  if("BarcodeDetector" in window){
+    detector=new BarcodeDetector({formats:["ean_13","ean_8","upc_a","code_128","qr_code"]});
+  }else{
+    loadZXing();
+  }
 }
 
-async function startScanning(){
+async function loadZXing(){
+  if(window.ZXingBrowser) return;
+  const s=document.createElement("script");
+  s.src=window.__ELVORA_ZXING_URL;
+  s.onload=()=>{ zxingReader=new ZXingBrowser.BrowserMultiFormatReader(); };
+  document.body.appendChild(s);
+}
+
+async function loopScan(){
+  if(!scanning) return;
   try{
-    const { BarcodeFormat, DecodeHintType } = ZXingBrowser;
-    const hints = new Map();
-    hints.set(DecodeHintType.POSSIBLE_FORMATS, [
-      BarcodeFormat.EAN_13, BarcodeFormat.UPC_A, BarcodeFormat.EAN_8,
-      BarcodeFormat.QR_CODE, BarcodeFormat.DATA_MATRIX, BarcodeFormat.CODE_128 // “novi” + fallback
-    ]);
-    reader = new ZXingBrowser.BrowserMultiFormatReader(hints);
-
-    await reader.decodeFromVideoDevice(currentDeviceId||null, video, async (result, err)=>{
-      if(result){
-        const code = result.getText();
-        const now = Date.now();
-        if(code!==lastCode || (now-lastAt)>1500){
-          lastCode=code; lastAt=now;
-          onScan(code);
-        }
-      }else if(err && !(err instanceof ZXingBrowser.NotFoundException)){
-        setStatus("Greška dekodiranja", false);
-      }
-    });
-  }catch(e){
-    setStatus("Skeniranje nije pokrenuto: "+e.message,false);
-  }
+    if(detector){
+      const codes=await detector.detect(video);
+      if(codes.length) handleCode(codes[0].rawValue);
+    }else if(zxingReader){
+      const res=await zxingReader.decodeOnceFromVideoDevice(undefined,video);
+      if(res) handleCode(res.getText());
+    }
+  }catch{}
+  requestAnimationFrame(loopScan);
 }
 
-async function onScan(code){
+async function handleCode(code){
+  const now=Date.now();
+  if(code===lastCode && now-lastAt<1500) return;
+  lastCode=code; lastAt=now;
+
+  beep();
   codeEl.textContent=code;
-  setStatus("Očitano ✅");
-  flash(); beep();
+  whenEl.textContent=new Date().toLocaleString("hr-HR");
 
-  const ts = new Date();
-  whenEl.textContent = ts.toLocaleString();
-
-  nameEl.textContent = "Tražim…";
-  const name = await lookupName(code);
-  nameEl.textContent = name;
-
-  // journal entry
-  const entry = { id: String(ts.getTime()), mode: MODE.value, code, name, ts: ts.getTime(), qty: 1 };
-  const j = readJournal();
-  j.unshift(entry);
-  saveJournal(j.slice(0,200));
-  renderJournal();
+  nameEl.textContent="Tražim…";
+  const name=await lookupName(code);
+  nameEl.textContent=name;
 }
 
-function readJournal(){
-  try{ return JSON.parse(localStorage.getItem("sl_journal")||"[]"); }catch(_){ return []; }
-}
-function saveJournal(j){ localStorage.setItem("sl_journal", JSON.stringify(j)); }
-function readCatalog(){
-  try{ return JSON.parse(localStorage.getItem("sl_catalog")||"{}"); }catch(_){ return {}; }
-}
-function saveCatalog(c){ localStorage.setItem("sl_catalog", JSON.stringify(c)); }
+btnStart.addEventListener("click",async()=>{ await listCameras(); await startCamera(); });
+btnStop.addEventListener("click",stopCamera);
+btnSwitch.addEventListener("click",switchCamera);
+btnTorch.addEventListener("click",toggleTorch);
+btnSound.addEventListener("click",()=>{ soundOn=!soundOn; btnSound.textContent="Zvuk: "+(soundOn?"ON":"OFF"); });
 
-function renderJournal(){
-  const rows = readJournal();
-  listEl.innerHTML = rows.map(r=>`
-    <div class="item">
-      <div>
-        <p class="ititle">${r.name||"—"}</p>
-        <div class="imeta">${r.mode} · Kod: ${r.code} · Količina: <span class="qty">${r.qty}</span></div>
-        <div class="imeta">Vrijeme: ${new Date(r.ts).toLocaleString()}</div>
-      </div>
-      <div>
-        <button class="btn ghost" onclick="inc('${r.id}',1)">+1</button>
-        <button class="btn ghost" onclick="inc('${r.id}',-1)">-1</button>
-        <button class="btn ghost" onclick="delItem('${r.id}')">Obriši</button>
-      </div>
-    </div>
-  `).join("");
-}
+document.addEventListener("visibilitychange",()=>{ if(document.hidden) stopCamera(); });
 
-window.inc = function(id,delta){
-  const j = readJournal();
-  const i = j.findIndex(x=>x.id===id);
-  if(i===-1) return;
-  j[i].qty = Math.max(1, (j[i].qty||1)+delta);
-  saveJournal(j); renderJournal();
-};
-window.delItem = function(id){
-  const j = readJournal().filter(x=>x.id!==id);
-  saveJournal(j); renderJournal();
-};
-
-startBtn.addEventListener("click", async ()=>{ await listCameras(); await startCamera(); });
-renderJournal(); setStatus("Spremno"); codeEl.textContent="—"; nameEl.textContent="—"; });
-
-document.addEventListener("visibilitychange", async ()=>{
-  if(document.hidden){ await stopCamera(); }
-});
-
-renderJournal();
-
-if (!('mediaDevices' in navigator) || !('getUserMedia' in navigator.mediaDevices)){
-  setStatus('Preglednik ne podržava kameru (getUserMedia).', false);
-  noteEl.textContent = 'Pokušaj s modernim preglednikom (Chrome, Edge, Safari).';
-}
-
-
-
-
-
-
-
-
-
-// --- ELVORA CAMERA DEBUG OVERLAY ---
-(function(){
-  function show(msg){
-    try{
-      var el = document.getElementById('note') || document.getElementById('st') || document.body;
-      var p = document.getElementById('__err');
-      if(!p){ p = document.createElement('pre'); p.id='__err'; p.style.cssText='position:fixed;left:8px;right:8px;bottom:8px;max-height:35vh;overflow:auto;background:rgba(0,0,0,.85);color:#ff5d5d;padding:10px;border-radius:12px;z-index:99999;font-size:12px;white-space:pre-wrap;'; document.body.appendChild(p); }
-      p.textContent = String(msg);
-    }catch(e){}
-  }
-  window.addEventListener('error', function(e){ show('JS ERROR: ' + (e.message||e.type) + (e.filename? ('\n' + e.filename + ':' + e.lineno):'')); });
-  window.addEventListener('unhandledrejection', function(e){ show('PROMISE ERROR: ' + (e.reason && (e.reason.message||e.reason) || 'unknown')); });
-  try{ show('DEBUG: camera.js loaded'); }catch(e){}
-})();
-
+setStatus("Spremno","warn");
