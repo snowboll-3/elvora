@@ -1,4 +1,4 @@
-﻿/* ELVORA CAMERA V1 — clean-room engine */
+﻿/* ELVORA CAMERA V1 — stable engine (clean-room) */
 
 const video = document.getElementById("video");
 const overlay = document.getElementById("overlay");
@@ -8,7 +8,6 @@ const stEl = document.getElementById("st");
 const codeEl = document.getElementById("code");
 const nameEl = document.getElementById("name");
 const whenEl = document.getElementById("when");
-const toastEl = document.getElementById("toast");
 
 const btnStart = document.getElementById("btnStart");
 const btnStop = document.getElementById("btnStop");
@@ -21,13 +20,13 @@ let scanning=false, lastCode=null, lastAt=0;
 let soundOn=true;
 let detector=null, zxingReader=null;
 
-const CACHE_KEY="elvora_ean_cache_v2";
+const CACHE_KEY="elvora_ean_cache_v3";
+const memGood = new Map(); // session last-good names
 
 function setStatus(msg, type="warn"){
-  stEl.textContent=msg;
-  stEl.className="v "+(type||"warn");
+  stEl.textContent = msg;
+  stEl.className = "v " + (type || "warn");
 }
-
 function beep(){
   if(!soundOn) return;
   try{
@@ -40,26 +39,75 @@ function beep(){
     if(navigator.vibrate) navigator.vibrate(50);
   }catch{}
 }
-
 function readCache(){ try{return JSON.parse(localStorage.getItem(CACHE_KEY)||"{}");}catch{return{}} }
 function writeCache(o){ try{localStorage.setItem(CACHE_KEY,JSON.stringify(o||{}));}catch{} }
 
-async function lookupName(ean){
-  const cache=readCache();
-  if(cache[ean]) return cache[ean];
+function normalizeCode(raw){
+  // uzmi samo znamenke (EAN/UPC)
+  const s = String(raw||"").trim();
+  const digits = s.replace(/\D+/g,'');
+  return digits;
+}
+function isValidCodeDigits(d){
+  // dopusti 8, 12, 13, 14 (EAN-8 / UPC-A / EAN-13 / GTIN-14)
+  return d.length===8 || d.length===12 || d.length===13 || d.length===14;
+}
+
+async function fetchOffName(ean, timeoutMs=2500){
+  const ctrl = ("AbortController" in window) ? new AbortController() : null;
+  const t = setTimeout(()=>{ try{ ctrl && ctrl.abort(); }catch{} }, timeoutMs);
 
   try{
-    const r=await fetch("https://world.openfoodfacts.org/api/v2/product/"+encodeURIComponent(ean)+".json",{cache:"no-store"});
-    const j=await r.json();
-    if(j.status===1 && j.product){
-      const name=j.product.product_name||j.product.product_name_en||j.product.generic_name||"—";
-      cache[ean]=name; writeCache(cache);
-      return name;
+    const url = "https://world.openfoodfacts.org/api/v2/product/" + encodeURIComponent(ean) + ".json";
+    const r = await fetch(url, { cache:"no-store", signal: ctrl ? ctrl.signal : undefined });
+    clearTimeout(t);
+
+    if(!r || !r.ok) return { ok:false, kind:"net" };
+    const j = await r.json();
+    if(j && j.status===1 && j.product){
+      const name = (j.product.product_name || j.product.product_name_en || j.product.generic_name || "").trim();
+      if(name) return { ok:true, name };
+      return { ok:false, kind:"noname" };
     }
-    return "Nije u katalogu";
+    return { ok:false, kind:"notfound" };
   }catch{
+    clearTimeout(t);
+    return { ok:false, kind:"net" };
+  }
+}
+
+async function lookupNameStable(ean){
+  // 1) cache (local + session)
+  const cache = readCache();
+  if(memGood.has(ean)) return memGood.get(ean);
+  if(cache[ean]){ memGood.set(ean, cache[ean]); return cache[ean]; }
+
+  // 2) OFF lookup s retry
+  const first = await fetchOffName(ean, 2500);
+  if(first.ok){
+    cache[ean]=first.name; writeCache(cache);
+    memGood.set(ean, first.name);
+    return first.name;
+  }
+
+  // retry only for network
+  if(first.kind==="net"){
+    const second = await fetchOffName(ean, 3000);
+    if(second.ok){
+      cache[ean]=second.name; writeCache(cache);
+      memGood.set(ean, second.name);
+      return second.name;
+    }
+    // ako imamo bilo kakav stari naziv, vrati njega (ne ruši UI)
+    if(memGood.has(ean)) return memGood.get(ean);
+    if(cache[ean]) return cache[ean];
     return "Greška mreže";
   }
+
+  // not found / no name
+  if(first.kind==="notfound") return "Nije u katalogu";
+  if(first.kind==="noname") return "Nije u katalogu";
+  return "Nije u katalogu";
 }
 
 async function listCameras(){
@@ -89,7 +137,7 @@ async function startCamera(){
     loopScan();
 
     setStatus("Spremno","ok");
-  }catch(e){
+  }catch{
     setStatus("Kamera greška","bad");
   }
 }
@@ -124,7 +172,6 @@ function initDetector(){
     loadZXing();
   }
 }
-
 async function loadZXing(){
   if(window.ZXingBrowser) return;
   const s=document.createElement("script");
@@ -147,8 +194,22 @@ async function loopScan(){
   requestAnimationFrame(loopScan);
 }
 
-async function handleCode(code){
+async function handleCode(raw){
   const now=Date.now();
+  const code = normalizeCode(raw);
+
+  // ignoriraj loše/kratko očitanje
+  if(!isValidCodeDigits(code)){
+    // ali pokaži barem kod ako je nešto očitao
+    if(code && code.length>=6){
+      codeEl.textContent = code;
+      whenEl.textContent = new Date().toLocaleString("hr-HR");
+      nameEl.textContent = "—";
+      setStatus("Loše očitanje","warn");
+    }
+    return;
+  }
+
   if(code===lastCode && now-lastAt<1500) return;
   lastCode=code; lastAt=now;
 
@@ -157,8 +218,9 @@ async function handleCode(code){
   whenEl.textContent=new Date().toLocaleString("hr-HR");
 
   nameEl.textContent="Tražim…";
-  const name=await lookupName(code);
-  nameEl.textContent=name;
+  const name = await lookupNameStable(code);
+  nameEl.textContent = name;
+  setStatus("Spremno","ok");
 }
 
 btnStart.addEventListener("click",async()=>{ await listCameras(); await startCamera(); });
@@ -168,5 +230,4 @@ btnTorch.addEventListener("click",toggleTorch);
 btnSound.addEventListener("click",()=>{ soundOn=!soundOn; btnSound.textContent="Zvuk: "+(soundOn?"ON":"OFF"); });
 
 document.addEventListener("visibilitychange",()=>{ if(document.hidden) stopCamera(); });
-
 setStatus("Spremno","warn");
