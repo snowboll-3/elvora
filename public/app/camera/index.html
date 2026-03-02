@@ -1,9 +1,9 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="hr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Elvora Ă„â€šĂ‹ÂÄ‚ËĂ˘â‚¬ĹˇĂ‚Â¬Ä‚ËĂ˘â€šÂ¬ÄąÄ„ Kamera</title>
+<title>Elvora — Kamera</title>
 <style>
 :root{
   --bg:#0b0f14;
@@ -48,7 +48,7 @@ canvas#overlay{position:absolute;inset:0;pointer-events:none}
 <div class="wrapper">
   <div class="topbar">
     <div class="brand">ELVORA</div>
-    <div class="badge">Kamera Ă„â€šĂ‹ÂÄ‚ËĂ˘â‚¬ĹˇĂ‚Â¬Ä‚â€ąĂ‚Â Skeniranje</div>
+    <div class="badge">Kamera • Skeniranje</div>
   </div>
 
   <div class="stage">
@@ -60,12 +60,12 @@ canvas#overlay{position:absolute;inset:0;pointer-events:none}
 
   <div id="result">
     <div class="row"><div class="k">Status</div><div id="st" class="v ok">Spremno</div></div>
-    <div class="row"><div class="k">Kod</div><div id="code" class="v">Ă„â€šĂ‹ÂÄ‚ËĂ˘â‚¬ĹˇĂ‚Â¬Ä‚ËĂ˘â€šÂ¬ÄąÄ„</div></div>
-    <div class="row"><div class="k">Naziv</div><div id="name" class="v">Ă„â€šĂ‹ÂÄ‚ËĂ˘â‚¬ĹˇĂ‚Â¬Ä‚ËĂ˘â€šÂ¬ÄąÄ„</div></div>
-    <div class="row"><div class="k">Vrijeme</div><div id="when" class="v">Ă„â€šĂ‹ÂÄ‚ËĂ˘â‚¬ĹˇĂ‚Â¬Ä‚ËĂ˘â€šÂ¬ÄąÄ„</div></div>
+    <div class="row"><div class="k">Kod</div><div id="code" class="v">—</div></div>
+    <div class="row"><div class="k">Naziv</div><div id="name" class="v">—</div></div>
+    <div class="row"><div class="k">Vrijeme</div><div id="when" class="v">—</div></div>
   </div>
 
-  <div class="note" id="note">Ciljaj barkod u okvir. Kamera se pokreĂ„â€šĂ˘â‚¬ĹľÄ‚ËĂ˘â€šÂ¬Ă‹â€ˇe automatski.</div>
+  <div class="note" id="note">Ciljaj barkod u okvir. Kamera se pokreće automatski.</div>
 </div>
 
 <script>
@@ -81,9 +81,6 @@ const whenEl = document.getElementById("when");
 const noteEl = document.getElementById("note");
 
 let lastCode=null, lastAt=0;
-
-function readCatalog(){ try{ return JSON.parse(localStorage.getItem("sl_catalog")||"{}"); }catch(e){ return {}; } }
-
 let detector = null;
 
 function setStatus(msg, ok=true){
@@ -128,33 +125,20 @@ function beep(){
   if(navigator.vibrate) navigator.vibrate(60);
 }
 
-async function fetchName(code){
+async function fetchProduct(ean){
   try{
-    const url = '/api/products?code=' + encodeURIComponent(String(code||''));
-    const r = await fetch(url, { cache:'no-store' });
-    if(!r.ok) throw new Error('API '+r.status);
+    const r = await fetch(`https://world.openfoodfacts.org/api/v0/product/${encodeURIComponent(ean)}.json`, {cache:"no-store"});
     const j = await r.json();
-    if(j && j.ok && j.product && j.product.name){
-      const n = String(j.product.name).trim();
-      return n ? n : '—';
-    }
-  }catch(e){
-    try{ setStatus('Naziv: greška API', false); }catch(_){}
-  }
-  return '—';
-}
-);
-    const j = await r.json();
-    if(j && j.ok && j.product && j.product.name){
-      const n = String(j.product.name).trim();
-      return n ? n : "—";
+    if(j && j.status===1 && j.product){
+      return (j.product.product_name || j.product.generic_name || "Nepoznato").trim() || "Nepoznato";
     }
   }catch(e){}
-  return "—";
+  return "Nepoznato";
 }
+
 async function startCamera(){
-  setStatus("PokreĂ„â€šĂ˘â‚¬ĹľÄ‚ËĂ˘â€šÂ¬Ă‹â€ˇemĂ„â€šĂ‹ÂÄ‚ËĂ˘â‚¬ĹˇĂ‚Â¬Ä‚â€šĂ‚Â¦");
-  noteEl.textContent = "TraÄ‚â€žĂ„â€¦Ä‚â€žĂ„Äľim dozvolu za kameruĂ„â€šĂ‹ÂÄ‚ËĂ˘â‚¬ĹˇĂ‚Â¬Ä‚â€šĂ‚Â¦";
+  setStatus("Pokrećem…");
+  noteEl.textContent = "Tražim dozvolu za kameru…";
 
   const stream = await navigator.mediaDevices.getUserMedia({
     video:{ facingMode:{ideal:"environment"} },
@@ -186,9 +170,9 @@ async function scanOnce(){
         beep();
         codeEl.textContent = code;
         whenEl.textContent = new Date().toLocaleString("hr-HR");
-        setStatus("OĂ„â€šĂ˘â‚¬ĹľĂ„Ä…Ă‚Â¤itano", true);
+        setStatus("Očitano", true);
 
-        nameEl.textContent = "NazivĂ„â€šĂ‹ÂÄ‚ËĂ˘â‚¬ĹˇĂ‚Â¬Ä‚â€šĂ‚Â¦"; const name = await fetchName(code); nameEl.textContent = name;
+        nameEl.textContent = "Naziv…"; const name = await resolveName(code); nameEl.textContent = name;
       }
     }
   }catch(e){
@@ -202,13 +186,13 @@ function loop(){
 
 function showStartButton(reason){
   setStatus(reason || "Potrebna akcija", false);
-  noteEl.textContent = "Klikni 'Pokreni kameru' (browser traÄ‚â€žĂ„â€¦Ä‚â€žĂ„Äľi potvrdu).";
+  noteEl.textContent = "Klikni 'Pokreni kameru' (browser traži potvrdu).";
   startBtn.style.display = "block";
 }
 
 async function autoStart(){
   if(!('mediaDevices' in navigator) || !('getUserMedia' in navigator.mediaDevices)){
-    showStartButton("Kamera nije podrÄ‚â€žĂ„â€¦Ä‚â€žĂ„Äľana");
+    showStartButton("Kamera nije podržana");
     return;
   }
 
@@ -227,7 +211,7 @@ async function autoStart(){
     const name = (e && e.name) ? e.name : "";
     const msg  = (e && (e.message||e.name)) ? (e.message||e.name) : "Dozvola za kameru";
 
-    // Samo permission/user-gesture -> pokaÄ‚â€žĂ„â€¦Ä‚â€žĂ„Äľi gumb kao fallback
+    // Samo permission/user-gesture -> pokaži gumb kao fallback
     if(name==="NotAllowedError" || name==="SecurityError"){
       showStartButton(name + ": " + msg);
       return;
@@ -235,7 +219,7 @@ async function autoStart(){
 
     // Sve ostalo -> retry automatski bez gumba
     setStatus(name ? (name + ": " + msg) : msg, false);
-    noteEl.textContent = "PokuÄ‚â€žĂ„â€¦Ä‚â€ąĂ˘â‚¬Ë‡avam ponovnoĂ„â€šĂ‹ÂÄ‚ËĂ˘â‚¬ĹˇĂ‚Â¬Ä‚â€šĂ‚Â¦";
+    noteEl.textContent = "Pokušavam ponovno…";
     startBtn.style.display = "none";
     setTimeout(autoStart, 900);
   }
@@ -250,7 +234,7 @@ startBtn.addEventListener("click", async ()=>{
 window.addEventListener("load", autoStart);
 window.addEventListener("resize", resizeOverlay);
 
-// Safety: kad tab ode u background, ugasi stream (Ä‚â€žĂ„â€¦Ä‚â€ąĂ˘â‚¬Ë‡tedi bateriju)
+// Safety: kad tab ode u background, ugasi stream (štedi bateriju)
 document.addEventListener("visibilitychange", ()=>{
   if(document.hidden){
     try{
@@ -262,6 +246,5 @@ document.addEventListener("visibilitychange", ()=>{
 </script>
 </body>
 </html>
-
 
 
