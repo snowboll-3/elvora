@@ -48,29 +48,40 @@ function writeEanCache(o){ try{ localStorage.setItem(EAN_CACHE_KEY, JSON.stringi
 async function lookupName(code){
   const ean = String(code||"").trim();
   if(!ean) return "—";
+
   const cache = readEanCache();
   if(cache[ean]) return cache[ean];
 
-  // timeout da ne visi
   const ctrl = ("AbortController" in window) ? new AbortController() : null;
   const t = setTimeout(()=>{ try{ ctrl && ctrl.abort(); }catch{} }, 2500);
 
   try{
     const url = "https://world.openfoodfacts.org/api/v2/product/" + encodeURIComponent(ean) + ".json";
     const r = await fetch(url, { method:"GET", cache:"no-store", signal: ctrl ? ctrl.signal : undefined });
+
+    clearTimeout(t);
+
     if(r && r.ok){
       const j = await r.json();
-      const name =
-        (j && j.product && (j.product.product_name || j.product.product_name_hr || j.product.product_name_en)) ||
-        (j && j.product && j.product.generic_name) ||
-        "Nepoznato";
-      cache[ean]=name; writeEanCache(cache);
-      return name;
-    }
-  }catch(e){}
+      if(j && j.status === 1 && j.product){
+        const name =
+          j.product.product_name ||
+          j.product.product_name_hr ||
+          j.product.product_name_en ||
+          j.product.generic_name ||
+          "Nepoznato";
 
-  clearTimeout(t);
-  cache[ean]="Nepoznato"; writeEanCache(cache);
+        cache[ean]=name;
+        writeEanCache(cache);
+        return name;
+      }
+    }
+  }catch(e){
+    clearTimeout(t);
+  }
+
+  cache[ean]="Nepoznato";
+  writeEanCache(cache);
   return "Nepoznato";
 }
 async function listCameras(){
@@ -232,5 +243,6 @@ if (!('mediaDevices' in navigator) || !('getUserMedia' in navigator.mediaDevices
   setStatus('Preglednik ne podržava kameru (getUserMedia).', false);
   noteEl.textContent = 'Pokušaj s modernim preglednikom (Chrome, Edge, Safari).';
 }
+
 
 
