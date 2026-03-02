@@ -1,0 +1,312 @@
+﻿<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Elvora – Kamera (V1)</title>
+
+<style>
+:root{
+  --bg:#0b0f14;
+  --panel:#111827;
+  --border:#1f2937;
+  --text:#e5e7eb;
+  --muted:#9fb0c6;
+  --blue:#19b5ff;
+  --green:#39d98a;
+  --warn:#f0c24b;
+  --danger:#ff5d5d;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:system-ui,Segoe UI,Roboto,Arial}
+.wrapper{width:min(92vw,520px);margin:16px auto;padding:0 4px}
+.header{display:flex;align-items:center;justify-content:space-between;margin:6px 0 10px}
+.brand{font-weight:900;letter-spacing:.08em;color:var(--blue)}
+.badge{font-size:12px;color:var(--muted)}
+.stage{position:relative;border-radius:16px;overflow:hidden;border:1px solid var(--border);background:#000}
+video{width:100%;height:min(46vh,420px);object-fit:cover;display:block}
+canvas#overlay{position:absolute;inset:0;pointer-events:none}
+
+.card{margin-top:12px;padding:12px;background:var(--panel);border:1px solid var(--border);border-radius:14px}
+.row{display:flex;gap:10px;align-items:center;justify-content:space-between;margin:6px 0}
+.k{color:var(--muted);font-size:12px}
+.v{font-weight:800}
+.code{font-family:ui-monospace,Consolas,monospace;color:#9cf}
+.pill{display:inline-flex;align-items:center;gap:8px;padding:8px 10px;border-radius:999px;font-weight:900;border:1px solid var(--border)}
+.pill.ok{background:rgba(57,217,138,.12);border-color:rgba(57,217,138,.25);color:var(--green)}
+.pill.warn{background:rgba(240,194,75,.12);border-color:rgba(240,194,75,.25);color:var(--warn)}
+.pill.bad{background:rgba(255,93,93,.12);border-color:rgba(255,93,93,.25);color:var(--danger)}
+
+input[type="date"]{
+  width:100%;
+  padding:10px 12px;
+  border-radius:12px;
+  border:1px solid var(--border);
+  background:#0e1623;
+  color:var(--text);
+  font-weight:800;
+}
+.small{font-size:12px;color:var(--muted);margin-top:6px}
+hr{border:0;border-top:1px solid var(--border);margin:10px 0}
+</style>
+</head>
+
+<body>
+<div class="wrapper">
+
+  <div class="header">
+    <div class="brand">ELVORA</div>
+    <div class="badge" id="modeBadge">ULAZ</div>
+  </div>
+
+  <div class="stage">
+    <video id="video" playsinline autoplay muted></video>
+    <canvas id="overlay"></canvas>
+  </div>
+
+  <div class="card">
+    <div class="row">
+      <div class="pill ok" id="statusPill">SPREMNO</div>
+      <div class="k" id="hint">Ciljaj barkod u okvir.</div>
+    </div>
+
+    <hr>
+
+    <div class="row"><div class="k">EAN</div><div class="v code" id="ean">—</div></div>
+    <div class="row"><div class="k">Naziv</div><div class="v" id="name">—</div></div>
+    <div class="row"><div class="k">Skenirano</div><div class="v" id="scannedAt">—</div></div>
+
+    <hr>
+
+    <div class="k">Rok trajanja (odaberi datum)</div>
+    <input id="expiry" type="date" />
+    <div class="small" id="expiryInfo">—</div>
+  </div>
+
+</div>
+
+<script>
+const video = document.getElementById("video");
+const overlay = document.getElementById("overlay");
+const ctx = overlay.getContext("2d");
+
+const pill = document.getElementById("statusPill");
+const hint = document.getElementById("hint");
+const eanEl = document.getElementById("ean");
+const nameEl = document.getElementById("name");
+const scannedAtEl = document.getElementById("scannedAt");
+const expiryEl = document.getElementById("expiry");
+const expiryInfo = document.getElementById("expiryInfo");
+
+// prag za "istiće uskoro" (admin kasnije; za V1 lokalno)
+const WARN_DAYS = Number(localStorage.getItem("elvora_warn_days")||"3");
+
+let lastEAN = "";
+let lastAt = 0;
+
+function setPill(kind, text){
+  pill.className = "pill " + kind;
+  pill.textContent = text;
+}
+
+function resizeOverlay(){
+  overlay.width = video.clientWidth;
+  overlay.height = video.clientHeight;
+}
+window.addEventListener("resize", resizeOverlay);
+
+function drawCorners(){
+  const w = overlay.width, h = overlay.height;
+  if(!w || !h){ requestAnimationFrame(drawCorners); return; }
+  ctx.clearRect(0,0,w,h);
+
+  const m = 22, l = 44;
+  ctx.strokeStyle = "#39d98a";
+  ctx.lineWidth = 4;
+
+  // TL
+  ctx.beginPath(); ctx.moveTo(m, m+l); ctx.lineTo(m, m); ctx.lineTo(m+l, m); ctx.stroke();
+  // TR
+  ctx.beginPath(); ctx.moveTo(w-m-l, m); ctx.lineTo(w-m, m); ctx.lineTo(w-m, m+l); ctx.stroke();
+  // BL
+  ctx.beginPath(); ctx.moveTo(m, h-m-l); ctx.lineTo(m, h-m); ctx.lineTo(m+l, h-m); ctx.stroke();
+  // BR
+  ctx.beginPath(); ctx.moveTo(w-m-l, h-m); ctx.lineTo(w-m, h-m); ctx.lineTo(w-m, h-m-l); ctx.stroke();
+
+  requestAnimationFrame(drawCorners);
+}
+
+function beep(){
+  // zvuk može failati bez user gesture; vibracija radi
+  try{
+    const ac = new (window.AudioContext || window.webkitAudioContext)();
+    const osc = ac.createOscillator();
+    const gain = ac.createGain();
+    osc.type="sine"; osc.frequency.value=900;
+    osc.connect(gain); gain.connect(ac.destination);
+    osc.start();
+    gain.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime+0.15);
+    setTimeout(()=>ac.close(),200);
+  }catch(e){}
+  if(navigator.vibrate) navigator.vibrate(60);
+}
+
+function hrNow(){
+  return new Date().toLocaleString("hr-HR");
+}
+
+function daysDiff(expiryDateStr){
+  // expiryDateStr: yyyy-mm-dd
+  if(!expiryDateStr) return null;
+  const [y,m,d] = expiryDateStr.split("-").map(Number);
+  if(!y||!m||!d) return null;
+
+  const exp = new Date(y, m-1, d);
+  const now = new Date();
+  // danas u 00:00 radi točnog broja dana
+  const n0 = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  const e0 = new Date(exp.getFullYear(), exp.getMonth(), exp.getDate());
+  const ms = e0 - n0;
+  return Math.round(ms / 86400000);
+}
+
+function updateExpiryUI(){
+  const v = expiryEl.value;
+  const dd = daysDiff(v);
+  if(dd===null){
+    expiryInfo.textContent = "—";
+    // ne diraj pill ako još nema roka
+    return;
+  }
+  if(dd < 0){
+    setPill("bad", "ISTEKAO ❌ (" + dd + " dana)");
+    expiryInfo.textContent = "Rok je prošao. Odmah makni proizvod.";
+  }else if(dd <= WARN_DAYS){
+    setPill("warn", "ISTIČE USKORO ⚠️ (" + dd + " dana)");
+    expiryInfo.textContent = "Upozorenje: bliži se rok (prag: " + WARN_DAYS + " dana).";
+  }else{
+    setPill("ok", "OK ✅ (" + dd + " dana)");
+    expiryInfo.textContent = "Ima još " + dd + " dana do isteka.";
+  }
+}
+
+expiryEl.addEventListener("change", updateExpiryUI);
+
+async function startCamera(){
+  setPill("ok","POKREĆEM…");
+  hint.textContent = "Dopuštenje kamere…";
+
+  const stream = await navigator.mediaDevices.getUserMedia({
+    video:{ facingMode:{ ideal:"environment" }, width:{ ideal:1280 }, height:{ ideal:720 } },
+    audio:false
+  });
+  video.srcObject = stream;
+  await video.play();
+  resizeOverlay();
+  drawCorners();
+
+  setPill("ok","SPREMNO");
+  hint.textContent = "Ciljaj barkod u okvir.";
+}
+
+async function fetchProduct(ean){
+  const code = String(ean||"").trim();
+  const CACHE_KEY="elvora_ean_cache_v1";
+  const cache = (()=>{ try{return JSON.parse(localStorage.getItem(CACHE_KEY)||"{}")}catch{return {}} })();
+
+  if(cache[code]) return cache[code];
+
+  try{
+    const url = "https://world.openfoodfacts.org/api/v2/product/" + encodeURIComponent(code) + ".json";
+    const r = await fetch(url, { method:"GET", cache:"no-store" });
+    if(r.ok){
+      const j = await r.json();
+      const name =
+        (j && j.product && (j.product.product_name || j.product.product_name_hr || j.product.product_name_en)) ||
+        (j && j.product && j.product.generic_name) ||
+        "Nepoznato";
+      cache[code]=name;
+      try{ localStorage.setItem(CACHE_KEY, JSON.stringify(cache)); }catch{}
+      return name;
+    }
+  }catch(e){}
+
+  cache[code]="Nepoznato";
+  try{ localStorage.setItem(CACHE_KEY, JSON.stringify(cache)); }catch{}
+  return "Nepoznato";
+}
+
+let detector = null;
+if("BarcodeDetector" in window){
+  detector = new BarcodeDetector({formats:["ean_13","ean_8","upc_a","upc_e","code_128","qr_code","data_matrix"]});
+}
+
+async function scanLoop(){
+  if(detector && video.readyState === 4){
+    try{
+      const codes = await detector.detect(video);
+      if(codes.length){
+        const code = codes[0].rawValue;
+        const now = performance.now();
+        if(code && (code!==lastEAN || now-lastAt>1600)){
+          lastEAN = code; lastAt = now;
+
+          beep();
+          eanEl.textContent = code;
+          scannedAtEl.textContent = hrNow();
+          nameEl.textContent = "Tražim…";
+
+          // reset roka (radnik odabere)
+          expiryEl.value = "";
+          expiryInfo.textContent = "Odaberi rok trajanja.";
+
+          const name = await fetchProduct(code);
+          nameEl.textContent = name;
+
+          // nakon naziva vrati pill na "SPREMNO" ako rok još nije upisan
+          setPill("ok","SPREMNO");
+        }
+      }
+    }catch(e){}
+  }else{
+    // fallback ako BarcodeDetector ne postoji
+    if(!detector){
+      setPill("warn","NEMA DETEKTORA");
+      hint.textContent = "Ovaj preglednik nema BarcodeDetector. Koristi Chrome/Android.";
+    }
+  }
+  requestAnimationFrame(scanLoop);
+}
+
+async function autoStart(retry=0){
+  try{
+    if(!('mediaDevices' in navigator) || !('getUserMedia' in navigator.mediaDevices)){
+      setPill("bad","NEMA KAMERE");
+      hint.textContent = "Preglednik ne podržava kameru (getUserMedia).";
+      return;
+    }
+    await startCamera();
+    scanLoop();
+  }catch(e){
+    if(retry < 6){
+      setTimeout(()=>autoStart(retry+1), 450);
+    }else{
+      setPill("bad","GREŠKA");
+      hint.textContent = (e && e.name ? (e.name+": ") : "") + "Provjeri dozvole kamere.";
+    }
+  }
+}
+
+document.addEventListener("visibilitychange", ()=>{
+  // kad se vratiš u tab – samo probaj opet (Android zna “ubiti” stream)
+  if(!document.hidden){
+    autoStart(0);
+  }
+});
+
+// AUTO start bez ikakvog gumba
+autoStart(0);
+</script>
+</body>
+</html>
+

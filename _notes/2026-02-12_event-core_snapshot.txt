@@ -1,0 +1,13 @@
+﻿2026-02-12 — Snapshot
+- Event Core: public/shared/events.js
+  - localStorage key: ev.core.queue (MAX 5000)
+  - API: ElvoraEvents.emit/on/off/queue/clear/flush
+  - flush() POST /api/events {batch:true, events:[...]}
+  - auto flush on window online
+- Shared scanner/i18n: public/shared/elvora.js
+  - ElvoraStore, ElvoraI18n
+  - dispatch CustomEvent "elvora:scan" (HID/CAM)
+  - window.ElvoraCamScan exported here
+- shared/warehouse.js: removed duplicate ElvoraCamScan (uses shared/elvora.js)
+Dogovor: kamera radimo na kraju.
+Sutra: tražimo backend handler za /api/events.
