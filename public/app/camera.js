@@ -1,4 +1,4 @@
-const video = document.getElementById("video");
+ï»¿const video = document.getElementById("video");
 const overlay = document.getElementById("overlay");
 const statusEl = document.getElementById("status");
 const codeEl = document.getElementById("code");
@@ -40,6 +40,39 @@ function beep(){
 function flash(){ overlay.classList.remove("flash"); void overlay.offsetWidth; overlay.classList.add("flash"); }
 function setStatus(msg, ok=true){ statusEl.textContent=msg; statusEl.className= ok?'value ok':'value bad'; }
 
+
+const EAN_CACHE_KEY="elvora_ean_cache_v1";
+function readEanCache(){ try{ return JSON.parse(localStorage.getItem(EAN_CACHE_KEY)||"{}"); }catch{ return {}; } }
+function writeEanCache(o){ try{ localStorage.setItem(EAN_CACHE_KEY, JSON.stringify(o||{})); }catch{} }
+
+async function lookupName(code){
+  const ean = String(code||"").trim();
+  if(!ean) return "â€”";
+  const cache = readEanCache();
+  if(cache[ean]) return cache[ean];
+
+  // timeout da ne visi
+  const ctrl = ("AbortController" in window) ? new AbortController() : null;
+  const t = setTimeout(()=>{ try{ ctrl && ctrl.abort(); }catch{} }, 2500);
+
+  try{
+    const url = "https://world.openfoodfacts.org/api/v2/product/" + encodeURIComponent(ean) + ".json";
+    const r = await fetch(url, { method:"GET", cache:"no-store", signal: ctrl ? ctrl.signal : undefined });
+    if(r && r.ok){
+      const j = await r.json();
+      const name =
+        (j && j.product && (j.product.product_name || j.product.product_name_hr || j.product.product_name_en)) ||
+        (j && j.product && j.product.generic_name) ||
+        "Nepoznato";
+      cache[ean]=name; writeEanCache(cache);
+      return name;
+    }
+  }catch(e){}
+
+  clearTimeout(t);
+  cache[ean]="Nepoznato"; writeEanCache(cache);
+  return "Nepoznato";
+}
 async function listCameras(){
   try{
     const all=await navigator.mediaDevices.enumerateDevices();
@@ -50,7 +83,7 @@ async function listCameras(){
 async function startCamera(pref=null){
   await stopCamera();
   try{
-    setStatus("Pokreæem kameru…");
+    setStatus("PokreÄ‡em kameruâ€¦");
     const constraints = pref
       ? { video:{ deviceId:{ exact: pref }}, audio:false }
       : { video:{ facingMode:{ ideal:'environment' }, width:{ ideal:1280 }, height:{ ideal:720 }}, audio:false };
@@ -62,7 +95,7 @@ async function startCamera(pref=null){
     await startScanning();
   }catch(e){
     setStatus(e.name+": "+e.message,false);
-    noteEl.textContent="Provjeri dopuštenja za kameru i da nije u upotrebi drugdje.";
+    noteEl.textContent="Provjeri dopuÅ¡tenja za kameru i da nije u upotrebi drugdje.";
   }
 }
 async function stopCamera(){
@@ -88,7 +121,7 @@ async function startScanning(){
     const hints = new Map();
     hints.set(DecodeHintType.POSSIBLE_FORMATS, [
       BarcodeFormat.EAN_13, BarcodeFormat.UPC_A, BarcodeFormat.EAN_8,
-      BarcodeFormat.QR_CODE, BarcodeFormat.DATA_MATRIX, BarcodeFormat.CODE_128 // “novi” + fallback
+      BarcodeFormat.QR_CODE, BarcodeFormat.DATA_MATRIX, BarcodeFormat.CODE_128 // â€œnoviâ€ + fallback
     ]);
     reader = new ZXingBrowser.BrowserMultiFormatReader(hints);
 
@@ -101,7 +134,7 @@ async function startScanning(){
           onScan(code);
         }
       }else if(err && !(err instanceof ZXingBrowser.NotFoundException)){
-        setStatus("Greška dekodiranja", false);
+        setStatus("GreÅ¡ka dekodiranja", false);
       }
     });
   }catch(e){
@@ -109,27 +142,16 @@ async function startScanning(){
   }
 }
 
-function onScan(code){
+async function onScan(code){
   codeEl.textContent=code;
-  setStatus("Oèitano ?");
+  setStatus("OÄitano âœ…");
   flash(); beep();
 
   const ts = new Date();
   whenEl.textContent = ts.toLocaleString();
 
-  // lokalni katalog (uèenje)
-  const catalog = readCatalog();
-  let name = catalog[code] || "";
-  if(!name){
-    const guess = prompt("Molim unesite toèan naziv proizvoda:", "");
-    if(guess && guess.trim().length){
-      name = guess.trim();
-      catalog[code] = name;
-      saveCatalog(catalog);
-    }else{
-      name = "—";
-    }
-  }
+  nameEl.textContent = "TraÅ¾imâ€¦";
+  const name = await lookupName(code);
   nameEl.textContent = name;
 
   // journal entry
@@ -138,17 +160,12 @@ function onScan(code){
     mode: MODE.value, // ADD/USE
     code,
     name,
-    qty: 1,
-    ts: ts.toISOString()
+    at: ts.toISOString()
   };
-  const journal = readJournal();
-  journal.unshift(entry);
-  saveJournal(journal);
+  const j = readJournal();
+  j.unshift(entry);
+  saveJournal(j.slice(0,200));
   renderJournal();
-
-    // event › Event Core (offline-first)
-  ev("SCANNER", MODE.value, { code, name, qty: 1, ts: entry.ts }, { hub:"scanner", source:"camera.js" });
-
 }
 
 function readJournal(){
@@ -165,14 +182,14 @@ function renderJournal(){
   listEl.innerHTML = rows.map(r=>`
     <div class="item">
       <div>
-        <p class="ititle">${r.name||"—"}</p>
-        <div class="imeta">${r.mode} · Kod: ${r.code} · Kolièina: <span class="qty">${r.qty}</span></div>
+        <p class="ititle">${r.name||"â€”"}</p>
+        <div class="imeta">${r.mode} Â· Kod: ${r.code} Â· KoliÄina: <span class="qty">${r.qty}</span></div>
         <div class="imeta">Vrijeme: ${new Date(r.ts).toLocaleString()}</div>
       </div>
       <div>
         <button class="btn ghost" onclick="inc('${r.id}',1)">+1</button>
         <button class="btn ghost" onclick="inc('${r.id}',-1)">-1</button>
-        <button class="btn ghost" onclick="delItem('${r.id}')">Obriši</button>
+        <button class="btn ghost" onclick="delItem('${r.id}')">ObriÅ¡i</button>
       </div>
     </div>
   `).join("");
@@ -201,9 +218,9 @@ sendBtn.addEventListener("click", ()=>{
   const j = readJournal();
   if(!j.length){ alert("Dnevnik je prazan."); return; }
   alert("?? Poslano u Hladnjak (mock). U praksi: API za spremanje.\nStavke: "+j.length);
-  // nakon slanja moeš odluèiti: oèistiti ili ostaviti
+  // nakon slanja moÅ¾eÅ¡ odluÄiti: oÄistiti ili ostaviti
 });
-clearBtn.addEventListener("click", ()=>{ saveJournal([]); renderJournal(); setStatus("Spremno"); codeEl.textContent="—"; nameEl.textContent="—"; });
+clearBtn.addEventListener("click", ()=>{ saveJournal([]); renderJournal(); setStatus("Spremno"); codeEl.textContent="â€”"; nameEl.textContent="â€”"; });
 
 document.addEventListener("visibilitychange", async ()=>{
   if(document.hidden){ await stopCamera(); }
@@ -212,7 +229,8 @@ document.addEventListener("visibilitychange", async ()=>{
 renderJournal();
 
 if (!('mediaDevices' in navigator) || !('getUserMedia' in navigator.mediaDevices)){
-  setStatus('Preglednik ne podrava kameru (getUserMedia).', false);
-  noteEl.textContent = 'Pokušaj s modernim preglednikom (Chrome, Edge, Safari).';
+  setStatus('Preglednik ne podrÅ¾ava kameru (getUserMedia).', false);
+  noteEl.textContent = 'PokuÅ¡aj s modernim preglednikom (Chrome, Edge, Safari).';
 }
+
 

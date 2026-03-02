@@ -121,4 +121,11 @@
   v.addEventListener("play", ()=>{ waitForStream(); startScan(); }, { once:true });
   ensureCamera();
   log("CamPatch loader injected");
-})();
+})();import { ElvoraWarehouseCamScan } from "./shared/warehouse.js";
+document.addEventListener("DOMContentLoaded",()=>{
+  const btn = document.querySelector("[data-startcam]");
+  if(btn) btn.addEventListener("click",()=>ElvoraWarehouseCamScan());
+});
+
+;(()=>{ const boot=()=>{ try{ if(window.ElvoraWarehouseCamScan) window.ElvoraWarehouseCamScan(); }catch(e){} }; if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',()=>setTimeout(boot,50)); else setTimeout(boot,50); })();
+
