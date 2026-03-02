@@ -1,17 +1,11 @@
 ﻿const video = document.getElementById("video");
 const overlay = document.getElementById("overlay");
-const statusEl = document.getElementById("status");
+const statusEl = document.getElementById("st");
 const codeEl = document.getElementById("code");
 const nameEl = document.getElementById("name");
 const whenEl = document.getElementById("when");
 const noteEl = document.getElementById("note");
 const startBtn = document.getElementById("startBtn");
-const stopBtn = document.getElementById("stopBtn");
-const switchBtn = document.getElementById("switchBtn");
-const soundBtn = document.getElementById("soundBtn");
-const sendBtn = document.getElementById("sendBtn");
-const clearBtn = document.getElementById("clearBtn");
-const listEl = document.getElementById("list");
 
 let stream=null, reader=null, devices=[], currentDeviceId=null;
 let lastCode=null, lastAt=0, soundOn=true, audioCtx=null;
@@ -213,19 +207,7 @@ window.delItem = function(id){
 };
 
 startBtn.addEventListener("click", async ()=>{ await listCameras(); await startCamera(); });
-stopBtn.addEventListener("click", stopCamera);
-switchBtn.addEventListener("click", switchCamera);
-soundBtn.addEventListener("click", ()=>{
-  soundOn=!soundOn;
-  soundBtn.textContent = (soundOn?'??':'??') + " Zvuk: " + (soundOn?"ON":"OFF");
-});
-sendBtn.addEventListener("click", ()=>{
-  const j = readJournal();
-  if(!j.length){ alert("Dnevnik je prazan."); return; }
-  alert("?? Poslano u Hladnjak (mock). U praksi: API za spremanje.\nStavke: "+j.length);
-  // nakon slanja možeš odlučiti: očistiti ili ostaviti
-});
-clearBtn.addEventListener("click", ()=>{ saveJournal([]); renderJournal(); setStatus("Spremno"); codeEl.textContent="—"; nameEl.textContent="—"; });
+renderJournal(); setStatus("Spremno"); codeEl.textContent="—"; nameEl.textContent="—"; });
 
 document.addEventListener("visibilitychange", async ()=>{
   if(document.hidden){ await stopCamera(); }
@@ -237,6 +219,8 @@ if (!('mediaDevices' in navigator) || !('getUserMedia' in navigator.mediaDevices
   setStatus('Preglednik ne podržava kameru (getUserMedia).', false);
   noteEl.textContent = 'Pokušaj s modernim preglednikom (Chrome, Edge, Safari).';
 }
+
+
 
 
 
