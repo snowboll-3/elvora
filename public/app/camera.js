@@ -226,3 +226,20 @@ if (!('mediaDevices' in navigator) || !('getUserMedia' in navigator.mediaDevices
 
 
 
+
+
+// --- ELVORA CAMERA DEBUG OVERLAY ---
+(function(){
+  function show(msg){
+    try{
+      var el = document.getElementById('note') || document.getElementById('st') || document.body;
+      var p = document.getElementById('__err');
+      if(!p){ p = document.createElement('pre'); p.id='__err'; p.style.cssText='position:fixed;left:8px;right:8px;bottom:8px;max-height:35vh;overflow:auto;background:rgba(0,0,0,.85);color:#ff5d5d;padding:10px;border-radius:12px;z-index:99999;font-size:12px;white-space:pre-wrap;'; document.body.appendChild(p); }
+      p.textContent = String(msg);
+    }catch(e){}
+  }
+  window.addEventListener('error', function(e){ show('JS ERROR: ' + (e.message||e.type) + (e.filename? ('\n' + e.filename + ':' + e.lineno):'')); });
+  window.addEventListener('unhandledrejection', function(e){ show('PROMISE ERROR: ' + (e.reason && (e.reason.message||e.reason) || 'unknown')); });
+  try{ show('DEBUG: camera.js loaded'); }catch(e){}
+})();
+
