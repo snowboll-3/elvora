@@ -166,13 +166,7 @@ async function onScan(code){
   nameEl.textContent = name;
 
   // journal entry
-  const entry = {
-    id: String(ts.getTime()),
-    mode: MODE.value, // ADD/USE
-    code,
-    name,
-    at: ts.toISOString()
-  };
+  const entry = { id: String(ts.getTime()), mode: MODE.value, code, name, ts: ts.getTime(), qty: 1 };
   const j = readJournal();
   j.unshift(entry);
   saveJournal(j.slice(0,200));
@@ -243,6 +237,7 @@ if (!('mediaDevices' in navigator) || !('getUserMedia' in navigator.mediaDevices
   setStatus('Preglednik ne podržava kameru (getUserMedia).', false);
   noteEl.textContent = 'Pokušaj s modernim preglednikom (Chrome, Edge, Safari).';
 }
+
 
 
 
