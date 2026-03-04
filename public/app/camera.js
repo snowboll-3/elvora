@@ -129,7 +129,7 @@ async function startCamera(){
     currentTrack=stream.getVideoTracks()[0];
     await video.play();
 
-    btnStop.disabled=false;
+    if(btnStop) if(btnStop) btnStop.disabled=false;
     btnTorch.disabled=!(currentTrack.getCapabilities?.().torch);
     scanning=true;
 
@@ -145,7 +145,7 @@ async function startCamera(){
 async function stopCamera(){
   scanning=false;
   if(stream){ stream.getTracks().forEach(t=>t.stop()); }
-  btnStop.disabled=true;
+  if(btnStop) if(btnStop) btnStop.disabled=true;
   setStatus("Zaustavljeno","warn");
 }
 
@@ -224,10 +224,15 @@ async function handleCode(raw){
 }
 
 btnStart.addEventListener("click",async()=>{ await listCameras(); await startCamera(); });
-btnStop.addEventListener("click",stopCamera);
+if(btnStop) if(btnStop) btnStop.addEventListener("click",stopCamera);
 btnSwitch.addEventListener("click",switchCamera);
 btnTorch.addEventListener("click",toggleTorch);
-btnSound.addEventListener("click",()=>{ soundOn=!soundOn; btnSound.textContent="Zvuk: "+(soundOn?"ON":"OFF"); });
+////btnSound.addEventListener("click",()=>{ soundOn=!soundOn; btnSound.textContent="Zvuk: "+(soundOn?"ON":"OFF"); });
 
 document.addEventListener("visibilitychange",()=>{ if(document.hidden) stopCamera(); });
 setStatus("Spremno","warn");
+
+
+
+
+
