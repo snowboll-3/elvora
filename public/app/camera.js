@@ -1,4 +1,4 @@
-﻿/* ELVORA CAMERA V1 — stable engine (clean-room) */
+﻿/* ELVORA CAMERA V1 — stable engine + scan frame */
 
 const video = document.getElementById("video");
 const overlay = document.getElementById("overlay");
@@ -10,47 +10,61 @@ const nameEl = document.getElementById("name");
 const whenEl = document.getElementById("when");
 
 const btnStart = document.getElementById("btnStart");
-const btnStop = document.getElementById("btnStop");
 const btnSwitch = document.getElementById("btnSwitch");
 const btnTorch = document.getElementById("btnTorch");
-const btnSound = document.getElementById("btnSound");
 
 let stream=null, currentTrack=null, devices=[], deviceIndex=0;
 let scanning=false, lastCode=null, lastAt=0;
-let soundOn=true;
+
 let detector=null, zxingReader=null;
 
 const CACHE_KEY="elvora_ean_cache_v3";
-const memGood = new Map(); // session last-good names
+const memGood = new Map();
 
 function setStatus(msg, type="warn"){
   stEl.textContent = msg;
   stEl.className = "v " + (type || "warn");
 }
-function beep(){
-  if(!soundOn) return;
-  try{
-    const ac=new (window.AudioContext||window.webkitAudioContext)();
-    const o=ac.createOscillator(); const g=ac.createGain();
-    o.type="sine"; o.frequency.value=900;
-    o.connect(g); g.connect(ac.destination);
-    o.start(); g.gain.exponentialRampToValueAtTime(0.0001, ac.currentTime+0.15);
-    setTimeout(()=>ac.close(),200);
-    if(navigator.vibrate) navigator.vibrate(50);
-  }catch{}
-}
+
 function readCache(){ try{return JSON.parse(localStorage.getItem(CACHE_KEY)||"{}");}catch{return{}} }
 function writeCache(o){ try{localStorage.setItem(CACHE_KEY,JSON.stringify(o||{}));}catch{} }
 
 function normalizeCode(raw){
-  // uzmi samo znamenke (EAN/UPC)
   const s = String(raw||"").trim();
-  const digits = s.replace(/\D+/g,'');
-  return digits;
+  return s.replace(/\D+/g,'');
 }
 function isValidCodeDigits(d){
-  // dopusti 8, 12, 13, 14 (EAN-8 / UPC-A / EAN-13 / GTIN-14)
   return d.length===8 || d.length===12 || d.length===13 || d.length===14;
+}
+
+function resizeOverlay(){
+  const r = video.getBoundingClientRect();
+  overlay.width  = Math.max(1, Math.floor(r.width));
+  overlay.height = Math.max(1, Math.floor(r.height));
+}
+
+function drawScanFrame(){
+  if(!overlay.width || !overlay.height) resizeOverlay();
+  const w = overlay.width, h = overlay.height;
+
+  ctx.clearRect(0,0,w,h);
+
+  const m = Math.round(Math.min(w,h)*0.12);
+  const x = m, y = m;
+  const sw = w - m*2;
+  const sh = h - m*2;
+
+  const L = Math.round(Math.min(sw,sh)*0.14);
+
+  ctx.strokeStyle = "#39d98a";
+  ctx.lineWidth = 4;
+
+  ctx.beginPath(); ctx.moveTo(x, y+L); ctx.lineTo(x, y); ctx.lineTo(x+L, y); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x+sw-L, y); ctx.lineTo(x+sw, y); ctx.lineTo(x+sw, y+L); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x, y+sh-L); ctx.lineTo(x, y+sh); ctx.lineTo(x+L, y+sh); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x+sw-L, y+sh); ctx.lineTo(x+sw, y+sh); ctx.lineTo(x+sw, y+sh-L); ctx.stroke();
+
+  requestAnimationFrame(drawScanFrame);
 }
 
 async function fetchOffName(ean, timeoutMs=2500){
@@ -64,6 +78,7 @@ async function fetchOffName(ean, timeoutMs=2500){
 
     if(!r || !r.ok) return { ok:false, kind:"net" };
     const j = await r.json();
+
     if(j && j.status===1 && j.product){
       const name = (j.product.product_name || j.product.product_name_en || j.product.generic_name || "").trim();
       if(name) return { ok:true, name };
@@ -77,12 +92,10 @@ async function fetchOffName(ean, timeoutMs=2500){
 }
 
 async function lookupNameStable(ean){
-  // 1) cache (local + session)
   const cache = readCache();
   if(memGood.has(ean)) return memGood.get(ean);
   if(cache[ean]){ memGood.set(ean, cache[ean]); return cache[ean]; }
 
-  // 2) OFF lookup s retry
   const first = await fetchOffName(ean, 2500);
   if(first.ok){
     cache[ean]=first.name; writeCache(cache);
@@ -90,7 +103,6 @@ async function lookupNameStable(ean){
     return first.name;
   }
 
-  // retry only for network
   if(first.kind==="net"){
     const second = await fetchOffName(ean, 3000);
     if(second.ok){
@@ -98,15 +110,10 @@ async function lookupNameStable(ean){
       memGood.set(ean, second.name);
       return second.name;
     }
-    // ako imamo bilo kakav stari naziv, vrati njega (ne ruši UI)
-    if(memGood.has(ean)) return memGood.get(ean);
     if(cache[ean]) return cache[ean];
     return "Greška mreže";
   }
 
-  // not found / no name
-  if(first.kind==="notfound") return "Nije u katalogu";
-  if(first.kind==="noname") return "Nije u katalogu";
   return "Nije u katalogu";
 }
 
@@ -119,17 +126,20 @@ async function listCameras(){
 async function startCamera(){
   try{
     setStatus("Pokrećem…","warn");
+
     const deviceId=devices[deviceIndex]?.deviceId;
-    const constraints=deviceId?
-      {video:{deviceId:{exact:deviceId}},audio:false}:
-      {video:{facingMode:{ideal:"environment"}},audio:false};
+    const constraints=deviceId
+      ? { video:{ deviceId:{ exact: deviceId } }, audio:false }
+      : { video:{ facingMode:{ ideal:"environment" } }, audio:false };
 
     stream=await navigator.mediaDevices.getUserMedia(constraints);
     video.srcObject=stream;
     currentTrack=stream.getVideoTracks()[0];
     await video.play();
 
-    if(btnStop) if(btnStop) btnStop.disabled=false;
+    resizeOverlay();
+    drawScanFrame();
+
     btnTorch.disabled=!(currentTrack.getCapabilities?.().torch);
     scanning=true;
 
@@ -142,16 +152,11 @@ async function startCamera(){
   }
 }
 
-async function stopCamera(){
-  scanning=false;
-  if(stream){ stream.getTracks().forEach(t=>t.stop()); }
-  if(btnStop) if(btnStop) btnStop.disabled=true;
-  setStatus("Zaustavljeno","warn");
-}
-
 async function switchCamera(){
+  if(!devices.length) return;
   deviceIndex=(deviceIndex+1)%devices.length;
-  await stopCamera();
+  scanning=false;
+  try{ if(stream) stream.getTracks().forEach(t=>t.stop()); }catch{}
   await startCamera();
 }
 
@@ -172,6 +177,7 @@ function initDetector(){
     loadZXing();
   }
 }
+
 async function loadZXing(){
   if(window.ZXingBrowser) return;
   const s=document.createElement("script");
@@ -198,9 +204,7 @@ async function handleCode(raw){
   const now=Date.now();
   const code = normalizeCode(raw);
 
-  // ignoriraj loše/kratko očitanje
   if(!isValidCodeDigits(code)){
-    // ali pokaži barem kod ako je nešto očitao
     if(code && code.length>=6){
       codeEl.textContent = code;
       whenEl.textContent = new Date().toLocaleString("hr-HR");
@@ -213,7 +217,6 @@ async function handleCode(raw){
   if(code===lastCode && now-lastAt<1500) return;
   lastCode=code; lastAt=now;
 
-  beep();
   codeEl.textContent=code;
   whenEl.textContent=new Date().toLocaleString("hr-HR");
 
@@ -223,16 +226,17 @@ async function handleCode(raw){
   setStatus("Spremno","ok");
 }
 
-btnStart.addEventListener("click",async()=>{ await listCameras(); await startCamera(); });
-if(btnStop) if(btnStop) btnStop.addEventListener("click",stopCamera);
-btnSwitch.addEventListener("click",switchCamera);
-btnTorch.addEventListener("click",toggleTorch);
-////btnSound.addEventListener("click",()=>{ soundOn=!soundOn; btnSound.textContent="Zvuk: "+(soundOn?"ON":"OFF"); });
+btnStart.addEventListener("click", async ()=>{ await listCameras(); await startCamera(); });
+btnSwitch.addEventListener("click", switchCamera);
+btnTorch.addEventListener("click", toggleTorch);
 
-document.addEventListener("visibilitychange",()=>{ if(document.hidden) stopCamera(); });
+window.addEventListener("resize", resizeOverlay);
+
+document.addEventListener("visibilitychange", ()=>{
+  if(document.hidden){
+    scanning=false;
+    try{ if(stream) stream.getTracks().forEach(t=>t.stop()); }catch{}
+  }
+});
+
 setStatus("Spremno","warn");
-
-
-
-
-
