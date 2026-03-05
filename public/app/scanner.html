@@ -1,114 +1,132 @@
-﻿# Elvora Starter (Web/PWA)
+<!doctype html>
+<html lang="hr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>Elvora � Kamera</title>
 
-## Run (local)
-# ===== elvora-snippets-apply.ps1 =====
-param(
-  [string]$root = "$PSScriptRoot"   # promijeni po želji
-)
+<style>
+:root{
+--bg:#0b0f14;
+--panel:#111827;
+--border:#1f2937;
+--text:#e5e7eb;
+--muted:#9fb0c6;
+--ok:#39d98a;
+--blue:#19b5ff;
+}
 
-# 1) Struktura
-$newDirs = @(
-  "$root\public",
-  "$root\public\app"
-)
-$newDirs | ForEach-Object { New-Item -ItemType Directory -Force -Path $_ | Out-Null }
+body{
+margin:0;
+background:var(--bg);
+color:var(--text);
+font-family:system-ui;
+}
 
-# 2) SCANNER: HTML
-@'
-<!doctype html><html lang="hr"><head><meta charset="utf-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>Elvora • Web skener</title>
-<link rel="stylesheet" href="./scanner.css">
-</head><body>
-<div id="onb" style="position:fixed;inset:0;background:rgba(0,0,0,.72);color:#fff;display:flex;align-items:center;justify-content:center;z-index:9999">
-  <div style="max-width:520px;padding:18px;border:1px solid #335;border-radius:14px;background:#0b0f14">
-    <h3>Kako skenirati</h3>
-    <p>Usmjeri kameru prema bar/QR kodu. Prihvatite dopuštenje za kameru. AI dohvaća naziv i rok trajanja.</p>
-    <button class="btn" onclick="localStorage.setItem('scannerOnbSeen','1');document.getElementById('onb').remove();">OK, razumijem</button>
-  </div>
-</div>
+.wrap{
+width:min(94vw,520px);
+margin:auto;
+padding:12px;
+}
+
+.stage{
+position:relative;
+border-radius:18px;
+overflow:hidden;
+border:1px solid var(--border);
+background:#000;
+}
+
+video{
+width:100%;
+height:56vh;
+object-fit:cover;
+}
+
+canvas{
+position:absolute;
+inset:0;
+pointer-events:none;
+}
+
+.panel{
+margin-top:12px;
+padding:12px;
+background:var(--panel);
+border-radius:14px;
+border:1px solid var(--border);
+}
+
+.row{
+display:flex;
+justify-content:space-between;
+padding:8px 0;
+border-bottom:1px solid rgba(255,255,255,.06);
+}
+
+.row:last-child{
+border-bottom:0;
+}
+
+.k{
+color:var(--muted);
+}
+
+.v{
+font-weight:800;
+}
+
+.ean{
+font-size:22px;
+color:#9fe3ff;
+}
+
+.name{
+font-size:20px;
+}
+
+.time{
+font-size:18px;
+}
+</style>
+</head>
+
+<body>
+
 <div class="wrap">
-  <h2>Elvora Web skener</h2>
-  <div class="cam">
-    <video id="v" playsinline autoplay muted></video>
-    <div class="corn tl"></div><div class="corn tr"></div><div class="corn bl"></div><div class="corn br"></div>
-    <div id="ocrBox" class="ocr">📅 <span id="ocrTxt"></span></div>
-  </div>
-  <div class="info">
-    <div class="pill">Naziv: <b id="name">—</b></div>
-    <div class="pill">Vrijeme: <b id="ts">—</b></div>
-    <div class="pill">Rok trajanja: <b id="exp">—</b></div>
-  </div>
-  <div class="row">
-    <button id="btnDate" class="btn">✎ Ručni unos roka</button>
-    <button id="btnRollback" class="btn ghost">↺ Rollback 1h</button>
-  </div>
+
+<div class="stage">
+<video id="video" playsinline autoplay muted></video>
+<canvas id="overlay"></canvas>
 </div>
 
-<script src="./i18n.js"></script>
-<script src="./voice.js"></script>
-<script src="./offline-backup.js"></script>
-<script>
-const v=document.getElementById('v'), nameEl=()=>document.getElementById('name'),
-      tsEl=()=>document.getElementById('ts'), expEl=()=>document.getElementById('exp');
-const ocrBox=document.getElementById('ocrBox'), ocrTxt=document.getElementById('ocrTxt');
-let ctx; function beep(){ try{ctx=ctx||new (window.AudioContext||window.webkitAudioContext)();
-  const o=ctx.createOscillator(), g=ctx.createGain(); o.type='square'; o.frequency.value=1150;
-  g.gain.value=.0001; g.gain.exponentialRampToValueAtTime(.25,ctx.currentTime+.02);
-  g.gain.exponentialRampToValueAtTime(.0001,ctx.currentTime+.18); o.connect(g).connect(ctx.destination);
-  o.start(); o.stop(ctx.currentTime+.2);}catch{} }
+<div class="panel">
 
-async function camera(){
-  const s=await navigator.mediaDevices.getUserMedia({video:{facingMode:{ideal:'environment'}}});
-  v.srcObject=s; await v.play();
-  // BarcodeDetector (gdje postoji); u suprotnom ručni import slike
-  if('BarcodeDetector' in window){
-    const det=new BarcodeDetector({formats:['ean_13','ean_8','upc_a','upc_e','qr_code','code_128','code_39','data_matrix']});
-    let last='', t0=0;
-    (async function loop(){
-      try{
-        const codes=await det.detect(v);
-        if(codes?.length){
-          const raw=codes[0].rawValue||'', now=performance.now();
-          if(raw && (raw!==last || (now-t0)>1500)){ last=raw; t0=now; onBarcode(raw); }
-        }
-      }catch{}
-      requestAnimationFrame(loop);
-    })();
-  }
-}
-function setTS(){ tsEl().textContent=new Date().toLocaleString(); }
-async function fetchNameFromOFF(code){
-  try{
-    const r=await fetch(`https://world.openfoodfacts.org/api/v2/product/${encodeURIComponent(code)}.json`);
-    const j=await r.json();
-    const p=j?.product; const n=p?.product_name || p?.generic_name || '';
-    return (n && n.trim()) || null;
-  }catch{return null;}
-}
-function aiFallback(code){
-  // vrlo jednostavna heuristika; u Pro ćemo je zamijeniti workers AI-jem
-  return i18n('unknown') + ` (${code.slice(0,4)}…)`;
-}
-async function onBarcode(code){
-  beep(); setTS();
-  let n=await fetchNameFromOFF(code);
-  if(!n){ n=aiFallback(code); }
-  nameEl().textContent=n;
-  say(n + '. ' + i18n('added'));
-  // “Scan the date” overlay
-  ocrTxt.textContent=i18n('scan_date');
-  ocrBox.classList.add('show');
-  setTimeout(()=>ocrBox.classList.remove('show'), 2800);
-}
-document.getElementById('btnDate').onclick=()=>{
-  const v=prompt(i18n('expiry')+' (npr. 2025-10-14 08:30):','');
-  if(v){ expEl().textContent=v; say(i18n('expiry')+' '+v); }
-};
-document.getElementById('btnRollback').onclick=()=>window.elvoraRollback();
-camera().catch(()=>alert('Kamera blokirana. Otvori preko HTTPS-a ili dozvoli kameru.'));
-</script>
-<footer class="footer">© <span id="y"></span> Elvora • <a href="/about.html">About</a> • <a href="/legal/privacy.html">Privacy</a> • <a href="/legal/terms.html">Terms</a></footer></body></html>
+<div class="row">
+<div class="k">Status</div>
+<div id="st" class="v">SPREMNO</div>
+</div>
 
+<div class="row">
+<div class="k">EAN</div>
+<div id="code" class="v ean">�</div>
+</div>
 
+<div class="row">
+<div class="k">Naziv</div>
+<div id="name" class="v name">�</div>
+</div>
 
+<div class="row">
+<div class="k">Skenirano</div>
+<div id="when" class="v time">�</div>
+</div>
+
+</div>
+
+</div>
+
+<script src="/app/camera.js"></script>
+
+</body>
+</html>
