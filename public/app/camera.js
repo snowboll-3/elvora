@@ -1,4 +1,4 @@
-ï»¿/* ELVORA CAMERA V1 â€” stable engine + scan frame */
+/* ELVORA CAMERA V1 — stable engine + scan frame */
 
 const video = document.getElementById("video");
 const overlay = document.getElementById("overlay");
@@ -111,7 +111,7 @@ async function lookupNameStable(ean){
       return second.name;
     }
     if(cache[ean]) return cache[ean];
-    return "GreÅ¡ka mreÅ¾e";
+    return "Greška mreže";
   }
 
   return "Nije u katalogu";
@@ -125,7 +125,7 @@ async function listCameras(){
 
 async function startCamera(){
   try{
-    setStatus("PokreÄ‡emâ€¦","warn");
+    setStatus("Pokreæem…","warn");
 
     const deviceId=devices[deviceIndex]?.deviceId;
     const constraints=deviceId
@@ -148,7 +148,7 @@ async function startCamera(){
 
     setStatus("Spremno","ok");
   }catch{
-    setStatus("Kamera greÅ¡ka","bad");
+    setStatus("Kamera greška","bad");
   }
 }
 
@@ -208,8 +208,8 @@ async function handleCode(raw){
     if(code && code.length>=6){
       codeEl.textContent = code;
       whenEl.textContent = new Date().toLocaleString("hr-HR");
-      nameEl.textContent = "â€”";
-      setStatus("LoÅ¡e oÄitanje","warn");
+      nameEl.textContent = "—";
+      setStatus("Loše oèitanje","warn");
     }
     return;
   }
@@ -220,7 +220,7 @@ async function handleCode(raw){
   codeEl.textContent=code;
   whenEl.textContent=new Date().toLocaleString("hr-HR");
 
-  nameEl.textContent="TraÅ¾imâ€¦";
+  nameEl.textContent="Tražim…";
   const name = await lookupNameStable(code);
   nameEl.textContent = name;
   setStatus("Spremno","ok");
@@ -240,3 +240,26 @@ document.addEventListener("visibilitychange", ()=>{
 });
 
 setStatus("Spremno","warn");
+
+
+// __ELVORA_AUTOSTART__ (no buttons, auto-start + tap fallback)
+(()=>{
+  try{ if(typeof btnStart!=='undefined' && btnStart){ btnStart.style.display='none'; } }catch(e){}
+  try{ if(typeof btnStop!=='undefined' && btnStop){ btnStop.style.display='none'; } }catch(e){}
+  function toast(msg){ try{ const t=document.getElementById('toast'); if(t){ t.textContent=msg||''; } }catch(e){} }
+  async function go(){
+    try{ toast(''); await startCamera(); }
+    catch(e){
+      const n=(e&&e.name)||'';
+      if(n==='NotAllowedError' || n==='SecurityError'){
+        toast('Dodirni ekran za pokretanje kamere (browser traži potvrdu).');
+        const once=async()=>{ document.removeEventListener('touchstart', once, true); document.removeEventListener('click', once, true); try{ toast(''); await startCamera(); }catch(_){ } };
+        document.addEventListener('touchstart', once, {capture:true, once:true});
+        document.addEventListener('click', once, {capture:true, once:true});
+        return;
+      }
+      toast((e&&e.message)?e.message:'Greška kamere');
+    }
+  }
+  window.addEventListener('load', go);
+})();
