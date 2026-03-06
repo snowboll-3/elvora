@@ -1,226 +1,266 @@
-﻿const video = document.getElementById("video");
+/* ELVORA CAMERA V1 � stable engine + scan frame */
+
+const video = document.getElementById("video");
 const overlay = document.getElementById("overlay");
-const statusEl = document.getElementById("status");
+const ctx = overlay.getContext("2d");
+
+const stEl = document.getElementById("st");
 const codeEl = document.getElementById("code");
 const nameEl = document.getElementById("name");
 const whenEl = document.getElementById("when");
-const noteEl = document.getElementById("note");
-const startBtn = document.getElementById("startBtn");
-const stopBtn = document.getElementById("stopBtn");
-const switchBtn = document.getElementById("switchBtn");
-const soundBtn = document.getElementById("soundBtn");
-const sendBtn = document.getElementById("sendBtn");
-const clearBtn = document.getElementById("clearBtn");
-const listEl = document.getElementById("list");
 
-let stream=null, reader=null, devices=[], currentDeviceId=null;
-let lastCode=null, lastAt=0, soundOn=true, audioCtx=null;
+const btnStart = document.getElementById("btnStart");
+const btnSwitch = document.getElementById("btnSwitch");
+const btnTorch = document.getElementById("btnTorch");
 
-const MODE = { value: "ADD" };
-document.querySelectorAll("input[name='mode']").forEach(r=>{
-  r.addEventListener("change", ()=>{ MODE.value = r.value; });
-});
+let stream=null, currentTrack=null, devices=[], deviceIndex=0;
+let scanning=false, lastCode=null, lastAt=0;
 
-function beep(){
-  if (!soundOn) return;
-  try{
-    audioCtx = audioCtx || new (window.AudioContext||window.webkitAudioContext)();
-    const o = audioCtx.createOscillator();
-    const g = audioCtx.createGain();
-    o.type="sine"; o.frequency.value=880; g.gain.value=0.0001;
-    o.connect(g); g.connect(audioCtx.destination);
-    const t=audioCtx.currentTime;
-    o.start(t);
-    g.gain.exponentialRampToValueAtTime(0.15,t+0.02);
-    g.gain.exponentialRampToValueAtTime(0.00001,t+0.18);
-    o.stop(t+0.2);
-    if(navigator.vibrate) navigator.vibrate(50);
-  }catch{}
+let detector=null, zxingReader=null;
+
+const CACHE_KEY="elvora_ean_cache_v3";
+const memGood = new Map();
+
+function setStatus(msg, type="warn"){
+  stEl.textContent = msg;
+  stEl.className = "v " + (type || "warn");
 }
-function flash(){ overlay.classList.remove("flash"); void overlay.offsetWidth; overlay.classList.add("flash"); }
-function setStatus(msg, ok=true){ statusEl.textContent=msg; statusEl.className= ok?'value ok':'value bad'; }
+
+function readCache(){ try{return JSON.parse(localStorage.getItem(CACHE_KEY)||"{}");}catch{return{}} }
+function writeCache(o){ try{localStorage.setItem(CACHE_KEY,JSON.stringify(o||{}));}catch{} }
+
+function normalizeCode(raw){
+  const s = String(raw||"").trim();
+  return s.replace(/\D+/g,'');
+}
+function isValidCodeDigits(d){
+  return d.length===8 || d.length===12 || d.length===13 || d.length===14;
+}
+
+function resizeOverlay(){
+  const r = video.getBoundingClientRect();
+  overlay.width  = Math.max(1, Math.floor(r.width));
+  overlay.height = Math.max(1, Math.floor(r.height));
+}
+
+function drawScanFrame(){
+  if(!overlay.width || !overlay.height) resizeOverlay();
+  const w = overlay.width, h = overlay.height;
+
+  ctx.clearRect(0,0,w,h);
+
+  const m = Math.round(Math.min(w,h)*0.12);
+  const x = m, y = m;
+  const sw = w - m*2;
+  const sh = h - m*2;
+
+  const L = Math.round(Math.min(sw,sh)*0.14);
+
+  ctx.strokeStyle = "#39d98a";
+  ctx.lineWidth = 4;
+
+  ctx.beginPath(); ctx.moveTo(x, y+L); ctx.lineTo(x, y); ctx.lineTo(x+L, y); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x+sw-L, y); ctx.lineTo(x+sw, y); ctx.lineTo(x+sw, y+L); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x, y+sh-L); ctx.lineTo(x, y+sh); ctx.lineTo(x+L, y+sh); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x+sw-L, y+sh); ctx.lineTo(x+sw, y+sh); ctx.lineTo(x+sw, y+sh-L); ctx.stroke();
+
+  requestAnimationFrame(drawScanFrame);
+}
+
+async function fetchOffName(ean, timeoutMs=2500){
+  const ctrl = ("AbortController" in window) ? new AbortController() : null;
+  const t = setTimeout(()=>{ try{ ctrl && ctrl.abort(); }catch{} }, timeoutMs);
+
+  try{
+    const url = "https://world.openfoodfacts.org/api/v2/product/" + encodeURIComponent(ean) + ".json";
+    const r = await fetch(url, { cache:"no-store", signal: ctrl ? ctrl.signal : undefined });
+    clearTimeout(t);
+
+    if(!r || !r.ok) return { ok:false, kind:"net" };
+    const j = await r.json();
+
+    if(j && j.status===1 && j.product){
+      const name = (j.product.product_name || j.product.product_name_en || j.product.generic_name || "").trim();
+      if(name) return { ok:true, name };
+      return { ok:false, kind:"noname" };
+    }
+    return { ok:false, kind:"notfound" };
+  }catch{
+    clearTimeout(t);
+    return { ok:false, kind:"net" };
+  }
+}
+
+async function lookupNameStable(ean){
+  const cache = readCache();
+  if(memGood.has(ean)) return memGood.get(ean);
+  if(cache[ean]){ memGood.set(ean, cache[ean]); return cache[ean]; }
+
+  const first = await fetchOffName(ean, 2500);
+  if(first.ok){
+    cache[ean]=first.name; writeCache(cache);
+    memGood.set(ean, first.name);
+    return first.name;
+  }
+
+  if(first.kind==="net"){
+    const second = await fetchOffName(ean, 3000);
+    if(second.ok){
+      cache[ean]=second.name; writeCache(cache);
+      memGood.set(ean, second.name);
+      return second.name;
+    }
+    if(cache[ean]) return cache[ean];
+    return "Gre�ka mre�e";
+  }
+
+  return "Nije u katalogu";
+}
 
 async function listCameras(){
-  try{
-    const all=await navigator.mediaDevices.enumerateDevices();
-    devices=all.filter(d=>d.kind==='videoinput');
-  }catch(e){ devices=[]; }
-  return devices;
+  const all=await navigator.mediaDevices.enumerateDevices();
+  devices=all.filter(d=>d.kind==="videoinput");
+  btnSwitch.disabled = devices.length<2;
 }
-async function startCamera(pref=null){
-  await stopCamera();
+
+async function startCamera(){
   try{
-    setStatus("Pokrećem kameru…");
-    const constraints = pref
-      ? { video:{ deviceId:{ exact: pref }}, audio:false }
-      : { video:{ facingMode:{ ideal:'environment' }, width:{ ideal:1280 }, height:{ ideal:720 }}, audio:false };
-    stream = await navigator.mediaDevices.getUserMedia(constraints);
-    video.srcObject=stream; await video.play();
-    currentDeviceId = (stream.getVideoTracks()[0]||{}).getSettings().deviceId || pref || null;
-    setStatus("Kamera pokrenuta ✅");
-    noteEl.textContent="Ciljaj barkod u zeleni okvir.";
-    await startScanning();
-  }catch(e){
-    setStatus(e.name+": "+e.message,false);
-    noteEl.textContent="Provjeri dopuštenja za kameru i da nije u upotrebi drugdje.";
-  }
+    setStatus("Pokre�em�","warn");
+
+    const deviceId=devices[deviceIndex]?.deviceId;
+    const constraints=deviceId
+      ? { video:{ deviceId:{ exact: deviceId } }, audio:false }
+      : { video:{ facingMode:{ ideal:"environment" } }, audio:false };
+
+    stream=await navigator.mediaDevices.getUserMedia(constraints);
+    video.srcObject=stream;
+    currentTrack=stream.getVideoTracks()[0];
+    await video.play();
+
+    resizeOverlay();
+    drawScanFrame();
+
+    btnTorch.disabled=!(currentTrack.getCapabilities?.().torch);
+    scanning=true;
+
+    initDetector();
+    loopScan();
+
+    setStatus("Spremno","ok");
+  }catch(err){`r`n    setStatus("Kamera gre�ka","bad");`r`n    throw err;`r`n  }
 }
-async function stopCamera(){
+
+async function switchCamera(){
+  if(!devices.length) return;
+  deviceIndex=(deviceIndex+1)%devices.length;
+  scanning=false;
+  try{ if(stream) stream.getTracks().forEach(t=>t.stop()); }catch{}
+  await startCamera();
+}
+
+async function toggleTorch(){
   try{
-    if(reader){ await reader.reset(); reader=null; }
-    if(video) video.pause();
-    if(stream){ stream.getTracks().forEach(t=>t.stop()); stream=null; }
-    setStatus("Kamera zaustavljena");
+    const cap=currentTrack.getCapabilities();
+    if(cap.torch){
+      const state=currentTrack.getSettings().torch||false;
+      await currentTrack.applyConstraints({advanced:[{torch:!state}]});
+    }
   }catch{}
 }
-async function switchCamera(){
-  const cams = await listCameras();
-  if(!cams.length){ setStatus("Nema dodatnih kamera",false); return; }
-  if(!currentDeviceId){ await startCamera(); return; }
-  const idx = cams.findIndex(d=>d.deviceId===currentDeviceId);
-  const next = cams[(idx+1)%cams.length];
-  await startCamera(next.deviceId);
-}
 
-async function startScanning(){
-  try{
-    const { BarcodeFormat, DecodeHintType } = ZXingBrowser;
-    const hints = new Map();
-    hints.set(DecodeHintType.POSSIBLE_FORMATS, [
-      BarcodeFormat.EAN_13, BarcodeFormat.UPC_A, BarcodeFormat.EAN_8,
-      BarcodeFormat.QR_CODE, BarcodeFormat.DATA_MATRIX, BarcodeFormat.CODE_128 // “novi” + fallback
-    ]);
-    reader = new ZXingBrowser.BrowserMultiFormatReader(hints);
-
-    await reader.decodeFromVideoDevice(currentDeviceId||null, video, async (result, err)=>{
-      if(result){
-        const code = result.getText();
-        const now = Date.now();
-        if(code!==lastCode || (now-lastAt)>1500){
-          lastCode=code; lastAt=now;
-          onScan(code);
-        }
-      }else if(err && !(err instanceof ZXingBrowser.NotFoundException)){
-        setStatus("Greška dekodiranja", false);
-      }
-    });
-  }catch(e){
-    setStatus("Skeniranje nije pokrenuto: "+e.message,false);
+function initDetector(){
+  if("BarcodeDetector" in window){
+    detector=new BarcodeDetector({formats:["ean_13","ean_8","upc_a","code_128","qr_code"]});
+  }else{
+    loadZXing();
   }
 }
 
-function onScan(code){
+async function loadZXing(){
+  if(window.ZXingBrowser) return;
+  const s=document.createElement("script");
+  s.src=window.__ELVORA_ZXING_URL;
+  s.onload=()=>{ zxingReader=new ZXingBrowser.BrowserMultiFormatReader(); };
+  document.body.appendChild(s);
+}
+
+async function loopScan(){
+  if(!scanning) return;
+  try{
+    if(detector){
+      const codes=await detector.detect(video);
+      if(codes.length) handleCode(codes[0].rawValue);
+    }else if(zxingReader){
+      const res=await zxingReader.decodeOnceFromVideoDevice(undefined,video);
+      if(res) handleCode(res.getText());
+    }
+  }catch{}
+  requestAnimationFrame(loopScan);
+}
+
+async function handleCode(raw){
+  const now=Date.now();
+  const code = normalizeCode(raw);
+
+  if(!isValidCodeDigits(code)){
+    if(code && code.length>=6){
+      codeEl.textContent = code;
+      whenEl.textContent = new Date().toLocaleString("hr-HR");
+      nameEl.textContent = "�";
+      setStatus("Lo�e o�itanje","warn");
+    }
+    return;
+  }
+
+  if(code===lastCode && now-lastAt<1500) return;
+  lastCode=code; lastAt=now;
+
   codeEl.textContent=code;
-  setStatus("Očitano ✅");
-  flash(); beep();
+  whenEl.textContent=new Date().toLocaleString("hr-HR");
 
-  const ts = new Date();
-  whenEl.textContent = ts.toLocaleString();
+  nameEl.textContent="Tra�im�";
+  const name = await lookupNameStable(code);
+  nameEl.textContent = name;
+  setStatus("Spremno","ok");
+}
 
-  // lokalni katalog (učenje)
-  const catalog = readCatalog();
-  let name = catalog[code] || "";
-  if(!name){
-    const guess = prompt("Molim unesite točan naziv proizvoda:", "");
-    if(guess && guess.trim().length){
-      name = guess.trim();
-      catalog[code] = name;
-      saveCatalog(catalog);
-    }else{
-      name = "—";
+btnStart.addEventListener("click", async ()=>{ await listCameras(); await startCamera(); });
+btnSwitch.addEventListener("click", switchCamera);
+btnTorch.addEventListener("click", toggleTorch);
+
+window.addEventListener("resize", resizeOverlay);
+
+document.addEventListener("visibilitychange", ()=>{
+  if(document.hidden){
+    scanning=false;
+    try{ if(stream) stream.getTracks().forEach(t=>t.stop()); }catch{}
+  }
+});
+
+setStatus("Spremno","warn");
+
+
+// __ELVORA_AUTOSTART__ (no buttons, auto-start + tap fallback)
+(()=>{
+  try{ if(typeof btnStart!=='undefined' && btnStart){ btnStart.remove(); } }catch(e){}
+  try{ if(typeof btnStop!=='undefined' && btnStop){ btnStop.style.display='none'; } }catch(e){}
+  function toast(msg){ try{ const t=document.getElementById('toast'); if(t){ t.textContent=msg||''; } }catch(e){} }
+  async function go(){
+    try{ toast(''); await startCamera(); }
+    catch(e){
+      const n=(e&&e.name)||'';
+      if(n==='NotAllowedError' || n==='SecurityError'){
+        toast('Dodirni ekran za pokretanje kamere (browser tra�i potvrdu).');
+        const once=async()=>{ document.removeEventListener('touchstart', once, true); document.removeEventListener('click', once, true); try{ toast(''); await startCamera(); }catch(_){ } };
+        document.addEventListener('touchstart', once, {capture:true, once:true});
+        document.addEventListener('click', once, {capture:true, once:true});
+        return;
+      }
+      toast((e&&e.message)?e.message:'Gre�ka kamere');
     }
   }
-  nameEl.textContent = name;
+  window.addEventListener('load', go);
+})();
 
-  // journal entry
-  const entry = {
-    id: String(ts.getTime()),
-    mode: MODE.value, // ADD/USE
-    code,
-    name,
-    qty: 1,
-    ts: ts.toISOString()
-  };
-  const journal = readJournal();
-  journal.unshift(entry);
-  saveJournal(journal);
-  renderJournal();
 
-  // pošalji event serveru (mock)
-  fetch("/api/events",{
-    method:"POST",
-    headers:{ "Content-Type":"application/json" },
-    body: JSON.stringify({
-      kind: MODE.value,
-      code,
-      name,
-      qty: 1,
-      ts: entry.ts
-    })
-  }).catch(()=>{});
-}
 
-function readJournal(){
-  try{ return JSON.parse(localStorage.getItem("sl_journal")||"[]"); }catch(_){ return []; }
-}
-function saveJournal(j){ localStorage.setItem("sl_journal", JSON.stringify(j)); }
-function readCatalog(){
-  try{ return JSON.parse(localStorage.getItem("sl_catalog")||"{}"); }catch(_){ return {}; }
-}
-function saveCatalog(c){ localStorage.setItem("sl_catalog", JSON.stringify(c)); }
-
-function renderJournal(){
-  const rows = readJournal();
-  listEl.innerHTML = rows.map(r=>`
-    <div class="item">
-      <div>
-        <p class="ititle">${r.name||"—"}</p>
-        <div class="imeta">${r.mode} · Kod: ${r.code} · Količina: <span class="qty">${r.qty}</span></div>
-        <div class="imeta">Vrijeme: ${new Date(r.ts).toLocaleString()}</div>
-      </div>
-      <div>
-        <button class="btn ghost" onclick="inc('${r.id}',1)">+1</button>
-        <button class="btn ghost" onclick="inc('${r.id}',-1)">−1</button>
-        <button class="btn ghost" onclick="delItem('${r.id}')">Obriši</button>
-      </div>
-    </div>
-  `).join("");
-}
-
-window.inc = function(id,delta){
-  const j = readJournal();
-  const i = j.findIndex(x=>x.id===id);
-  if(i===-1) return;
-  j[i].qty = Math.max(1, (j[i].qty||1)+delta);
-  saveJournal(j); renderJournal();
-};
-window.delItem = function(id){
-  const j = readJournal().filter(x=>x.id!==id);
-  saveJournal(j); renderJournal();
-};
-
-startBtn.addEventListener("click", async ()=>{ await listCameras(); await startCamera(); });
-stopBtn.addEventListener("click", stopCamera);
-switchBtn.addEventListener("click", switchCamera);
-soundBtn.addEventListener("click", ()=>{
-  soundOn=!soundOn;
-  soundBtn.textContent = (soundOn?'🔊':'🔈') + " Zvuk: " + (soundOn?"ON":"OFF");
-});
-sendBtn.addEventListener("click", ()=>{
-  const j = readJournal();
-  if(!j.length){ alert("Dnevnik je prazan."); return; }
-  alert("📤 Poslano u Hladnjak (mock). U praksi: API za spremanje.\nStavke: "+j.length);
-  // nakon slanja možeš odlučiti: očistiti ili ostaviti
-});
-clearBtn.addEventListener("click", ()=>{ saveJournal([]); renderJournal(); setStatus("Spremno"); codeEl.textContent="—"; nameEl.textContent="—"; });
-
-document.addEventListener("visibilitychange", async ()=>{
-  if(document.hidden){ await stopCamera(); }
-});
-
-renderJournal();
-
-if (!('mediaDevices' in navigator) || !('getUserMedia' in navigator.mediaDevices)){
-  setStatus('Preglednik ne podržava kameru (getUserMedia).', false);
-  noteEl.textContent = 'Pokušaj s modernim preglednikom (Chrome, Edge, Safari).';
-}
