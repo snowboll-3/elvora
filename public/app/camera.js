@@ -1,4 +1,4 @@
-/* ELVORA CAMERA V1 - stable engine + scan frame */
+﻿/* ELVORA CAMERA V1 - stable engine + scan frame */
 
 const video = document.getElementById("video");
 const overlay = document.getElementById("overlay");
@@ -248,7 +248,7 @@ async function handleCode(raw){
 
   nameEl.textContent = "Trazim...";
   const name = await lookupNameStable(code);
-  nameEl.textContent = name;
+  nameEl.textContent = name ? decodeURIComponent(escape(name)) : "Nije u katalogu";
 
   try{ if(navigator.vibrate) navigator.vibrate(60); }catch{}
   beepOk();
@@ -310,3 +310,7 @@ setStatus("Spremno", "warn");
   }
   window.addEventListener("load", go);
 })();
+
+
+
+
