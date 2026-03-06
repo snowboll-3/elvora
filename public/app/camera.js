@@ -1,4 +1,4 @@
-/* ELVORA CAMERA V1 Ä‚ËĂ˘â€šÂ¬Ă˘â‚¬ĹĄ stable engine + scan frame */
+/* ELVORA CAMERA V1 Ä‚â€žĂ˘â‚¬ĹˇÄ‚â€ąĂ‚ÂĂ„â€šĂ‹ÂÄ‚ËĂ˘â€šÂ¬ÄąË‡Ä‚â€šĂ‚Â¬Ă„â€šĂ‹ÂÄ‚ËĂ˘â‚¬ĹˇĂ‚Â¬Ă„Ä…Ă„â€ž stable engine + scan frame */
 
 const video = document.getElementById("video");
 const overlay = document.getElementById("overlay");
@@ -19,7 +19,7 @@ let scanning=false, lastCode=null, lastAt=0;
 let detector=null, zxingReader=null;
 
 const CACHE_KEY="elvora_ean_cache_v3";
-const memGood = new Map();
+const memGood = new Map();`r`n`r`nfunction beepOk(){`r`n  try{`r`n    const A = window.AudioContext || window.webkitAudioContext;`r`n    if(!A) return;`r`n    const ac = new A();`r`n    const o = ac.createOscillator();`r`n    const g = ac.createGain();`r`n    o.type = "sine";`r`n    o.frequency.value = 1100;`r`n    o.connect(g); g.connect(ac.destination);`r`n    g.gain.setValueAtTime(0.001, ac.currentTime);`r`n    g.gain.exponentialRampToValueAtTime(0.18, ac.currentTime + 0.01);`r`n    g.gain.exponentialRampToValueAtTime(0.001, ac.currentTime + 0.09);`r`n    o.start(); o.stop(ac.currentTime + 0.10);`r`n    setTimeout(()=>{ try{ ac.close(); }catch{} }, 180);`r`n  }catch{}`r`n}
 
 function setStatus(msg, type="warn"){
   stEl.textContent = msg;
@@ -111,7 +111,7 @@ async function lookupNameStable(ean){
       return second.name;
     }
     if(cache[ean]) return cache[ean];
-    return "GreĂ„Ä…Ă‹â€ˇka mreĂ„Ä…Ă„Äľe";
+    return "GreĂ„â€šĂ˘â‚¬ĹľÄ‚â€žĂ˘â‚¬Â¦Ă„â€šĂ˘â‚¬Ä…Ä‚ËĂ˘â€šÂ¬Ă‹â€ˇka mreĂ„â€šĂ˘â‚¬ĹľÄ‚â€žĂ˘â‚¬Â¦Ă„â€šĂ˘â‚¬ĹľÄ‚â€žĂ„Äľe";
   }
 
   return "Nije u katalogu";
@@ -125,7 +125,7 @@ async function listCameras(){
 
 async function startCamera(){
   try{
-    setStatus("PokreÄ‚â€žĂ˘â‚¬Ë‡emÄ‚ËĂ˘â€šÂ¬Ă‚Â¦","warn");
+    setStatus("PokreÄ‚â€žĂ˘â‚¬ĹˇÄ‚ËĂ˘â€šÂ¬ÄąÄľĂ„â€šĂ‹ÂÄ‚ËĂ˘â‚¬ĹˇĂ‚Â¬Ä‚â€ąĂ˘â‚¬Ë‡emÄ‚â€žĂ˘â‚¬ĹˇÄ‚â€ąĂ‚ÂĂ„â€šĂ‹ÂÄ‚ËĂ˘â€šÂ¬ÄąË‡Ä‚â€šĂ‚Â¬Ă„â€šĂ˘â‚¬ĹˇÄ‚â€šĂ‚Â¦","warn");
 
     const deviceId=devices[deviceIndex]?.deviceId;
     const constraints=deviceId
@@ -146,9 +146,9 @@ async function startCamera(){
     initDetector();
     loopScan();
 
-    setStatus("Spremno","ok"); try{navigator.vibrate(60);}catch(e){} try{new Audio("https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg").play();}catch(e){}
+    setStatus("Spremno","ok"); 
   }catch(err){
-    setStatus("GreĂ„Ä…Ă‹â€ˇka kamere","bad");
+    setStatus("GreĂ„â€šĂ˘â‚¬ĹľÄ‚â€žĂ˘â‚¬Â¦Ă„â€šĂ˘â‚¬Ä…Ä‚ËĂ˘â€šÂ¬Ă‹â€ˇka kamere","bad");
     throw err;
   }
 }
@@ -209,8 +209,8 @@ async function handleCode(raw){
     if(code && code.length>=6){
       codeEl.textContent = code;
       whenEl.textContent = new Date().toLocaleString("hr-HR");
-      nameEl.textContent = "Ä‚ËĂ˘â€šÂ¬Ă˘â‚¬ĹĄ";
-      setStatus("LoĂ„Ä…Ă‹â€ˇe oÄ‚â€žÄąÂ¤itanje","warn");
+      nameEl.textContent = "Ä‚â€žĂ˘â‚¬ĹˇÄ‚â€ąĂ‚ÂĂ„â€šĂ‹ÂÄ‚ËĂ˘â€šÂ¬ÄąË‡Ä‚â€šĂ‚Â¬Ă„â€šĂ‹ÂÄ‚ËĂ˘â‚¬ĹˇĂ‚Â¬Ă„Ä…Ă„â€ž";
+      setStatus("LoĂ„â€šĂ˘â‚¬ĹľÄ‚â€žĂ˘â‚¬Â¦Ă„â€šĂ˘â‚¬Ä…Ä‚ËĂ˘â€šÂ¬Ă‹â€ˇe oÄ‚â€žĂ˘â‚¬ĹˇÄ‚ËĂ˘â€šÂ¬ÄąÄľÄ‚â€žĂ„â€¦Ä‚â€šĂ‚Â¤itanje","warn");
     }
     return;
   }
@@ -221,10 +221,9 @@ async function handleCode(raw){
   codeEl.textContent=code;
   whenEl.textContent=new Date().toLocaleString("hr-HR");
 
-  nameEl.textContent="TraĂ„Ä…Ă„ÄľimÄ‚ËĂ˘â€šÂ¬Ă‚Â¦";
+  nameEl.textContent="TraĂ„â€šĂ˘â‚¬ĹľÄ‚â€žĂ˘â‚¬Â¦Ă„â€šĂ˘â‚¬ĹľÄ‚â€žĂ„ÄľimÄ‚â€žĂ˘â‚¬ĹˇÄ‚â€ąĂ‚ÂĂ„â€šĂ‹ÂÄ‚ËĂ˘â€šÂ¬ÄąË‡Ä‚â€šĂ‚Â¬Ă„â€šĂ˘â‚¬ĹˇÄ‚â€šĂ‚Â¦";
   const name = await lookupNameStable(code);
-  nameEl.textContent = name;
-  setStatus("Spremno","ok"); try{navigator.vibrate(60);}catch(e){} try{new Audio("https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg").play();}catch(e){}
+  nameEl.textContent = name;`r`n  try{ if(navigator.vibrate) navigator.vibrate(60); }catch{}`r`n  beepOk();`r`n  setStatus("Spremno","ok"); 
 }
 
 btnStart.addEventListener("click", async ()=>{ await listCameras(); await startCamera(); });
@@ -253,13 +252,13 @@ setStatus("Spremno","warn");
     catch(e){
       const n=(e&&e.name)||'';
       if(n==='NotAllowedError' || n==='SecurityError'){
-        toast('Dodirni ekran za pokretanje kamere (browser traĂ„Ä…Ă„Äľi potvrdu).');
+        toast('Dodirni ekran za pokretanje kamere (browser traĂ„â€šĂ˘â‚¬ĹľÄ‚â€žĂ˘â‚¬Â¦Ă„â€šĂ˘â‚¬ĹľÄ‚â€žĂ„Äľi potvrdu).');
         const once=async()=>{ document.removeEventListener('touchstart', once, true); document.removeEventListener('click', once, true); try{ toast(''); await startCamera(); }catch(_){ } };
         document.addEventListener('touchstart', once, {capture:true, once:true});
         document.addEventListener('click', once, {capture:true, once:true});
         return;
       }
-      toast((e&&e.message)?e.message:'GreĂ„Ä…Ă‹â€ˇka kamere');
+      toast((e&&e.message)?e.message:'GreĂ„â€šĂ˘â‚¬ĹľÄ‚â€žĂ˘â‚¬Â¦Ă„â€šĂ˘â‚¬Ä…Ä‚ËĂ˘â€šÂ¬Ă‹â€ˇka kamere');
     }
   }
   window.addEventListener('load', go);
