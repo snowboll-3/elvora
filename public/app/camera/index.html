@@ -1,9 +1,9 @@
-Ôªø<!doctype html>
+<!doctype html>
 <html lang="hr">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>Elvora ‚Ä¢ Kamera</title>
+<title>Elvora ï Kamera</title>
 <meta name="theme-color" content="#0b0f14">
 <style>
 :root{--bg:#0b0f14;--panel:#111827;--border:#1f2937;--text:#e5e7eb;--muted:#9fb0c6;--ok:#39d98a;--blue:#19b5ff;--warn:#f0c24b;--bad:#ff5d5d;}
@@ -39,30 +39,25 @@ canvas#overlay{position:absolute;inset:0;pointer-events:none}
 <div class="wrap">
   <div class="top">
     <div class="brand">ELVORA</div>
-    <div class="badge">Kamera ‚Ä¢ Skeniranje</div>
+    <div class="badge">Kamera ï Skeniranje</div>
   </div>
 
   <div class="stage" id="stage">
     <video id="video" playsinline autoplay muted></video>
-    <canvas id="overlay"></canvas>
-
-    <!-- Jedna stvar: TAP / Pokreni -->
-    <div class="tap" id="tapLayer">
-      <button id="btnStart">Pokreni kameru</button>
-    </div>
-  </div>
+    <canvas id="overlay"></canvas></div>
 
   <div id="result">
     <div class="row"><div class="k">Status</div><div id="st" class="v warn">Spremno</div></div>
-    <div class="row"><div class="k">EAN</div><div id="code" class="v">‚Äî</div></div>
-    <div class="row"><div class="k">Naziv</div><div id="name" class="v">‚Äî</div></div>
-    <div class="row"><div class="k">Skenirano</div><div id="when" class="v">‚Äî</div></div>
+    <div class="row"><div class="k">EAN</div><div id="code" class="v">ó</div></div>
+    <div class="row"><div class="k">Naziv</div><div id="name" class="v">ó</div></div>
+    <div class="row"><div class="k">Skenirano</div><div id="when" class="v">ó</div></div>
   </div>
 
-  <div class="note" id="note">Tapni ‚ÄúPokreni kameru‚Äù, zatim ciljaj barkod u zeleni okvir.</div>
+  <div class="note" id="note">Ciljaj barkod u zeleni okvir.</div>
 </div>
 
 <script>window.__ELVORA_ZXING_URL="https://unpkg.com/@zxing/browser@latest";</script>
 <script src="/app/camera.js?v=cam_ui_v3"></script>
 </body>
 </html>
+
