@@ -1,4 +1,4 @@
-/* ELVORA CAMERA V1 — stable engine + scan frame */
+/* ELVORA CAMERA V1 â€” stable engine + scan frame */
 
 const video = document.getElementById("video");
 const overlay = document.getElementById("overlay");
@@ -111,7 +111,7 @@ async function lookupNameStable(ean){
       return second.name;
     }
     if(cache[ean]) return cache[ean];
-    return "Greška mreže";
+    return "GreĹˇka mreĹľe";
   }
 
   return "Nije u katalogu";
@@ -125,7 +125,7 @@ async function listCameras(){
 
 async function startCamera(){
   try{
-    setStatus("Pokrećem…","warn");
+    setStatus("PokreÄ‡emâ€¦","warn");
 
     const deviceId=devices[deviceIndex]?.deviceId;
     const constraints=deviceId
@@ -148,7 +148,7 @@ async function startCamera(){
 
     setStatus("Spremno","ok");
   }catch(err){
-    setStatus("Greška kamere","bad");
+    setStatus("GreĹˇka kamere","bad");
     throw err;
   }
 }
@@ -198,7 +198,7 @@ async function loopScan(){
       if(res) handleCode(res.getText());
     }
   }catch{}
-  requestAnimationFrame(loopScan);
+  setTimeout(loopScan,250);
 }
 
 async function handleCode(raw){
@@ -209,19 +209,19 @@ async function handleCode(raw){
     if(code && code.length>=6){
       codeEl.textContent = code;
       whenEl.textContent = new Date().toLocaleString("hr-HR");
-      nameEl.textContent = "—";
-      setStatus("Loše očitanje","warn");
+      nameEl.textContent = "â€”";
+      setStatus("LoĹˇe oÄŤitanje","warn");
     }
     return;
   }
 
-  if(code===lastCode && now-lastAt<1500) return;
+  if(code===lastCode && now-lastAt<2000) return;
   lastCode=code; lastAt=now;
 
   codeEl.textContent=code;
   whenEl.textContent=new Date().toLocaleString("hr-HR");
 
-  nameEl.textContent="Tražim…";
+  nameEl.textContent="TraĹľimâ€¦";
   const name = await lookupNameStable(code);
   nameEl.textContent = name;
   setStatus("Spremno","ok");
@@ -253,13 +253,13 @@ setStatus("Spremno","warn");
     catch(e){
       const n=(e&&e.name)||'';
       if(n==='NotAllowedError' || n==='SecurityError'){
-        toast('Dodirni ekran za pokretanje kamere (browser traži potvrdu).');
+        toast('Dodirni ekran za pokretanje kamere (browser traĹľi potvrdu).');
         const once=async()=>{ document.removeEventListener('touchstart', once, true); document.removeEventListener('click', once, true); try{ toast(''); await startCamera(); }catch(_){ } };
         document.addEventListener('touchstart', once, {capture:true, once:true});
         document.addEventListener('click', once, {capture:true, once:true});
         return;
       }
-      toast((e&&e.message)?e.message:'Greška kamere');
+      toast((e&&e.message)?e.message:'GreĹˇka kamere');
     }
   }
   window.addEventListener('load', go);
