@@ -242,7 +242,7 @@ setStatus("Spremno","warn");
 
 // __ELVORA_AUTOSTART__ (no buttons, auto-start + tap fallback)
 (()=>{
-  try{ if(typeof btnStart!=='undefined' && btnStart){ btnStart.style.display='none'; } }catch(e){}
+  try{ if(typeof btnStart!=='undefined' && btnStart){ btnStart.remove(); } }catch(e){}
   try{ if(typeof btnStop!=='undefined' && btnStop){ btnStop.style.display='none'; } }catch(e){}
   function toast(msg){ try{ const t=document.getElementById('toast'); if(t){ t.textContent=msg||''; } }catch(e){} }
   async function go(){
@@ -261,5 +261,6 @@ setStatus("Spremno","warn");
   }
   window.addEventListener('load', go);
 })();
+
 
 
