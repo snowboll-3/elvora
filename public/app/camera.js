@@ -1,4 +1,4 @@
-/* ELVORA CAMERA V1 ó stable engine + scan frame */
+/* ELVORA CAMERA V1 ‚Äî stable engine + scan frame */
 
 const video = document.getElementById("video");
 const overlay = document.getElementById("overlay");
@@ -111,7 +111,7 @@ async function lookupNameStable(ean){
       return second.name;
     }
     if(cache[ean]) return cache[ean];
-    return "Greöka mreûe";
+    return "Gre≈°ka mre≈æe";
   }
 
   return "Nije u katalogu";
@@ -125,7 +125,7 @@ async function listCameras(){
 
 async function startCamera(){
   try{
-    setStatus("PokreÊemÖ","warn");
+    setStatus("Pokreƒáem‚Ä¶","warn");
 
     const deviceId=devices[deviceIndex]?.deviceId;
     const constraints=deviceId
@@ -148,7 +148,7 @@ async function startCamera(){
 
     setStatus("Spremno","ok");
   }catch(err){
-    setStatus("Greöka kamere","bad");
+    setStatus("Gre≈°ka kamere","bad");
     throw err;
   }
 }
@@ -209,8 +209,8 @@ async function handleCode(raw){
     if(code && code.length>=6){
       codeEl.textContent = code;
       whenEl.textContent = new Date().toLocaleString("hr-HR");
-      nameEl.textContent = "ó";
-      setStatus("Loöe oËitanje","warn");
+      nameEl.textContent = "‚Äî";
+      setStatus("Lo≈°e oƒçitanje","warn");
     }
     return;
   }
@@ -221,7 +221,7 @@ async function handleCode(raw){
   codeEl.textContent=code;
   whenEl.textContent=new Date().toLocaleString("hr-HR");
 
-  nameEl.textContent="TraûimÖ";
+  nameEl.textContent="Tra≈æim‚Ä¶";
   const name = await lookupNameStable(code);
   nameEl.textContent = name;
   setStatus("Spremno","ok");
@@ -253,13 +253,13 @@ setStatus("Spremno","warn");
     catch(e){
       const n=(e&&e.name)||'';
       if(n==='NotAllowedError' || n==='SecurityError'){
-        toast('Dodirni ekran za pokretanje kamere (browser traûi potvrdu).');
+        toast('Dodirni ekran za pokretanje kamere (browser tra≈æi potvrdu).');
         const once=async()=>{ document.removeEventListener('touchstart', once, true); document.removeEventListener('click', once, true); try{ toast(''); await startCamera(); }catch(_){ } };
         document.addEventListener('touchstart', once, {capture:true, once:true});
         document.addEventListener('click', once, {capture:true, once:true});
         return;
       }
-      toast((e&&e.message)?e.message:'Greöka kamere');
+      toast((e&&e.message)?e.message:'Gre≈°ka kamere');
     }
   }
   window.addEventListener('load', go);
