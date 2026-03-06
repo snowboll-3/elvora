@@ -1,4 +1,4 @@
-/* ELVORA CAMERA V1 â€” stable engine + scan frame */
+/* ELVORA CAMERA V1 Ä‚ËĂ˘â€šÂ¬Ă˘â‚¬ĹĄ stable engine + scan frame */
 
 const video = document.getElementById("video");
 const overlay = document.getElementById("overlay");
@@ -111,7 +111,7 @@ async function lookupNameStable(ean){
       return second.name;
     }
     if(cache[ean]) return cache[ean];
-    return "GreĹˇka mreĹľe";
+    return "GreĂ„Ä…Ă‹â€ˇka mreĂ„Ä…Ă„Äľe";
   }
 
   return "Nije u katalogu";
@@ -125,7 +125,7 @@ async function listCameras(){
 
 async function startCamera(){
   try{
-    setStatus("PokreÄ‡emâ€¦","warn");
+    setStatus("PokreÄ‚â€žĂ˘â‚¬Ë‡emÄ‚ËĂ˘â€šÂ¬Ă‚Â¦","warn");
 
     const deviceId=devices[deviceIndex]?.deviceId;
     const constraints=deviceId
@@ -146,9 +146,9 @@ async function startCamera(){
     initDetector();
     loopScan();
 
-    setStatus("Spremno","ok");
+    setStatus("Spremno","ok"); try{navigator.vibrate(60);}catch(e){} try{new Audio("https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg").play();}catch(e){}
   }catch(err){
-    setStatus("GreĹˇka kamere","bad");
+    setStatus("GreĂ„Ä…Ă‹â€ˇka kamere","bad");
     throw err;
   }
 }
@@ -209,8 +209,8 @@ async function handleCode(raw){
     if(code && code.length>=6){
       codeEl.textContent = code;
       whenEl.textContent = new Date().toLocaleString("hr-HR");
-      nameEl.textContent = "â€”";
-      setStatus("LoĹˇe oÄŤitanje","warn");
+      nameEl.textContent = "Ä‚ËĂ˘â€šÂ¬Ă˘â‚¬ĹĄ";
+      setStatus("LoĂ„Ä…Ă‹â€ˇe oÄ‚â€žÄąÂ¤itanje","warn");
     }
     return;
   }
@@ -221,10 +221,10 @@ async function handleCode(raw){
   codeEl.textContent=code;
   whenEl.textContent=new Date().toLocaleString("hr-HR");
 
-  nameEl.textContent="TraĹľimâ€¦";
+  nameEl.textContent="TraĂ„Ä…Ă„ÄľimÄ‚ËĂ˘â€šÂ¬Ă‚Â¦";
   const name = await lookupNameStable(code);
   nameEl.textContent = name;
-  setStatus("Spremno","ok");
+  setStatus("Spremno","ok"); try{navigator.vibrate(60);}catch(e){} try{new Audio("https://actions.google.com/sounds/v1/cartoon/wood_plank_flicks.ogg").play();}catch(e){}
 }
 
 btnStart.addEventListener("click", async ()=>{ await listCameras(); await startCamera(); });
@@ -253,13 +253,13 @@ setStatus("Spremno","warn");
     catch(e){
       const n=(e&&e.name)||'';
       if(n==='NotAllowedError' || n==='SecurityError'){
-        toast('Dodirni ekran za pokretanje kamere (browser traĹľi potvrdu).');
+        toast('Dodirni ekran za pokretanje kamere (browser traĂ„Ä…Ă„Äľi potvrdu).');
         const once=async()=>{ document.removeEventListener('touchstart', once, true); document.removeEventListener('click', once, true); try{ toast(''); await startCamera(); }catch(_){ } };
         document.addEventListener('touchstart', once, {capture:true, once:true});
         document.addEventListener('click', once, {capture:true, once:true});
         return;
       }
-      toast((e&&e.message)?e.message:'GreĹˇka kamere');
+      toast((e&&e.message)?e.message:'GreĂ„Ä…Ă‹â€ˇka kamere');
     }
   }
   window.addEventListener('load', go);
