@@ -147,9 +147,7 @@ async function startCamera(){
     loopScan();
 
     setStatus("Spremno","ok");
-  }catch{
-    setStatus("Kamera greška","bad");
-  }
+  }catch(err){`r`n    setStatus("Kamera greška","bad");`r`n    throw err;`r`n  }
 }
 
 async function switchCamera(){
@@ -263,3 +261,4 @@ setStatus("Spremno","warn");
   }
   window.addEventListener('load', go);
 })();
+
