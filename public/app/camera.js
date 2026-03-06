@@ -262,3 +262,4 @@ setStatus("Spremno","warn");
   window.addEventListener('load', go);
 })();
 
+
